@@ -18,12 +18,38 @@ export default async function MovieDetailsPage({ params }: MovieDetailsPageProps
   let bonusData: CurateMovieBonusesOutput | null = null;
   let error: string | null = null;
 
-  try {
-    bonusData = await curateMovieBonuses({ movieTitle });
-  } catch (e) {
-    console.error(`Failed to curate bonuses for ${movieTitle}:`, e);
-    error = "An error occurred while fetching bonus information. The AI service may be temporarily unavailable. Please try again later.";
-  }
+  // try {
+  //   bonusData = await curateMovieBonuses({ movieTitle });
+  // } catch (e) {
+  //   console.error(`Failed to curate bonuses for ${movieTitle}:`, e);
+  //   error = "An error occurred while fetching bonus information. The AI service may be temporarily unavailable. Please try again later.";
+  // }
+
+  bonusData = {
+    bonuses: [
+      {
+        bonusName: "第1弾「スペシャル描き下ろしA5カード」",
+        description: "第1弾の来場者特典は、キャラクターデザイン担当者によるスペシャル描き下ろしA5カードです。数量限定のため、なくなり次第終了となります。",
+        imageUrl: 'https://placehold.co/300x300.png',
+        distributionPeriod: "公開第1週目",
+        rules: "ご鑑賞者1名様につき1点プレゼント",
+      },
+      {
+        bonusName: "第2弾「キャラクターデザインステッカーセット」",
+        description: "映画の主要キャラクターたちの特製ビニールステッカーセットです。",
+        imageUrl: 'https://placehold.co/300x300.png',
+        distributionPeriod: "公開第2週目",
+        rules: "ご鑑賞者1名様につき1セットプレゼント",
+      },
+      {
+        bonusName: "第3弾「オリジナル・サウンドトラック・サンプラー」",
+        description: "映画のオリジナル・サウンドトラックのサンプラー版がダウンロードできるコードです。",
+        imageUrl: 'https://placehold.co/300x300.png',
+        distributionPeriod: "公開第3週目",
+        rules: "チケット1枚ご購入につき1つのダウンロードコード",
+      },
+    ],
+  };
 
   const moviePoster = `https://placehold.co/400x600.png`;
 
