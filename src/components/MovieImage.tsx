@@ -1,6 +1,6 @@
-// 專門處理電影圖片的組件
+// 專門處理電影圖片的組件 - 使用 dangerouslySetInnerHTML 完全繞過 Next.js 圖片處理
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface MovieImageProps {
   src: string;
@@ -20,21 +20,35 @@ export function MovieImage({
 }: MovieImageProps) {
   const [imageSrc, setImageSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleError = () => {
-    if (!hasError) {
-      setHasError(true);
-      setImageSrc('https://placehold.co/400x600/gray/white?text=電影海報');
+  useEffect(() => {
+    if (containerRef.current) {
+      const img = containerRef.current.querySelector('img');
+      if (img) {
+        img.onerror = () => {
+          if (!hasError) {
+            setHasError(true);
+            setImageSrc('https://placehold.co/400x600/gray/white?text=電影海報');
+          }
+        };
+      }
     }
-  };
+  }, [imageSrc, hasError]);
+
+  const finalSrc = imageSrc || 'https://placehold.co/400x600/gray/white?text=電影海報';
+  
+  const imgHtml = `<img 
+    src="${finalSrc}" 
+    alt="${alt}" 
+    class="${className || ''}" 
+    ${aiHint ? `data-ai-hint="${aiHint}"` : ''}
+  />`;
 
   return (
-    <img
-      src={imageSrc || 'https://placehold.co/400x600/gray/white?text=電影海報'}
-      alt={alt}
-      className={className}
-      data-ai-hint={aiHint}
-      onError={handleError}
+    <div 
+      ref={containerRef}
+      dangerouslySetInnerHTML={{ __html: imgHtml }}
     />
   );
 }
