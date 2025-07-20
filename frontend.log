@@ -2959,3 +2959,11 @@ https://nextjs.org/docs/messages/module-not-found
  ✓ Compiled in 975ms
  GET /movie/6b1ebeb0-b84b-4b32-a8e1-f0b5a9b52c20 200 in 1365ms
  GET / 200 in 1362ms
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.3.3 (Turbopack)
+   - Local:        http://localhost:9002
+   - Network:      http://192.168.1.110:9002
+   - Environments: .env.local, .env.development
+
+ ✓ Starting...
+ ✓ Ready in 4s
