@@ -29,17 +29,26 @@ export async function GET(request: NextRequest) {
       return new NextResponse('Domain not allowed', { status: 403 });
     }
 
-    // 代理請求圖片，模擬瀏覽器請求
+    // 代理請求圖片，模擬台灣用戶瀏覽器請求
     const response = await fetch(imageUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
-        'Accept-Language': 'zh-TW,zh;q=0.9,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'image/webp,image/apng,image/avif,image/svg+xml,image/*,*/*;q=0.8',
+        'Accept-Language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Accept-Encoding': 'gzip, deflate, br',
         'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
         'Referer': 'https://www.vscinemas.com.tw/',
+        'Origin': 'https://www.vscinemas.com.tw',
+        'Sec-Fetch-Dest': 'image',
+        'Sec-Fetch-Mode': 'no-cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"macOS"',
       },
       // 設定超時
-      signal: AbortSignal.timeout(10000), // 10秒超時
+      signal: AbortSignal.timeout(15000), // 15秒超時
     });
 
     if (!response.ok) {

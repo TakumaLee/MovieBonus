@@ -16,10 +16,10 @@ export function getProxyImageUrl(originalUrl: string): string {
     return originalUrl;
   }
 
-  // 如果是威秀影城圖片，先嘗試直接載入，失敗時使用 placeholder
+  // 如果是威秀影城圖片，使用我們的 API 代理
   if (originalUrl.includes('vscinemas.com.tw')) {
-    // 暫時直接返回原始 URL，如果載入失敗會被 onError 處理
-    return originalUrl;
+    const encodedUrl = encodeURIComponent(originalUrl);
+    return `/api/image-proxy?url=${encodedUrl}`;
   }
 
   // 其他圖片直接返回
