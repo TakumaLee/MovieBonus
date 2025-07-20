@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useMovieDetail } from '@/hooks/useMovieDetail';
 import type { MoviePromotion } from '@/lib/types';
 import { format } from 'date-fns';
+import { SimpleImage } from '@/components/SimpleImage';
 import { use } from 'react';
 
 interface MovieDetailsPageProps {
@@ -136,7 +137,7 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
       <div className={`grid ${hasImages ? 'md:grid-cols-3' : 'md:grid-cols-1'}`}>
         {hasImages && (
           <div className="md:col-span-1">
-            <img
+            <SimpleImage
               src={promotion.gifts?.find(gift => gift.gift_image_url)?.gift_image_url || 'https://placehold.co/300x300.png'}
               alt={`Image for ${promotion.title}`}
               className="w-full h-full object-cover"
@@ -290,7 +291,7 @@ export default function MovieDetailsPage({ params }: MovieDetailsPageProps) {
           {/* Movie Poster and Basic Info */}
           <aside className="w-full lg:w-1/3 xl:w-1/4">
             <Card className="overflow-hidden sticky top-8">
-              <img
+              <SimpleImage
                 src={movie.poster_url || 'https://placehold.co/400x600.png'}
                 alt={`Poster for ${movie.title}`}
                 className="w-full h-auto object-cover"
