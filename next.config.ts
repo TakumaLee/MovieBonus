@@ -9,9 +9,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // 完全禁用 Next.js 圖片優化
   images: {
+    unoptimized: true,
     loader: 'custom',
-    loaderFile: './image-loader.js'
+    loaderFile: './image-loader.js',
   },
 };
 
