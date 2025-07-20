@@ -14,6 +14,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackForm from '@/components/FeedbackForm';
+import { SimpleImage } from '@/components/SimpleImage';
 import type { Movie } from '@/lib/types';
 
 interface MovieCardProps {
@@ -28,7 +29,7 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
   const cardContent = (
     <Card className="overflow-hidden group border-2 border-transparent hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
       <CardContent className="p-0 relative aspect-[2/3]">
-        <img
+        <SimpleImage
           src={movie.poster_url || `https://placehold.co/400x600.png`}
           alt={`Poster for ${movie.title}`}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
