@@ -5,7 +5,6 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, ChevronLeft, Film, Gift, Info, ShieldCheck, TriangleAlert, RefreshCw, AlertCircle, Clock, Users, Star } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { MovieDetailClient } from './MovieDetailClient';
