@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +14,6 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackForm from '@/components/FeedbackForm';
 import { MovieImage } from '@/components/MovieImage';
-import { getProxyImageUrl } from '@/lib/image-utils';
 import type { Movie } from '@/lib/types';
 
 interface MovieCardProps {
@@ -31,13 +29,10 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
     <Card className="overflow-hidden group border-2 border-transparent hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
       <CardContent className="p-0 relative aspect-[2/3]">
         <MovieImage
-          src={getProxyImageUrl(movie.poster_url) || ''}
+          src={movie.poster_url || ''}
           alt={`Poster for ${movie.title}`}
-          width={400}
-          height={600}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           data-ai-hint="movie poster"
-          priority={false}
         />
         {hasBonuses && (
           <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground shadow-lg backdrop-blur-sm" variant="default">

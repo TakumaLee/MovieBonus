@@ -1,19 +1,37 @@
 {
-  "version": 2,
-  "name": "moviebonus",
-  "regions": ["hkg1", "sin1", "icn1"],
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "regions": ["hkg1"],
   "functions": {
-    "src/app/api/**/*.ts": {
+    "app/movie/[movieId]/page.tsx": {
       "maxDuration": 30
     }
   },
+  "rewrites": [
+    {
+      "source": "/movie/(.*)",
+      "destination": "/movie/[movieId]"
+    }
+  ],
   "headers": [
     {
-      "source": "/api/image-proxy",
+      "source": "**/*.@(js|css)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=86400"
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "**/*.@(jpg|jpeg|png|gif|webp|svg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
         }
       ]
     }
