@@ -2994,3 +2994,17 @@ https://nextjs.org/docs/messages/module-not-found
    Reload env: .env.local
  ✓ Compiled in 54ms
  ✓ Compiled middleware in 435ms
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+/Users/kumaneko/Development/project/MovieBonus/frontend/MovieBonus/node_modules/next/src/server/config.ts:461
+        throw new Error(
+              ^
+
+
+Error: Specified images.loaderFile does not exist at "/Users/kumaneko/Development/project/MovieBonus/frontend/MovieBonus/image-loader.js".
+    at assignDefaults (/Users/kumaneko/Development/project/MovieBonus/frontend/MovieBonus/node_modules/next/dist/server/config.js:494:45)
+    at loadConfig (/Users/kumaneko/Development/project/MovieBonus/frontend/MovieBonus/node_modules/next/dist/server/config.js:1076:32)
+    at async getStartServerInfo (/Users/kumaneko/Development/project/MovieBonus/frontend/MovieBonus/node_modules/next/dist/server/lib/app-info-log.js:103:5)
+    at async Server.<anonymous> (/Users/kumaneko/Development/project/MovieBonus/frontend/MovieBonus/node_modules/next/dist/server/lib/start-server.js:235:41)
+
+Node.js v22.15.1
+[?25h
