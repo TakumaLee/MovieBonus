@@ -1,4 +1,4 @@
-// 專門處理電影圖片的組件 - 使用 dangerouslySetInnerHTML 完全繞過 Next.js 圖片處理
+// 在客戶端動態創建圖片元素，完全繞過 Next.js 構建時處理
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -23,32 +23,43 @@ export function MovieImage({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      const img = containerRef.current.querySelector('img');
-      if (img) {
-        img.onerror = () => {
-          if (!hasError) {
-            setHasError(true);
-            setImageSrc('https://placehold.co/400x600/gray/white?text=電影海報');
-          }
-        };
-      }
+    if (!containerRef.current) return;
+
+    // 清空容器
+    containerRef.current.innerHTML = '';
+
+    // 動態創建 img 元素
+    const img = document.createElement('img');
+    const finalSrc = imageSrc || 'https://placehold.co/400x600/gray/white?text=電影海報';
+    
+    img.src = finalSrc;
+    img.alt = alt;
+    img.loading = 'lazy';
+    
+    if (className) {
+      img.className = className;
     }
-  }, [imageSrc, hasError]);
+    
+    if (aiHint) {
+      img.setAttribute('data-ai-hint', aiHint);
+    }
 
-  const finalSrc = imageSrc || 'https://placehold.co/400x600/gray/white?text=電影海報';
-  
-  const imgHtml = `<img 
-    src="${finalSrc}" 
-    alt="${alt}" 
-    class="${className || ''}" 
-    ${aiHint ? `data-ai-hint="${aiHint}"` : ''}
-  />`;
+    img.onerror = () => {
+      if (!hasError) {
+        setHasError(true);
+        setImageSrc('https://placehold.co/400x600/gray/white?text=電影海報');
+      }
+    };
 
-  return (
-    <div 
-      ref={containerRef}
-      dangerouslySetInnerHTML={{ __html: imgHtml }}
-    />
-  );
+    // 插入動態創建的 img 元素
+    containerRef.current.appendChild(img);
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
+    };
+  }, [imageSrc, alt, className, aiHint, hasError]);
+
+  return <div ref={containerRef} />;
 }
