@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, ChevronLeft, Film, Gift, Info, ShieldCheck, TriangleAlert, RefreshCw, AlertCircle, Clock, Users, Star } from 'lucide-react';
-import Image from 'next/image';
+// import Image from 'next/image'; // 改用原生 img 標籤
 import Link from 'next/link';
 import { useMovieDetail } from '@/hooks/useMovieDetail';
 import type { MoviePromotion } from '@/lib/types';
@@ -136,11 +136,9 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
       <div className={`grid ${hasImages ? 'md:grid-cols-3' : 'md:grid-cols-1'}`}>
         {hasImages && (
           <div className="md:col-span-1">
-            <Image
+            <img
               src={promotion.gifts?.find(gift => gift.gift_image_url)?.gift_image_url || 'https://placehold.co/300x300.png'}
               alt={`Image for ${promotion.title}`}
-              width={300}
-              height={300}
               className="w-full h-full object-cover"
               data-ai-hint="promotional item"
             />
@@ -292,11 +290,9 @@ export default function MovieDetailsPage({ params }: MovieDetailsPageProps) {
           {/* Movie Poster and Basic Info */}
           <aside className="w-full lg:w-1/3 xl:w-1/4">
             <Card className="overflow-hidden sticky top-8">
-              <Image
+              <img
                 src={movie.poster_url || 'https://placehold.co/400x600.png'}
                 alt={`Poster for ${movie.title}`}
-                width={400}
-                height={600}
                 className="w-full h-auto object-cover"
                 data-ai-hint="movie poster"
               />
