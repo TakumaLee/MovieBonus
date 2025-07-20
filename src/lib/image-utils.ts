@@ -16,10 +16,9 @@ export function getProxyImageUrl(originalUrl: string): string {
     return originalUrl;
   }
 
-  // 如果是威秀影城圖片，使用我們的 API 代理
+  // 如果是威秀影城圖片，直接嘗試載入（Firebase Hosting 從台灣節點提供更好連線）
   if (originalUrl.includes('vscinemas.com.tw')) {
-    const encodedUrl = encodeURIComponent(originalUrl);
-    return `/api/image-proxy?url=${encodedUrl}`;
+    return originalUrl;
   }
 
   // 其他圖片直接返回
