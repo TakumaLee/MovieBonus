@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "moviebonus",
-  "regions": ["hkg1", "sin1", "tpe1"],
+  "regions": ["hkg1", "sin1", "icn1"],
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 30
