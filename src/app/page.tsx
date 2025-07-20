@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-// import Image from 'next/image'; // 改用原生 img 標籤
+import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -29,12 +29,15 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
   const cardContent = (
     <Card className="overflow-hidden group border-2 border-transparent hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
       <CardContent className="p-0 relative aspect-[2/3]">
-        <SimpleImage
+        <Image
           src={movie.poster_url || `https://placehold.co/400x600.png`}
           alt={`Poster for ${movie.title}`}
+          width={400}
+          height={600}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           data-ai-hint="movie poster"
-          loading="lazy"
+          priority={false}
+          unoptimized={true}
         />
         {hasBonuses && (
           <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground shadow-lg backdrop-blur-sm" variant="default">

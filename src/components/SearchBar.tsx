@@ -9,8 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSearch } from '@/hooks/useSearch';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-// import Image from 'next/image'; // 改用原生 img 標籤
-import { SimpleImage } from '@/components/SimpleImage';
+import Image from 'next/image';
 
 interface SearchBarProps {
   className?: string;
@@ -195,10 +194,13 @@ export function SearchBar({
                       onClick={() => handleMovieSelect(movie.movie_id)}
                       className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
                     >
-                      <SimpleImage
+                      <Image
                         src={movie.poster_url || 'https://placehold.co/60x90.png'}
                         alt={movie.title}
+                        width={40}
+                        height={60}
                         className="w-10 h-15 object-cover rounded-sm flex-shrink-0"
+                        unoptimized={true}
                       />
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{movie.title}</p>

@@ -10,21 +10,38 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: true,
-    loader: 'custom',
-    loaderFile: './image-loader.js',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.vscinemas.com.tw',
+        port: '',
+        pathname: '/upload/film/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'vscinemas.com.tw',
+        port: '',
+        pathname: '/upload/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
-    formats: [],
-  },
-  webpack: (config: any) => {
-    // 完全禁用 Next.js 的圖片處理
-    config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg)$/,
-      type: 'asset/resource',
-    });
-    return config;
-  },
-  experimental: {
-    optimizePackageImports: [],
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 
