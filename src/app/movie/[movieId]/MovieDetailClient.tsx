@@ -137,7 +137,7 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
           <div className="md:col-span-1">
             <img
               src={promotion.gifts?.find(gift => gift.gift_image_url)?.gift_image_url || 'https://placehold.co/300x300.png'}
-              alt={`Image for ${promotion.title}`}
+              alt={`${promotion.title}特典商品圖片 - 特典速報`}
               className="w-full h-full object-cover"
               data-ai-hint="promotional item"
             />
@@ -291,7 +291,7 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
             <Card className="overflow-hidden sticky top-8">
               <img
                 src={movie.poster_url || 'https://placehold.co/400x600.png'}
-                alt={`Poster for ${movie.title}`}
+                alt={`${movie.title}電影海報 - 完整資訊與特典速報`}
                 className="w-full h-auto object-cover"
                 data-ai-hint="movie poster"
               />
