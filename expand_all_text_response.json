@@ -1,0 +1,63 @@
+{
+  "status": "success",
+  "page_url": "https://www.facebook.com/vieshow",
+  "posts": [
+    {
+      "id": "post_1",
+      "content": "台北│南港LaLaport威秀影城 𝟬𝟳/𝟮𝟱–𝟬𝟴/𝟬𝟳 台中│大魯閣新時代威秀影城 𝟬𝟴/𝟮𝟮–𝟬𝟵/𝟬𝟳 #車銀優 #CHAEUNWOO #CHAEUNWOO_VRconcert #VRCONCERT #威秀影城獨家",
+      "length": 127,
+      "type": "影城資訊",
+      "keywords": [
+        "威秀"
+      ],
+      "features": {
+        "hasLinks": false,
+        "hasHashtags": true,
+        "hasPrice": false,
+        "hasDate": false,
+        "hasMovieInfo": true,
+        "hasMention": false
+      },
+      "hashtags": [
+        "車銀優",
+        "CHAEUNWOO",
+        "CHAEUNWOO_VRconcert",
+        "VRCONCERT",
+        "威秀影城獨家"
+      ],
+      "post_time": "2025-07-18T17:00:00+08:00",
+      "post_time_original": "2025年7月18日 星期五下午5:00",
+      "fragmentCount": 3,
+      "extracted_at": "2025-07-19T22:32:28.462Z",
+      "index": 1
+    },
+    {
+      "id": "post_2",
+      "content": "《𝘾𝙃𝘼 𝙀𝙐𝙉-𝙒𝙊𝙊 𝙑𝙍 𝘾𝙊𝙉𝘾𝙀𝙍𝙏：𝙈𝙀𝙈𝙊𝙍𝙄𝙀𝙎》 #熱售中",
+      "length": 64,
+      "type": "一般貼文",
+      "keywords": [],
+      "features": {
+        "hasLinks": false,
+        "hasHashtags": true,
+        "hasPrice": false,
+        "hasDate": false,
+        "hasMovieInfo": false,
+        "hasMention": false
+      },
+      "hashtags": [
+        "熱售中"
+      ],
+      "post_time": "2025-07-18T17:00:00+08:00",
+      "post_time_original": "2025年7月18日 星期五下午5:00",
+      "fragmentCount": 1,
+      "extracted_at": "2025-07-19T22:32:28.461Z",
+      "index": 2
+    }
+  ],
+  "buttons_clicked": 1,
+  "posts_count": 2,
+  "total_content_length": 191,
+  "execution_time": 24.6,
+  "message": "未登入模式+核心引擎：展開 1 個按鈕，獲取 2 個增強貼文 (含時間+評論)"
+}
