@@ -24,12 +24,16 @@ interface MovieCardProps {
 const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
   // Use has_bonuses directly from movie data instead of separate API call
   const hasBonuses = movie.has_bonuses || false;
+  
+  // Log poster URL for debugging
+  console.log('Movie poster URL:', movie.poster_url, 'for movie:', movie.title);
 
   const cardContent = (
     <Card className="overflow-hidden group border-2 border-transparent hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
       <CardContent className="p-0 relative aspect-[2/3]">
-        <MovieImage
-          src={movie.poster_url || ''}
+        {/* Test: Direct img tag to see if Next.js intercepts it */}
+        <img
+          src={movie.poster_url || 'https://placehold.co/400x600/gray/white?text=電影海報'}
           alt={`Poster for ${movie.title}`}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           data-ai-hint="movie poster"
