@@ -1,5 +1,5 @@
 {
-  "name": "moviebonus-frontend",
+  "name": "paruparu",
   "version": 2,
   "framework": "nextjs",
   "buildCommand": "npm run build",
@@ -8,12 +8,10 @@
   "devCommand": "npm run dev",
   "regions": ["sin1"],
   "env": {
-    "NEXT_PUBLIC_ENVIRONMENT": "@next_public_environment",
     "NEXT_PUBLIC_DEBUG": "@next_public_debug"
   },
   "build": {
     "env": {
-      "NEXT_PUBLIC_ENVIRONMENT": "@next_public_environment",
       "NEXT_PUBLIC_DEBUG": "@next_public_debug"
     }
   },
