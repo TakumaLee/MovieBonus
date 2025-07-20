@@ -10,6 +10,7 @@ import { useSearch } from '@/hooks/useSearch';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getProxyImageUrl, getPlaceholderUrl } from '@/lib/image-utils';
 
 interface SearchBarProps {
   className?: string;
@@ -195,7 +196,7 @@ export function SearchBar({
                       className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
                     >
                       <Image
-                        src={movie.poster_url || 'https://placehold.co/60x90.png'}
+                        src={getProxyImageUrl(movie.poster_url) || getPlaceholderUrl(60, 90, '海報')}
                         alt={movie.title}
                         width={40}
                         height={60}

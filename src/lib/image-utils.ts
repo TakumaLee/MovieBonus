@@ -16,10 +16,11 @@ export function getProxyImageUrl(originalUrl: string): string {
     return originalUrl;
   }
 
-  // 如果是威秀影城圖片，使用代理
+  // 如果是威秀影城圖片，使用外部代理服務
   if (originalUrl.includes('vscinemas.com.tw')) {
-    const encodedUrl = encodeURIComponent(originalUrl);
-    return `/api/image-proxy?url=${encodedUrl}`;
+    // 使用免費的圖片代理服務 (weserv.nl)
+    const cleanUrl = originalUrl.replace('https://', '');
+    return `https://images.weserv.nl/?url=${cleanUrl}&w=600&h=900&fit=cover&a=attention`;
   }
 
   // 其他圖片直接返回
@@ -31,4 +32,27 @@ export function getProxyImageUrl(originalUrl: string): string {
  */
 export function getPlaceholderUrl(width: number = 400, height: number = 600, text: string = '電影海報'): string {
   return `https://placehold.co/${width}x${height}.png?text=${encodeURIComponent(text)}`;
+}
+
+/**
+ * 圖片載入錯誤處理
+ */
+export function handleImageError(event: React.SyntheticEvent<HTMLImageElement, Event>) {
+  const img = event.currentTarget;
+  const currentSrc = img.src;
+  
+  // 如果是代理 URL 失敗，嘗試原始 URL
+  if (currentSrc.includes('/api/image-proxy')) {
+    const urlMatch = currentSrc.match(/url=([^&]+)/);
+    if (urlMatch) {
+      const originalUrl = decodeURIComponent(urlMatch[1]);
+      img.src = originalUrl;
+      return;
+    }
+  }
+  
+  // 如果是威秀圖片失敗，使用 placeholder
+  if (currentSrc.includes('vscinemas.com.tw') || currentSrc.includes('/api/image-proxy')) {
+    img.src = getPlaceholderUrl(400, 600, '圖片載入失敗');
+  }
 }

@@ -14,7 +14,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackForm from '@/components/FeedbackForm';
-import { getProxyImageUrl, getPlaceholderUrl } from '@/lib/image-utils';
+import { getProxyImageUrl, getPlaceholderUrl, handleImageError } from '@/lib/image-utils';
 import type { Movie } from '@/lib/types';
 
 interface MovieCardProps {
@@ -38,6 +38,7 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
           data-ai-hint="movie poster"
           priority={false}
           unoptimized={true}
+          onError={handleImageError}
         />
         {hasBonuses && (
           <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground shadow-lg backdrop-blur-sm" variant="default">
