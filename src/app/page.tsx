@@ -14,7 +14,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackForm from '@/components/FeedbackForm';
-import { getProxyImageUrl, getPlaceholderUrl, handleImageError } from '@/lib/image-utils';
+import { MovieImage } from '@/components/MovieImage';
 import type { Movie } from '@/lib/types';
 
 interface MovieCardProps {
@@ -29,16 +29,14 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
   const cardContent = (
     <Card className="overflow-hidden group border-2 border-transparent hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20">
       <CardContent className="p-0 relative aspect-[2/3]">
-        <Image
-          src={getProxyImageUrl(movie.poster_url) || getPlaceholderUrl(400, 600, '電影海報')}
+        <MovieImage
+          src={movie.poster_url || ''}
           alt={`Poster for ${movie.title}`}
           width={400}
           height={600}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           data-ai-hint="movie poster"
           priority={false}
-          unoptimized={true}
-          onError={handleImageError}
         />
         {hasBonuses && (
           <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground shadow-lg backdrop-blur-sm" variant="default">
