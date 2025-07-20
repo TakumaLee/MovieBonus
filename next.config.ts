@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: true,
+    domains: ['placehold.co', 'www.vscinemas.com.tw', 'vscinemas.com.tw'],
     remotePatterns: [
       {
         protocol: 'https',
