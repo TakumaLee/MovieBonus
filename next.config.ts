@@ -18,24 +18,11 @@ const nextConfig: NextConfig = {
     loader: 'custom',
     loaderFile: './image-loader.js',
   },
-  // 實驗性功能：完全禁用圖片優化
-  experimental: {
-    optimizePackageImports: [],
-    turbo: {
-      rules: {
-        '*.jpg': {
-          loaders: ['file-loader'],
-          as: '*.jpg',
-        },
-        '*.png': {
-          loaders: ['file-loader'],
-          as: '*.png',
-        },
-      },
-    },
-  },
-  // Webpack 配置：禁用圖片處理
-  webpack: (config: any) => {
+  // 強制客戶端渲染，避免 SSG 影響圖片處理
+  output: process.env.NODE_ENV === 'production' ? undefined : undefined,
+  
+  // Webpack 配置：完全禁用圖片處理
+  webpack: (config: any, { isServer }: any) => {
     // 移除 Next.js 默認的圖片處理規則
     config.module.rules = config.module.rules.filter((rule: any) => {
       if (rule.test && rule.test.toString().includes('jpg|jpeg|png|gif|webp|avif')) {
@@ -43,6 +30,15 @@ const nextConfig: NextConfig = {
       }
       return true;
     });
+    
+    // 禁用服務器端的圖片優化
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        'sharp': 'commonjs sharp',
+        'image-size': 'commonjs image-size'
+      });
+    }
     
     return config;
   },
