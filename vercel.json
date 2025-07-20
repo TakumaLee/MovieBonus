@@ -2,26 +2,7 @@
   "version": 2,
   "name": "moviebonus",
   "regions": ["hkg1", "sin1", "tpe1"],
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
   "functions": {
-    "src/app/**/*.ts": {
-      "maxDuration": 30
-    },
     "src/app/api/**/*.ts": {
       "maxDuration": 30
     }
