@@ -247,7 +247,7 @@ export const movieApi = {
         allMovies = [...allMovies, ...comingSoonResponse.data.data];
       }
 
-      // 找到對應的電影（使用 id - UUID）
+      // 找到對應的電影（使用 id - 我們的資料庫 UUID）
       const movie = allMovies.find(m => m.id === movieId) || null;
 
       // 從 movie-bonuses API 獲取所有電影的特典資料
