@@ -12,7 +12,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
-import FeedbackForm from '@/components/FeedbackForm';
+import FeedbackFormSupabase from '@/components/FeedbackFormSupabase';
 import { MovieImage } from '@/components/MovieImage';
 import type { Movie } from '@/lib/types';
 
@@ -231,7 +231,7 @@ export default function Home() {
       </footer>
       
       {/* Feedback Form */}
-      <FeedbackForm />
+      <FeedbackFormSupabase />
     </div>
     </ErrorBoundary>
   );

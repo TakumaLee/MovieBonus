@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { MessageCircle, X, Send, Gift } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackEvent } from '@/lib/gtag';
 
 interface FeedbackFormData {
   type: string;
@@ -378,6 +379,9 @@ export default function FeedbackForm() {
       const success = submitViaGmail();
 
       if (success) {
+        // 追蹤反饋提交事件
+        trackEvent.feedbackSubmit(formData.type);
+        
         // Record successful submission
         recordSubmission();
 

@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useSearch } from '@/hooks/useSearch';
 import { cn } from '@/lib/utils';
+import { trackEvent } from '@/lib/gtag';
 import Link from 'next/link';
 
 interface SearchBarProps {
@@ -77,6 +78,8 @@ export function SearchBar({
   // Handle search submission
   const handleSearch = () => {
     if (inputValue.trim()) {
+      // 追蹤搜尋事件
+      trackEvent.movieSearch(inputValue);
       search(inputValue);
       setIsExpanded(true);
     }
@@ -94,7 +97,11 @@ export function SearchBar({
   };
 
   // Handle movie selection
-  const handleMovieSelect = (movieId: string) => {
+  const handleMovieSelect = (movieId: string, movieTitle?: string) => {
+    // 追蹤電影點擊事件
+    if (movieTitle) {
+      trackEvent.movieView(movieTitle);
+    }
     setIsExpanded(false);
     setInputValue('');
     setQuery('');
@@ -190,7 +197,7 @@ export function SearchBar({
                     <Link
                       key={movie.id}
                       href={`/movie/${encodeURIComponent(movie.movie_id)}`}
-                      onClick={() => handleMovieSelect(movie.movie_id)}
+                      onClick={() => handleMovieSelect(movie.movie_id, movie.title)}
                       className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
                     >
                       <img

@@ -2,15 +2,31 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { StructuredData } from '@/components/SEO/StructuredData';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://paruparu.vercel.app'),
   title: {
-    default: '特典速報 - 台灣電影特典資訊追蹤平台',
-    template: '%s | 特典速報'
+    default: '特典速報 パルパル - 台灣電影特典資訊追蹤平台 | Movie Bonus Tracker',
+    template: '%s | 特典速報 パルパル'
   },
-  description: '台灣最完整的電影特典與限定禮品追蹤平台。即時更新威秀影城、各大電影院的獨家特典資訊，不錯過任何精彩好康！',
-  keywords: ['電影特典', '電影禮品', '威秀影城', '電影院特典', '限定商品', '台灣電影', '特典速報', '電影周邊'],
+  description: '台灣最完整的電影特典與限定禮品追蹤平台 パルパル。即時更新威秀影城、各大電影院的獨家特典資訊，movie bonus、perk、限定商品一網打盡！不錯過任何精彩好康！',
+  keywords: [
+    // 中文關鍵字
+    '特典速報', 'パルパル', '帕魯帕魯', 'paruparu',
+    '電影特典', '電影禮品', '電影贈品', '電影周邊',
+    '威秀影城', '電影院特典', '限定商品', '台灣電影',
+    '首週購票禮', '預售禮', '會員禮', '電影特典情報',
+    // 英文關鍵字
+    'movie bonus', 'movie perk', 'cinema bonus', 'film bonus',
+    'movie gift', 'cinema gift', 'movie merchandise', 'movie collectible',
+    'movie promotion', 'cinema promotion', 'taiwan movie',
+    'vieshow cinema', 'movie theater bonus', 'limited edition',
+    // 日文關鍵字
+    '映画特典', '映画グッズ', 'シネマ特典',
+    // 品牌相關
+    'paruparu', 'paru paru', 'パルパル', '帕魯帕魯'
+  ],
   authors: [{ name: '特典速報' }],
   creator: '特典速報',
   publisher: '特典速報',
@@ -21,9 +37,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'zh_TW',
     url: 'https://paruparu.vercel.app',
-    title: '特典速報 - 台灣電影特典資訊追蹤平台',
-    description: '台灣最完整的電影特典與限定禮品追蹤平台。即時更新威秀影城、各大電影院的獨家特典資訊，不錯過任何精彩好康！',
-    siteName: '特典速報',
+    title: '特典速報 パルパル - 台灣電影特典資訊追蹤平台 | Movie Bonus Tracker',
+    description: '台灣最完整的電影特典與限定禮品追蹤平台 パルパル。即時更新威秀影城、各大電影院的獨家特典資訊，movie bonus、perk、限定商品一網打盡！',
+    siteName: '特典速報 パルパル',
     images: [{
       url: '/og-image.jpg',
       width: 1200,
@@ -35,8 +51,8 @@ export const metadata: Metadata = {
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
-    title: '特典速報 - 台灣電影特典資訊追蹤平台',
-    description: '台灣最完整的電影特典與限定禮品追蹤平台。即時更新威秀影城、各大電影院的獨家特典資訊，不錯過任何精彩好康！',
+    title: '特典速報 パルパル - 台灣電影特典資訊追蹤平台 | Movie Bonus Tracker',
+    description: '台灣最完整的電影特典與限定禮品追蹤平台 パルパル。即時更新威秀影城、各大電影院的獨家特典資訊，movie bonus、perk、限定商品一網打盡！',
     images: ['/og-image.jpg'],
   },
   
@@ -54,10 +70,10 @@ export const metadata: Metadata = {
   },
   
   verification: {
-    // 可以在這裡添加 Google Search Console、Bing 等驗證碼
-    // google: 'your-google-verification-code',
-    // yandex: 'your-yandex-verification-code',
-    // yahoo: 'your-yahoo-verification-code',
+    // 請在 Google Search Console 獲取驗證碼後替換下面的值
+    google: 'YOUR-GOOGLE-VERIFICATION-CODE', // 例如：'abcd1234efgh5678'
+    // 可選：其他搜尋引擎驗證
+    // bing: 'YOUR-BING-VERIFICATION-CODE',
   },
   
   alternates: {
@@ -80,6 +96,7 @@ export default function RootLayout({
         <StructuredData type="website" />
       </head>
       <body className="font-body antialiased">
+        <GoogleAnalytics />
         {children}
         <Toaster />
       </body>
