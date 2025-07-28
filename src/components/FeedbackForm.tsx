@@ -146,8 +146,8 @@ interface SubmissionRecord {
 }
 
 // Backend API configuration
-const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
-const USE_BACKEND_API = false; // 改為純 mailto 方案，提供結構化格式
+const BACKEND_API_URL = process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3000';
+const USE_BACKEND_API = true; // 使用後端 API
 
 export default function FeedbackForm() {
   const [isOpen, setIsOpen] = useState(false);
@@ -196,8 +196,17 @@ export default function FeedbackForm() {
   const validateForm = (): boolean => {
     if (!formData.type) {
       toast({
-        title: '錯誤',
+        title: '❗ 錯誤',
         description: '請選擇回饋類型',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    if (!formData.content || formData.content.trim().length === 0) {
+      toast({
+        title: '❗ 錯誤',
+        description: '請填寫回饋內容',
         variant: 'destructive',
       });
       return false;
@@ -206,7 +215,7 @@ export default function FeedbackForm() {
     // Check honeypot (should be empty)
     if (formData.honeypot) {
       toast({
-        title: '錯誤',
+        title: '❗ 錯誤',
         description: '表單驗證失敗',
         variant: 'destructive',
       });
@@ -218,11 +227,12 @@ export default function FeedbackForm() {
 
   const submitViaBackend = async (): Promise<boolean> => {
     try {
-      const response = await fetch(`${BACKEND_API_URL}/api/v1/feedback/submit`, {
+      const response = await fetch(`${BACKEND_API_URL}/api/feedback/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies for CORS
         body: JSON.stringify({
           type: formData.type,
           content: formData.content,
@@ -233,15 +243,17 @@ export default function FeedbackForm() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `HTTP ${response.status}`);
+        throw new Error(errorData.error || `HTTP ${response.status}`);
       }
 
       const result = await response.json();
       
+      // Success animation and feedback
       toast({
-        title: '回饋已送出',
-        description: `謝謝您的回饋！提交編號：${result.submission_id}`,
+        title: '✅ 回饋已送出',
+        description: result.message || '感謝您的寶貴意見！我們會盡快處理。',
         variant: 'default',
+        duration: 5000,
       });
 
       return true;
@@ -251,7 +263,7 @@ export default function FeedbackForm() {
       // Show specific error message
       const errorMessage = error instanceof Error ? error.message : '未知錯誤';
       toast({
-        title: '後端發送失敗',
+        title: '❌ 發送失敗',
         description: `錯誤：${errorMessage}`,
         variant: 'destructive',
       });
@@ -365,7 +377,7 @@ export default function FeedbackForm() {
 
     if (!checkRateLimit()) {
       toast({
-        title: '提交限制',
+        title: '⏱️ 提交限制',
         description: '您的提交過於頻繁，請稍後再試（每小時限制 3 次）',
         variant: 'destructive',
       });
@@ -375,8 +387,25 @@ export default function FeedbackForm() {
     setIsSubmitting(true);
 
     try {
-      // 使用 Gmail 方案
-      const success = submitViaGmail();
+      let success = false;
+      
+      if (USE_BACKEND_API) {
+        // 優先使用後端 API
+        success = await submitViaBackend();
+        
+        // 如果後端失敗，提供 Gmail 備援
+        if (!success) {
+          toast({
+            title: '切換至備用方案',
+            description: '正在開啟 Gmail...',
+            variant: 'default',
+          });
+          success = submitViaGmail();
+        }
+      } else {
+        // 直接使用 Gmail
+        success = submitViaGmail();
+      }
 
       if (success) {
         // 追蹤反饋提交事件
@@ -385,20 +414,22 @@ export default function FeedbackForm() {
         // Record successful submission
         recordSubmission();
 
-        // Reset form and close
-        setFormData({
-          type: '',
-          content: '',
-          email: '',
-          honeypot: '',
-        });
-        setIsOpen(false);
+        // Reset form and close with animation
+        setTimeout(() => {
+          setFormData({
+            type: '',
+            content: '',
+            email: '',
+            honeypot: '',
+          });
+          setIsOpen(false);
+        }, 500);
       }
 
     } catch (error) {
       console.error('Submission failed:', error);
       toast({
-        title: '發送失敗',
+        title: '❌ 發送失敗',
         description: '提交過程中發生錯誤，請稍後再試',
         variant: 'destructive',
       });
@@ -516,37 +547,28 @@ export default function FeedbackForm() {
 
                     {/* Content */}
                     <div className="space-y-2">
-                      <Label htmlFor="feedback-content">補充說明 (可選)</Label>
+                      <Label htmlFor="feedback-content">回饋內容 *</Label>
                       <Textarea
                         id="feedback-content"
-                        placeholder="如有額外補充資訊，請在此填寫..."
+                        placeholder={
+                          formData.type === 'bonus_completion' 
+                            ? "請說明電影名稱、影城、特典內容等資訊..."
+                            : formData.type === 'suggestion'
+                            ? "請詳細說明您的建議..."
+                            : formData.type === 'data_correction'
+                            ? "請說明需要修正的內容..."
+                            : "請輸入您的回饋內容..."
+                        }
                         value={formData.content}
                         onChange={(e) => handleInputChange('content', e.target.value)}
-                        rows={3}
+                        rows={4}
                         className="resize-none"
+                        required
                       />
                       <p className="text-xs text-muted-foreground">
-                        此欄位為可選，系統會提供結構化表單供您填寫
+                        請提供詳細資訊以便我們處理您的回饋
                       </p>
                     </div>
-                    
-                    {/* 預覽郵件內容 */}
-                    {formData.type && (
-                      <div className="space-y-2">
-                        <Label>📧 郵件預覽</Label>
-                        <div className="bg-muted/50 rounded-lg p-3 text-sm max-h-32 overflow-y-auto">
-                          <p className="font-medium text-xs text-muted-foreground mb-2">
-                            主旨：{EMAIL_TEMPLATES[formData.type as keyof typeof EMAIL_TEMPLATES]?.subject}
-                          </p>
-                          <div className="text-xs whitespace-pre-wrap opacity-70">
-                            {EMAIL_TEMPLATES[formData.type as keyof typeof EMAIL_TEMPLATES]?.body.substring(0, 200)}...
-                          </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          點擊「開啟 Gmail」後會在新分頁開啟 Gmail 撰寫頁面，您可以在結構化表單中填寫詳細資訊
-                        </p>
-                      </div>
-                    )}
 
                     {/* Email (Optional) */}
                     <div className="space-y-2">
@@ -585,15 +607,18 @@ export default function FeedbackForm() {
                       </Button>
                       <Button
                         type="submit"
-                        disabled={isSubmitting}
-                        className="flex-1"
+                        disabled={isSubmitting || !formData.type}
+                        className="flex-1 transition-all"
                       >
                         {isSubmitting ? (
-                          '開啟中...'
+                          <div className="flex items-center">
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            送出中...
+                          </div>
                         ) : (
                           <>
                             <Send className="w-4 h-4 mr-2" />
-                            開啟 Gmail
+                            送出回饋
                           </>
                         )}
                       </Button>

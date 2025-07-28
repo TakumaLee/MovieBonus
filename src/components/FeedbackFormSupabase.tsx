@@ -11,7 +11,35 @@ import { useToast } from '@/hooks/use-toast';
 import { MessageCircle, X, Send, Gift, CheckCircle, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '@/lib/gtag';
-import { submitFeedback, getFeedbackTypes, type FeedbackSubmission, type BonusCompletionDetails } from '@/lib/supabase-client';
+import { apiClient, handleApiError } from '@/lib/api-client';
+
+// 回報相關的類型定義
+interface FeedbackSubmission {
+  feedback_type: string;
+  title?: string;
+  content: string;
+  contact_email?: string;
+  contact_name?: string;
+  honeypot?: string;
+  user_agent?: string;
+  referrer_url?: string;
+}
+
+interface BonusCompletionDetails {
+  movie_title?: string;
+  movie_english_title?: string;
+  cinema_name?: string;
+  bonus_type?: string;
+  bonus_name?: string;
+  bonus_description?: string;
+  acquisition_method?: string;
+  activity_period_start?: string;
+  activity_period_end?: string;
+  quantity_limit?: string;
+  source_type?: string;
+  source_url?: string;
+  source_description?: string;
+}
 
 interface FeedbackFormData {
   type: string;
@@ -236,21 +264,24 @@ export default function FeedbackFormSupabase() {
         };
       }
 
-      const result = await submitFeedback(feedbackData, bonusDetails);
+      const result = await apiClient.post('/api/feedback/user-submission', {
+        feedback: feedbackData,
+        bonus_details: bonusDetails,
+      });
 
-      if (result.success) {
+      if (result.success && result.data) {
         // 追蹤成功提交事件
         trackEvent.feedbackSubmit(formData.type);
         recordSubmission();
         
         setSubmissionResult({
           success: true,
-          submission_id: result.submission_id,
+          submission_id: result.data.submission_id,
         });
 
         toast({
           title: '回饋已成功提交！',
-          description: `感謝您的回饋！提交編號：${result.submission_id}`,
+          description: `感謝您的回饋！提交編號：${result.data.submission_id}`,
           variant: 'default',
         });
 
@@ -279,22 +310,24 @@ export default function FeedbackFormSupabase() {
           sourceDescription: '',
         });
       } else {
+        const errorMessage = handleApiError(new Error(result.error || 'Unknown error'));
         setSubmissionResult({
           success: false,
-          error: result.error,
+          error: errorMessage,
         });
 
         toast({
           title: '提交失敗',
-          description: result.error || '發生未知錯誤，請稍後再試',
+          description: errorMessage,
           variant: 'destructive',
         });
       }
     } catch (error) {
       console.error('Submission failed:', error);
+      const errorMessage = handleApiError(error);
       toast({
         title: '提交失敗',
-        description: '網路錯誤，請檢查連線後再試',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
