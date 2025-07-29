@@ -12,6 +12,7 @@ Visit: https://vercel.com/nebula-proj/moviebonus-frontend/settings/environment-v
 ```env
 # API Configuration
 NEXT_PUBLIC_API_URL=https://moviebonus-python-scrapers-777964931661.asia-east1.run.app
+NEXT_PUBLIC_NODE_API_URL=https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app
 NEXT_PUBLIC_API_TIMEOUT=30000
 
 # Supabase Configuration

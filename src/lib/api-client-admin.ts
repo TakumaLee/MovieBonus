@@ -30,8 +30,13 @@ class AdminApiClient {
   private timeout: number;
 
   constructor() {
-    // Use Node.js backend URL from environment variable
-    this.baseUrl = process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3000';
+    // Use Node.js backend URL
+    // In production, use the Cloud Run URL
+    // In development, use localhost
+    const isProduction = process.env.NODE_ENV === 'production';
+    this.baseUrl = isProduction 
+      ? 'https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app'
+      : (process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3000');
     this.timeout = 30000; // 30 seconds timeout
   }
 
