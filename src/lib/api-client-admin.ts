@@ -186,5 +186,9 @@ export const adminApi = {
     },
     get: (id: string) => adminApiClient.get(`/api/admin/feedbacks/${id}`),
     update: (id: string, data: any) => adminApiClient.put(`/api/admin/feedbacks/${id}`, data),
+    processLink: (feedbackId: string, data: any) => 
+      adminApiClient.post(`/api/admin/feedbacks/${feedbackId}/process-link`, data),
+    saveBonusData: (feedbackId: string, bonusData: any) =>
+      adminApiClient.post(`/api/admin/feedbacks/${feedbackId}/save-bonus`, bonusData),
   },
 };

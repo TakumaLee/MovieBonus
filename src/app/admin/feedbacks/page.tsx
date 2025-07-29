@@ -34,13 +34,15 @@ import {
   ChevronLeft,
   ChevronRight,
   LogIn,
-  Loader2
+  Loader2,
+  Link2
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
 import { adminApi, AdminApiError } from '@/lib/api-client-admin';
 import { handleApiError } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
+import { BonusLinkProcessModal } from '@/components/admin/BonusLinkProcessModal';
 
 interface Feedback {
   id: string;
@@ -97,6 +99,8 @@ function FeedbacksContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [authError, setAuthError] = useState(false);
+  const [linkProcessModalOpen, setLinkProcessModalOpen] = useState(false);
+  const [selectedLinkFeedback, setSelectedLinkFeedback] = useState<Feedback | null>(null);
   
   const [filters, setFilters] = useState<FilterState>({
     status: searchParams.get('status') || 'all',
@@ -245,6 +249,31 @@ function FeedbacksContent() {
 
   // 計算總頁數
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
+  // 檢查是否應該顯示處理連結按鈕
+  const shouldShowProcessLinkButton = (feedback: Feedback): boolean => {
+    // 必須是特典補完類型
+    if (feedback.feedback_type !== 'bonus_completion') return false;
+    
+    // 必須有 bonus_details 和 source_url
+    if (!feedback.bonus_details?.source_url) return false;
+    
+    // 檢查是否為 Facebook 連結
+    const url = feedback.bonus_details.source_url.toLowerCase();
+    return url.includes('facebook.com') || url.includes('fb.com');
+  };
+
+  // 處理連結按鈕點擊
+  const handleProcessLink = (feedback: Feedback) => {
+    setSelectedLinkFeedback(feedback);
+    setLinkProcessModalOpen(true);
+  };
+
+  // 處理連結處理完成
+  const handleLinkProcessComplete = () => {
+    // 重新載入資料以更新狀態
+    fetchFeedbacks();
+  };
 
   if (loading && feedbacks.length === 0) {
     return (
@@ -486,17 +515,29 @@ function FeedbacksContent() {
                         {format(new Date(feedback.created_at), 'MM/dd HH:mm', { locale: zhTW })}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedFeedback(feedback);
-                            setDetailsOpen(true);
-                          }}
-                        >
-                          <Eye className="h-4 w-4 mr-2" />
-                          檢視
-                        </Button>
+                        <div className="flex items-center justify-end gap-2">
+                          {shouldShowProcessLinkButton(feedback) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleProcessLink(feedback)}
+                            >
+                              <Link2 className="h-4 w-4 mr-2" />
+                              處理連結
+                            </Button>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedFeedback(feedback);
+                              setDetailsOpen(true);
+                            }}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            檢視
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -779,6 +820,24 @@ function FeedbacksContent() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* 特典連結處理 Modal */}
+      {selectedLinkFeedback && (
+        <BonusLinkProcessModal
+          open={linkProcessModalOpen}
+          onOpenChange={setLinkProcessModalOpen}
+          feedbackId={selectedLinkFeedback.id}
+          facebookUrl={selectedLinkFeedback.bonus_details?.source_url || ''}
+          bonusDetails={{
+            movie_title: selectedLinkFeedback.bonus_details?.movie_title,
+            movie_english_title: selectedLinkFeedback.bonus_details?.movie_english_title,
+            cinema_name: selectedLinkFeedback.bonus_details?.cinema_name,
+            bonus_type: selectedLinkFeedback.bonus_details?.bonus_type,
+            bonus_name: selectedLinkFeedback.bonus_details?.bonus_name,
+          }}
+          onProcessComplete={handleLinkProcessComplete}
+        />
+      )}
     </div>
   );
 }
