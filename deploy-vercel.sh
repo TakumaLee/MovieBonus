@@ -44,7 +44,7 @@ fi
 
 # 部署到 Vercel
 echo "🚀 部署到 Vercel..."
-vercel --prod
+vercel --prod --yes
 
 echo "🎉 部署完成！"
 echo "📱 檢查您的 Vercel 控制台以獲取網站 URL" 
