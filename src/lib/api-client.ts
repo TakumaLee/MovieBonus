@@ -5,6 +5,8 @@
  * All Supabase data is accessed through the backend API, not directly
  */
 
+import { Movie, MovieQueryParams } from './types';
+
 // ============================================================================
 // Base API Client Configuration
 // ============================================================================
@@ -146,6 +148,31 @@ class ApiClient {
 
 // Export singleton instance
 export const apiClient = new ApiClient();
+
+// ============================================================================
+// Movie API Endpoints
+// ============================================================================
+
+export const movieApi = {
+  // Get movie list with pagination and filters
+  list: (params?: MovieQueryParams) => 
+    apiClient.get<Movie[]>('/api/v1/movies', params),
+  
+  // Get single movie by ID
+  get: (id: string) => 
+    apiClient.get<Movie>(`/api/v1/movies/${id}`),
+  
+  // Search movies
+  search: (query: string) => 
+    apiClient.get<Movie[]>('/api/v1/movies/search', { q: query }),
+  
+  // Get movie promotions
+  getPromotions: (movieId: string) => 
+    apiClient.get(`/api/v1/movie-promotions-query/by-id/${movieId}`, {
+      include_gifts: true,
+      active_only: false,
+    }),
+};
 
 // ============================================================================
 // Error Handling Utilities

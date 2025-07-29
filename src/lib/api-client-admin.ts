@@ -191,4 +191,29 @@ export const adminApi = {
     saveBonusData: (feedbackId: string, bonusData: any) =>
       adminApiClient.post(`/api/admin/feedbacks/${feedbackId}/save-bonus`, bonusData),
   },
+  
+  // Movies management
+  movies: {
+    list: (params?: any) => {
+      const queryString = params ? `?${new URLSearchParams(params).toString()}` : '';
+      return adminApiClient.get(`/api/admin/movies${queryString}`);
+    },
+    get: (id: string) => adminApiClient.get(`/api/admin/movies/${id}`),
+    search: (query: string) => adminApiClient.get(`/api/admin/movies/search?q=${encodeURIComponent(query)}`),
+    
+    // Movie promotions/bonuses management
+    promotions: {
+      list: (movieId: string) => adminApiClient.get(`/api/admin/movies/${movieId}/promotions`),
+      get: (movieId: string, promotionId: string) => 
+        adminApiClient.get(`/api/admin/movies/${movieId}/promotions/${promotionId}`),
+      create: (movieId: string, data: any) => 
+        adminApiClient.post(`/api/admin/movies/${movieId}/promotions`, data),
+      update: (movieId: string, promotionId: string, data: any) => 
+        adminApiClient.put(`/api/admin/movies/${movieId}/promotions/${promotionId}`, data),
+      delete: (movieId: string, promotionId: string) => 
+        adminApiClient.delete(`/api/admin/movies/${movieId}/promotions/${promotionId}`),
+      toggleStatus: (movieId: string, promotionId: string) =>
+        adminApiClient.post(`/api/admin/movies/${movieId}/promotions/${promotionId}/toggle-status`),
+    },
+  },
 };

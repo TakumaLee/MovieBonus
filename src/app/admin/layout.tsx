@@ -13,7 +13,8 @@ import {
   Menu,
   ChevronRight,
   Settings,
-  Users
+  Users,
+  Film
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -43,6 +44,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       title: '儀表板',
       href: '/admin',
       icon: LayoutDashboard,
+    },
+    {
+      title: '電影管理',
+      href: '/admin/movies',
+      icon: Film,
     },
     {
       title: '回報管理',

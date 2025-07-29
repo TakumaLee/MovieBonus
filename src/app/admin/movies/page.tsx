@@ -1,0 +1,277 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { EmptyState } from '@/components/ui/empty-state';
+import { useToast } from '@/hooks/use-toast';
+import { adminApi } from '@/lib/api-client-admin';
+import { Movie, MovieStatus } from '@/lib/types';
+import { Search, Calendar, Clock, Film, ChevronLeft, ChevronRight } from 'lucide-react';
+import { format } from 'date-fns';
+import { zhTW } from 'date-fns/locale';
+
+interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export default function MoviesPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0,
+  });
+  
+  // 載入電影列表
+  const loadMovies = async (page: number = 1, search?: string) => {
+    try {
+      setLoading(true);
+      const params: any = {
+        page,
+        limit: pagination.limit,
+      };
+      
+      if (search) {
+        params.search = search;
+      }
+      
+      const response = await adminApi.movies.list(params);
+      
+      if (response.success) {
+        setMovies(response.data.movies || []);
+        setPagination({
+          page: response.data.page || 1,
+          limit: response.data.limit || 10,
+          total: response.data.total || 0,
+          totalPages: response.data.totalPages || 0,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load movies:', error);
+      toast({
+        title: '載入失敗',
+        description: '無法載入電影列表，請稍後再試',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    loadMovies();
+  }, []);
+  
+  // 處理搜尋
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchTerm(searchQuery);
+    loadMovies(1, searchQuery);
+  };
+  
+  // 處理分頁
+  const handlePageChange = (newPage: number) => {
+    loadMovies(newPage, searchTerm);
+  };
+  
+  // 取得狀態顏色
+  const getStatusVariant = (status: MovieStatus) => {
+    switch (status) {
+      case 'showing':
+        return 'default';
+      case 'coming_soon':
+        return 'secondary';
+      case 'ended':
+        return 'outline';
+      default:
+        return 'default';
+    }
+  };
+  
+  // 取得狀態文字
+  const getStatusText = (status: MovieStatus) => {
+    switch (status) {
+      case 'showing':
+        return '上映中';
+      case 'coming_soon':
+        return '即將上映';
+      case 'ended':
+        return '已下檔';
+      default:
+        return status;
+    }
+  };
+  
+  // 格式化日期
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '-';
+    try {
+      return format(new Date(dateString), 'yyyy/MM/dd', { locale: zhTW });
+    } catch {
+      return dateString;
+    }
+  };
+  
+  return (
+    <div className="space-y-6">
+      {/* 頁面標題 */}
+      <div>
+        <h1 className="text-3xl font-bold">電影管理</h1>
+        <p className="text-muted-foreground mt-2">管理電影資訊與特典內容</p>
+      </div>
+      
+      {/* 搜尋區塊 */}
+      <Card>
+        <CardHeader>
+          <CardTitle>搜尋電影</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSearch} className="flex gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                type="text"
+                placeholder="搜尋電影名稱..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Button type="submit">搜尋</Button>
+          </form>
+        </CardContent>
+      </Card>
+      
+      {/* 電影列表 */}
+      <Card>
+        <CardHeader>
+          <CardTitle>電影列表</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <Skeleton key={i} className="h-16 w-full" />
+              ))}
+            </div>
+          ) : movies.length === 0 ? (
+            <EmptyState
+              icon={<Film className="h-12 w-12" />}
+              title="沒有找到電影"
+              description={searchTerm ? "請嘗試其他搜尋關鍵字" : "目前沒有電影資料"}
+            />
+          ) : (
+            <>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>電影名稱</TableHead>
+                    <TableHead>狀態</TableHead>
+                    <TableHead>上映日期</TableHead>
+                    <TableHead>下檔日期</TableHead>
+                    <TableHead>特典數量</TableHead>
+                    <TableHead className="text-right">操作</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {movies.map((movie) => (
+                    <TableRow key={movie.id}>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{movie.title}</div>
+                          {movie.english_title && (
+                            <div className="text-sm text-muted-foreground">{movie.english_title}</div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusVariant(movie.status)}>
+                          {getStatusText(movie.status)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          {formatDate(movie.release_date)}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          {formatDate(movie.end_date)}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">
+                          {movie.bonus_count || 0} 個特典
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => router.push(`/admin/movies/${movie.id}`)}
+                        >
+                          管理特典
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              
+              {/* 分頁控制 */}
+              {pagination.totalPages > 1 && (
+                <div className="flex items-center justify-between mt-6">
+                  <p className="text-sm text-muted-foreground">
+                    顯示 {(pagination.page - 1) * pagination.limit + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} 筆，
+                    共 {pagination.total} 筆
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(pagination.page - 1)}
+                      disabled={pagination.page === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      上一頁
+                    </Button>
+                    <span className="text-sm">
+                      第 {pagination.page} / {pagination.totalPages} 頁
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(pagination.page + 1)}
+                      disabled={pagination.page === pagination.totalPages}
+                    >
+                      下一頁
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
