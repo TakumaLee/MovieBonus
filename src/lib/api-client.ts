@@ -44,6 +44,13 @@ class ApiClient {
     // Backend Python API URL (default to localhost for development)
     this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
     this.timeout = 30000; // 30 seconds timeout
+    
+    // Log the API URL in development for debugging
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.log('[API Client] Using API URL:', this.baseURL);
+      console.log('[API Client] Environment:', process.env.NODE_ENV);
+      console.log('[API Client] NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+    }
   }
 
   private async makeRequest<T>(
@@ -57,7 +64,8 @@ class ApiClient {
         'Content-Type': 'application/json',
         ...options.headers,
       },
-      credentials: 'include', // Include cookies for authentication
+      // Remove credentials: 'include' to fix CORS issues with wildcard origin
+      // credentials: 'include', // Include cookies for authentication
       ...options,
     };
 

@@ -176,7 +176,7 @@ export default function Home() {
               <Alert className="mb-6">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  無法連接到後端服務。請確認後端服務正在運行 (localhost:8080)，或使用模擬資料。
+                  無法連接到後端服務。{process.env.NODE_ENV === 'development' ? '請確認後端服務正在運行。' : '請稍後再試。'}
                 </AlertDescription>
               </Alert>
             )}
@@ -197,7 +197,7 @@ export default function Home() {
               <Alert className="mb-6">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  無法連接到後端服務。請確認後端服務正在運行 (localhost:8080)，或使用模擬資料。
+                  無法連接到後端服務。{process.env.NODE_ENV === 'development' ? '請確認後端服務正在運行。' : '請稍後再試。'}
                 </AlertDescription>
               </Alert>
             )}

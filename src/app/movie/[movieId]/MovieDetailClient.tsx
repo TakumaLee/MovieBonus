@@ -398,7 +398,7 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
               <Alert key="error-alert" className="mb-6">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  無法連接到後端服務。請確認後端服務正在運行 (localhost:8080)。
+                  無法連接到後端服務。{process.env.NODE_ENV === 'development' ? '請確認後端服務正在運行。' : '請稍後再試。'}
                 </AlertDescription>
               </Alert>
             )}
