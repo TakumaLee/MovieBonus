@@ -255,17 +255,41 @@ function FeedbacksContent() {
     // 必須是特典補完類型
     if (feedback.feedback_type !== 'bonus_completion') return false;
     
-    // 必須有 bonus_details 和 source_url
-    if (!feedback.bonus_details?.source_url) return false;
+    // 檢查內容中是否包含 Facebook 連結
+    const content = feedback.content?.toLowerCase() || '';
+    const hasFacebookLink = content.includes('facebook.com') || content.includes('fb.com') || content.includes('fb.me');
     
-    // 檢查是否為 Facebook 連結
-    const url = feedback.bonus_details.source_url.toLowerCase();
-    return url.includes('facebook.com') || url.includes('fb.com');
+    // 或者檢查 bonus_details 中的 source_url
+    const sourceUrl = feedback.bonus_details?.source_url?.toLowerCase() || '';
+    const hasSourceUrl = sourceUrl.includes('facebook.com') || sourceUrl.includes('fb.com') || sourceUrl.includes('fb.me');
+    
+    return hasFacebookLink || hasSourceUrl;
   };
 
   // 處理連結按鈕點擊
   const handleProcessLink = (feedback: Feedback) => {
-    setSelectedLinkFeedback(feedback);
+    // 從內容或 source_url 中提取 Facebook URL
+    let facebookUrl = feedback.bonus_details?.source_url || '';
+    
+    if (!facebookUrl || (!facebookUrl.includes('facebook.com') && !facebookUrl.includes('fb.com') && !facebookUrl.includes('fb.me'))) {
+      // 嘗試從內容中提取 Facebook URL
+      const urlRegex = /(https?:\/\/(?:www\.)?(?:facebook\.com|fb\.com|fb\.me)\/[^\s]+)/gi;
+      const matches = feedback.content?.match(urlRegex);
+      if (matches && matches.length > 0) {
+        facebookUrl = matches[0];
+      }
+    }
+    
+    // 更新 feedback 物件以包含提取的 URL
+    const updatedFeedback = {
+      ...feedback,
+      bonus_details: {
+        ...feedback.bonus_details,
+        source_url: facebookUrl
+      }
+    };
+    
+    setSelectedLinkFeedback(updatedFeedback);
     setLinkProcessModalOpen(true);
   };
 
@@ -516,11 +540,12 @@ function FeedbacksContent() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {shouldShowProcessLinkButton(feedback) && (
+                          {feedback.feedback_type === 'bonus_completion' && shouldShowProcessLinkButton(feedback) && (
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleProcessLink(feedback)}
+                              title="處理 Facebook 連結"
                             >
                               <Link2 className="h-4 w-4 mr-2" />
                               處理連結
@@ -622,6 +647,18 @@ function FeedbacksContent() {
                     <div className="mt-1 p-3 bg-muted rounded-md whitespace-pre-wrap">
                       {selectedFeedback.content}
                     </div>
+                    {/* 如果是特典補完且內容包含 Facebook 連結，顯示提示 */}
+                    {selectedFeedback.feedback_type === 'bonus_completion' && 
+                     (selectedFeedback.content?.toLowerCase().includes('facebook.com') || 
+                      selectedFeedback.content?.toLowerCase().includes('fb.com') ||
+                      selectedFeedback.content?.toLowerCase().includes('fb.me')) && (
+                      <Alert className="mt-2">
+                        <Link2 className="h-4 w-4" />
+                        <AlertDescription>
+                          此回報內容包含 Facebook 連結，您可以使用「處理連結」功能擷取特典資訊。
+                        </AlertDescription>
+                      </Alert>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -749,6 +786,23 @@ function FeedbacksContent() {
                         <div className="mt-1 p-3 bg-muted rounded-md whitespace-pre-wrap">
                           {selectedFeedback.bonus_details.source_description}
                         </div>
+                      </div>
+                    )}
+                    
+                    {/* 在詳情視窗中也顯示處理連結按鈕 */}
+                    {shouldShowProcessLinkButton(selectedFeedback) && (
+                      <div className="mt-4 pt-4 border-t">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            handleProcessLink(selectedFeedback);
+                            setDetailsOpen(false); // 關閉詳情視窗
+                          }}
+                          className="w-full"
+                        >
+                          <Link2 className="h-4 w-4 mr-2" />
+                          處理 Facebook 連結
+                        </Button>
                       </div>
                     )}
                   </div>
