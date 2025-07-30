@@ -12,6 +12,7 @@ import { useMovieDetail } from '@/hooks/useMovieDetail';
 import type { MoviePromotion } from '@/lib/types';
 import { format } from 'date-fns';
 import { use } from 'react';
+import { getMovieStatus, getStatusVariant, getStatusText } from '@/lib/movie-utils';
 
 interface MovieDetailClientProps {
   params: Promise<{
@@ -303,9 +304,8 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                 
                 {/* Movie Status Badge */}
                 <div key="status-badges" className="flex items-center gap-2 mt-4">
-                  <Badge variant={movie.status === 'showing' ? 'default' : 'secondary'}>
-                    {movie.status === 'showing' ? '現正上映' : 
-                     movie.status === 'coming_soon' ? '即將上映' : '已下檔'}
+                  <Badge variant={getStatusVariant(getMovieStatus(movie))}>
+                    {getStatusText(getMovieStatus(movie))}
                   </Badge>
                   {bonuses.length > 0 && (
                     <Badge variant="outline" className="bg-accent/10 text-accent">

@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { adminApi } from '@/lib/api-client-admin';
-import { Movie, MoviePromotion } from '@/lib/types';
+import { Movie, MoviePromotion, MovieStatus } from '@/lib/types';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
+import { getMovieStatus, getStatusVariant, getStatusText } from '@/lib/movie-utils';
 import MovieBonusForm from '@/components/admin/MovieBonusForm';
 import BonusCard from '@/components/admin/BonusCard';
 
@@ -190,33 +191,6 @@ export default function MovieDetailPage() {
     }
   };
   
-  // 取得狀態顏色
-  const getStatusVariant = (status: string) => {
-    switch (status) {
-      case 'showing':
-        return 'default';
-      case 'coming_soon':
-        return 'secondary';
-      case 'ended':
-        return 'outline';
-      default:
-        return 'default';
-    }
-  };
-  
-  // 取得狀態文字
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'showing':
-        return '上映中';
-      case 'coming_soon':
-        return '即將上映';
-      case 'ended':
-        return '已下檔';
-      default:
-        return status;
-    }
-  };
   
   if (loading) {
     return (
@@ -264,8 +238,8 @@ export default function MovieDetailPage() {
                 <p className="text-muted-foreground mt-1">{movie.english_title}</p>
               )}
             </div>
-            <Badge variant={getStatusVariant(movie.status)}>
-              {getStatusText(movie.status)}
+            <Badge variant={getStatusVariant(getMovieStatus(movie))}>
+              {getStatusText(getMovieStatus(movie))}
             </Badge>
           </div>
         </CardHeader>

@@ -15,6 +15,7 @@ import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackFormNew from '@/components/FeedbackFormNew';
 import { MovieImage } from '@/components/MovieImage';
 import type { Movie } from '@/lib/types';
+import { getMovieStatus, getStatusText } from '@/lib/movie-utils';
 
 interface MovieCardProps {
   movie: Movie;
@@ -50,8 +51,7 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
           )}
           <div className="flex items-center gap-2 mt-2">
             <Badge variant="secondary" className="text-xs">
-              {movie.status === 'showing' ? '上映中' : 
-               movie.status === 'coming_soon' ? '即將上映' : '已下檔'}
+              {getStatusText(getMovieStatus(movie))}
             </Badge>
           </div>
         </div>

@@ -10,6 +10,7 @@ import { useSearch } from '@/hooks/useSearch';
 import { cn } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 import Link from 'next/link';
+import { getMovieStatus, getStatusVariant, getStatusText } from '@/lib/movie-utils';
 
 interface SearchBarProps {
   className?: string;
@@ -213,9 +214,8 @@ export function SearchBar({
                           </p>
                         )}
                         <div className="flex items-center gap-2 mt-1">
-                          <Badge variant={movie.status === 'showing' ? 'default' : 'secondary'} className="text-xs">
-                            {movie.status === 'showing' ? '上映中' : 
-                             movie.status === 'coming_soon' ? '即將上映' : '已下檔'}
+                          <Badge variant={getStatusVariant(getMovieStatus(movie))} className="text-xs">
+                            {getStatusText(getMovieStatus(movie))}
                           </Badge>
                           {movie.release_date && (
                             <span className="text-xs text-muted-foreground">

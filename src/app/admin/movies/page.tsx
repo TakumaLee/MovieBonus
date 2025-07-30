@@ -15,6 +15,7 @@ import { Movie, MovieStatus } from '@/lib/types';
 import { Search, Calendar, Clock, Film, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
+import { getMovieStatus, getStatusVariant, getStatusText } from '@/lib/movie-utils';
 
 interface PaginationInfo {
   page: number;
@@ -90,33 +91,6 @@ export default function MoviesPage() {
     loadMovies(newPage, searchTerm);
   };
   
-  // 取得狀態顏色
-  const getStatusVariant = (status: MovieStatus) => {
-    switch (status) {
-      case 'showing':
-        return 'default';
-      case 'coming_soon':
-        return 'secondary';
-      case 'ended':
-        return 'outline';
-      default:
-        return 'default';
-    }
-  };
-  
-  // 取得狀態文字
-  const getStatusText = (status: MovieStatus) => {
-    switch (status) {
-      case 'showing':
-        return '上映中';
-      case 'coming_soon':
-        return '即將上映';
-      case 'ended':
-        return '已下檔';
-      default:
-        return status;
-    }
-  };
   
   // 格式化日期
   const formatDate = (dateString?: string) => {
@@ -201,8 +175,8 @@ export default function MoviesPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={getStatusVariant(movie.status)}>
-                          {getStatusText(movie.status)}
+                        <Badge variant={getStatusVariant(getMovieStatus(movie))}>
+                          {getStatusText(getMovieStatus(movie))}
                         </Badge>
                       </TableCell>
                       <TableCell>
