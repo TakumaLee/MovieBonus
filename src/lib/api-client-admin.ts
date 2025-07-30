@@ -28,6 +28,9 @@ export class AdminApiError extends Error {
 class AdminApiClient {
   private baseUrl: string;
   private timeout: number;
+  private testAuthEnabled: boolean;
+  private testToken: string = 'development-test-token-2025';
+  private testCookieName: string = 'test-admin-token';
 
   constructor() {
     // Use Node.js backend URL
@@ -38,11 +41,23 @@ class AdminApiClient {
       ? 'https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app'
       : (process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3000');
     this.timeout = 30000; // 30 seconds timeout
+    
+    // Enable test auth in development or when explicitly enabled
+    this.testAuthEnabled = !isProduction || process.env.NEXT_PUBLIC_ENABLE_TEST_AUTH === 'true';
+  }
+
+  private setTestAuthCookie() {
+    if (typeof document !== 'undefined' && this.testAuthEnabled) {
+      // Set cookie with appropriate settings
+      const cookieValue = `${this.testCookieName}=${this.testToken}; path=/; max-age=86400; SameSite=Lax`;
+      document.cookie = cookieValue;
+    }
   }
 
   private async makeRequest<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    isRetry: boolean = false
   ): Promise<AdminApiResponse<T>> {
     // Construct full URL with Node.js backend
     const url = `${this.baseUrl}${endpoint}`;
@@ -79,6 +94,18 @@ class AdminApiClient {
 
         // Handle 401 Unauthorized specifically
         if (response.status === 401) {
+          // If test auth is enabled and this is not a retry, set test cookie and retry
+          if (this.testAuthEnabled && !isRetry) {
+            console.log('Received 401, setting test auth cookie and retrying...');
+            this.setTestAuthCookie();
+            
+            // Wait a bit for the cookie to be set
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            // Retry the request
+            return this.makeRequest<T>(endpoint, options, true);
+          }
+          
           // Check if we're already on the login page to avoid redirect loop
           if (typeof window !== 'undefined' && !window.location.pathname.includes('/admin/login')) {
             // Store the current path for redirect after login
@@ -109,6 +136,19 @@ class AdminApiClient {
       
       throw new AdminApiError(error instanceof Error ? error.message : 'Unknown error occurred');
     }
+  }
+
+  // Initialize test authentication (optional)
+  initializeTestAuth() {
+    if (this.testAuthEnabled) {
+      this.setTestAuthCookie();
+      console.log('Test authentication initialized');
+    }
+  }
+
+  // Check if test auth is enabled
+  isTestAuthEnabled(): boolean {
+    return this.testAuthEnabled;
   }
 
   // HTTP Methods
