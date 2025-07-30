@@ -49,10 +49,49 @@ interface MovieSchema {
     price?: string;
     priceCurrency?: string;
   };
+  aggregateRating?: {
+    '@type': string;
+    ratingValue?: number;
+    ratingCount?: number;
+    bestRating?: number;
+    worstRating?: number;
+  };
+  director?: {
+    '@type': string;
+    name: string;
+  };
+  actor?: Array<{
+    '@type': string;
+    name: string;
+  }>;
+}
+
+interface BreadcrumbSchema {
+  '@context': string;
+  '@type': string;
+  itemListElement: Array<{
+    '@type': string;
+    position: number;
+    name: string;
+    item?: string;
+  }>;
+}
+
+interface FAQSchema {
+  '@context': string;
+  '@type': string;
+  mainEntity: Array<{
+    '@type': string;
+    name: string;
+    acceptedAnswer: {
+      '@type': string;
+      text: string;
+    };
+  }>;
 }
 
 interface StructuredDataProps {
-  type: 'website' | 'movie' | 'organization';
+  type: 'website' | 'movie' | 'organization' | 'breadcrumb' | 'faq';
   data?: {
     title?: string;
     description?: string;
@@ -61,6 +100,20 @@ interface StructuredDataProps {
     genre?: string[];
     datePublished?: string;
     price?: string;
+    rating?: {
+      value: number;
+      count: number;
+    };
+    director?: string;
+    actors?: string[];
+    breadcrumbs?: Array<{
+      name: string;
+      url?: string;
+    }>;
+    faqs?: Array<{
+      question: string;
+      answer: string;
+    }>;
   };
 }
 
@@ -76,7 +129,7 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           name: '特典速報',
           url: baseUrl,
           description: '台灣最完整的電影特典與限定禮品追蹤平台',
-          logo: `${baseUrl}/logo.png`,
+          // logo: `${baseUrl}/logo.png`, // Uncomment when logo is available
           sameAs: [
             // 可以添加社交媒體連結
           ],
@@ -130,7 +183,63 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           };
         }
 
+        if (data?.rating) {
+          movieSchema.aggregateRating = {
+            '@type': 'AggregateRating',
+            ratingValue: data.rating.value,
+            ratingCount: data.rating.count,
+            bestRating: 5,
+            worstRating: 1,
+          };
+        }
+
+        if (data?.director) {
+          movieSchema.director = {
+            '@type': 'Person',
+            name: data.director,
+          };
+        }
+
+        if (data?.actors && data.actors.length > 0) {
+          movieSchema.actor = data.actors.map(actor => ({
+            '@type': 'Person',
+            name: actor,
+          }));
+        }
+
         return movieSchema;
+
+      case 'breadcrumb':
+        if (!data?.breadcrumbs) return null;
+        
+        const breadcrumbSchema: BreadcrumbSchema = {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: data.breadcrumbs.map((crumb, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: crumb.name,
+            ...(crumb.url && { item: crumb.url }),
+          })),
+        };
+        return breadcrumbSchema;
+
+      case 'faq':
+        if (!data?.faqs || data.faqs.length === 0) return null;
+        
+        const faqSchema: FAQSchema = {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: data.faqs.map(faq => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.answer,
+            },
+          })),
+        };
+        return faqSchema;
 
       default:
         return null;

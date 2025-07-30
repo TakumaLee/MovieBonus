@@ -21,6 +21,46 @@ const nextConfig: NextConfig = {
   // 強制客戶端渲染，避免 SSG 影響圖片處理
   output: process.env.NODE_ENV === 'production' ? undefined : undefined,
   
+  // SEO 優化配置
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow',
+          },
+        ],
+      },
+      {
+        source: '/admin/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow',
+          },
+        ],
+      },
+    ];
+  },
+  
+  // 重定向設置
+  async redirects() {
+    return [
+      {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/home',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
+  
   // Webpack 配置：完全禁用圖片處理
   webpack: (config: any, { isServer }: any) => {
     // 移除 Next.js 默認的圖片處理規則
