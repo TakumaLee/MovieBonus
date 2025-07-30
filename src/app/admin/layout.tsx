@@ -10,6 +10,7 @@ import {
   LayoutDashboard, 
   MessageSquare, 
   LogOut, 
+  LogIn,
   Menu,
   ChevronRight,
   Settings,
@@ -37,6 +38,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   // 導航項目
   const navItems: NavItem[] = [
@@ -79,9 +82,48 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  // 如果是登入頁面，不顯示 layout
-  if (pathname === '/admin/login') {
+  // 檢查登入狀態
+  useEffect(() => {
+    const checkAuth = async () => {
+      // 如果是登入頁面，不需要檢查
+      if (pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password') {
+        setCheckingAuth(false);
+        return;
+      }
+
+      try {
+        const response = await adminApi.auth.verify();
+        if (response.success) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkAuth();
+  }, [pathname]);
+
+  // 如果是登入相關頁面，不顯示 layout
+  if (pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password') {
     return <>{children}</>;
+  }
+
+  // 如果還在檢查登入狀態，顯示載入中
+  if (checkingAuth) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">載入中...</p>
+        </div>
+      </div>
+    );
   }
 
   const handleLogout = async () => {
@@ -97,6 +139,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         // Clear any stored authentication data
         sessionStorage.removeItem('redirectAfterLogin');
         
+        // Update authentication state
+        setIsAuthenticated(false);
+        
         // Redirect to login page
         router.push('/admin/login');
         router.refresh();
@@ -108,6 +153,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         description: '請稍後再試',
         variant: 'destructive',
       });
+      
+      // Update authentication state
+      setIsAuthenticated(false);
       
       // Even if logout fails, redirect to login
       router.push('/admin/login');
@@ -151,24 +199,39 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </nav>
       </div>
       <div className="border-t p-4 space-y-2">
-        <Link href="/admin/settings/profile">
-          <Button
-            variant="ghost"
-            className="w-full justify-start"
-            onClick={() => setIsOpen(false)}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            個人設定
-          </Button>
-        </Link>
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={handleLogout}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          登出
-        </Button>
+        {isAuthenticated ? (
+          <>
+            <Link href="/admin/settings/profile">
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => setIsOpen(false)}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                個人設定
+              </Button>
+            </Link>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              登出
+            </Button>
+          </>
+        ) : (
+          <Link href="/admin/login">
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => setIsOpen(false)}
+            >
+              <LogIn className="mr-2 h-4 w-4" />
+              登入
+            </Button>
+          </Link>
+        )}
       </div>
     </>
   );
@@ -209,6 +272,31 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               {navItems.find(item => pathname.startsWith(item.href))?.title || '管理後台'}
             </h1>
           </div>
+          {/* Desktop auth button */}
+          {!isMobile && (
+            <div className="flex items-center gap-2">
+              {isAuthenticated ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  登出
+                </Button>
+              ) : (
+                <Link href="/admin/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                  >
+                    <LogIn className="mr-2 h-4 w-4" />
+                    登入
+                  </Button>
+                </Link>
+              )}
+            </div>
+          )}
         </header>
 
         {/* Page Content */}
