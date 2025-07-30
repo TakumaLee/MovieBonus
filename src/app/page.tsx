@@ -207,7 +207,7 @@ export default function Home() {
               isLoading={comingSoonHook.isLoading}
               error={comingSoonHook.error}
               onRetry={comingSoonHook.refresh}
-              isClickable={false}
+              isClickable={true}
               emptyMessage="目前沒有即將上映的電影資料"
             />
           </TabsContent>
