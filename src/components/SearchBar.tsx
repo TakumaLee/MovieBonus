@@ -197,8 +197,8 @@ export function SearchBar({
                   {results.slice(0, 10).map((movie) => (
                     <Link
                       key={movie.id}
-                      href={`/movie/${encodeURIComponent(movie.movie_id)}`}
-                      onClick={() => handleMovieSelect(movie.movie_id, movie.title)}
+                      href={`/movie/${encodeURIComponent(movie.id)}`}
+                      onClick={() => handleMovieSelect(movie.id, movie.title)}
                       className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
                     >
                       <img
