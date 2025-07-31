@@ -70,8 +70,8 @@ export const metadata: Metadata = {
   },
   
   verification: {
-    // 請在 Google Search Console 獲取驗證碼後替換下面的值
-    google: 'YOUR-GOOGLE-VERIFICATION-CODE', // 例如：'abcd1234efgh5678'
+    // Google Search Console 驗證碼
+    google: 'uhuWAZIse2zwAXrBThHqPQZhxruWaqyMgdm_m2EmKUk',
     // 可選：其他搜尋引擎驗證
     // bing: 'YOUR-BING-VERIFICATION-CODE',
   },
