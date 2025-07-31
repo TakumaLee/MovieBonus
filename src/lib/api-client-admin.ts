@@ -114,8 +114,21 @@ class AdminApiClient {
           }
         }
 
+        // Extract error message from nested structure
+        let errorMessage = 'Unknown error';
+        
+        if (errorData.error) {
+          if (typeof errorData.error === 'string') {
+            errorMessage = errorData.error;
+          } else if (errorData.error.message) {
+            errorMessage = errorData.error.message;
+          }
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+        
         throw new AdminApiError(
-          errorData.error || errorData.message || 'Unknown error',
+          errorMessage,
           response.status,
           errorData
         );
