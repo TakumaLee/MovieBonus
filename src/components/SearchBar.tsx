@@ -194,13 +194,17 @@ export function SearchBar({
                   搜尋結果 ({results.length})
                 </div>
                 <div className="max-h-60 overflow-y-auto">
-                  {results.slice(0, 10).map((movie) => (
-                    <Link
-                      key={movie.id}
-                      href={`/movie/${encodeURIComponent(movie.id)}`}
-                      onClick={() => handleMovieSelect(movie.id, movie.title)}
-                      className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
-                    >
+                  {results.slice(0, 10).map((movie) => {
+                    // 使用 id 作為主要識別符（這是資料庫的 UUID）
+                    const movieIdentifier = movie.id || '';
+                    
+                    return (
+                      <Link
+                        key={movieIdentifier}
+                        href={`/movie/${encodeURIComponent(movieIdentifier)}`}
+                        onClick={() => handleMovieSelect(movieIdentifier, movie.title)}
+                        className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
+                      >
                       <img
                         src={movie.poster_url || 'https://placehold.co/40x60/gray/white?text=海報'}
                         alt={movie.title}
@@ -225,7 +229,8 @@ export function SearchBar({
                         </div>
                       </div>
                     </Link>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
