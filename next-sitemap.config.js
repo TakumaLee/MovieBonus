@@ -16,6 +16,12 @@ module.exports = {
     '/admin/login',
     '/admin/forgot-password',
     '/admin/reset-password',
+    '/server-sitemap.xml',
+  ],
+  additionalPaths: async (config) => [
+    await config.transform(config, '/'),
+    await config.transform(config, '/about'),
+    await config.transform(config, '/contact'),
   ],
   robotsTxtOptions: {
     additionalSitemaps: [
