@@ -164,7 +164,7 @@ export const movieApi = {
   
   // Search movies
   search: (query: string) => 
-    apiClient.get<Movie[]>('/api/v1/movies/search', { q: query }),
+    apiClient.get<Movie[]>('/api/v1/movie-search/suggest', { q: query, limit: 10 }),
   
   // Get movie promotions
   getPromotions: (movieId: string) => 

@@ -262,7 +262,7 @@ export const movieApi = {
 
       let bonuses: MoviePromotion[] = [];
       if (bonusesResponse.success && bonusesResponse.data && bonusesResponse.data.success && bonusesResponse.data.movies) {
-        // 在特典API中，movie_id 是我們的資料庫 UUID，所以直接比較
+        // 在特典API中，movie_id 對應到我們電影的 id 欄位
         const movieWithBonuses = bonusesResponse.data.movies.find(m => m.movie_id === movieId);
         bonuses = movieWithBonuses?.promotions || [];
       }
@@ -308,12 +308,26 @@ export const movieApi = {
     }
 
     try {
-      const response = await api.search.fuzzy({
-        queries: [{ title: query, search_type: 'smart' }],
+      // 使用新的搜尋 API endpoint
+      const response = await apiClient.get<any>('/api/v1/movie-search/suggest', { 
+        q: query, 
+        limit: 10 
       });
       
-      if (response.success && response.data?.results) {
-        return response.data.results.flatMap(result => result.matched_movies);
+      if (response.success && response.data?.suggestions) {
+        // 將搜尋建議轉換為 Movie 對象格式
+        return response.data.suggestions.map((suggestion: any) => ({
+          id: suggestion.movie_id, // 使用 movie_id 作為 id
+          movie_id: suggestion.movie_id,
+          title: suggestion.title,
+          english_title: suggestion.english_title,
+          // 其他必要的 Movie 類型欄位可以設為默認值
+          poster_url: '',
+          release_date: '',
+          status: 'unknown',
+          score: suggestion.score,
+          matched_field: suggestion.matched_field
+        }));
       }
     } catch (error) {
       console.error('Movie search failed:', error);
