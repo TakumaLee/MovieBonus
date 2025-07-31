@@ -59,6 +59,15 @@ class AdminApiClient {
     options: RequestInit = {},
     isRetry: boolean = false
   ): Promise<AdminApiResponse<T>> {
+    // Set test auth cookie if enabled and not already set
+    if (this.testAuthEnabled && typeof document !== 'undefined') {
+      const existingCookie = document.cookie.includes(this.testCookieName);
+      if (!existingCookie) {
+        this.setTestAuthCookie();
+        console.log('Setting test auth cookie for development');
+      }
+    }
+
     // Construct full URL with Node.js backend
     const url = `${this.baseUrl}${endpoint}`;
     
