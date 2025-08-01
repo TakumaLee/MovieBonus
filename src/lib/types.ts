@@ -15,8 +15,8 @@ export type FormatType = 'digital' | 'imax' | '4dx' | 'vr' | 'titan' | 'mucrown'
 
 // Movie entity
 export interface Movie {
-  id: string;
-  movie_id: string; // 唯一標識符
+  id: string; // 資料庫主鍵 UUID（主要使用的識別符）
+  movie_id: string; // 額外的電影標識符
   title: string;
   english_title?: string;
   vieshow_movie_id: string;

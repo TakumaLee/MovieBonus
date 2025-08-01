@@ -32,3 +32,13 @@
  ✓ Compiled /admin/feedbacks in 1020ms
  GET /admin/feedbacks/ 200 in 1058ms
  GET /admin/feedbacks/ 200 in 73ms
+ ✓ Compiled middleware in 3ms
+ GET /admin/feedbacks/ 200 in 190ms
+ ✓ Compiled in 104ms
+ GET /admin/feedbacks/ 200 in 73ms
+ ✓ Compiled / in 30ms
+ GET / 200 in 475ms
+ ✓ Compiled in 24ms
+ ✓ Compiled in 101ms
+ ✓ Compiled in 20ms
+[?25h

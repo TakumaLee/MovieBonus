@@ -195,8 +195,9 @@ export function SearchBar({
                 </div>
                 <div className="max-h-60 overflow-y-auto">
                   {results.slice(0, 10).map((movie) => {
-                    // 使用 movie_id 作為主要識別符（這是資料庫的 UUID）
-                    const movieIdentifier = movie.movie_id || movie.id || '';
+                    // 使用 id 作為主要識別符（這是資料庫的 UUID）
+                    // movie_id 欄位包含的是 movie_xxx_xxxx 格式，不能使用
+                    const movieIdentifier = movie.id || '';
                     
                     return (
                       <Link
