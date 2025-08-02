@@ -76,6 +76,11 @@ export const metadata: Metadata = {
     // 可選：其他搜尋引擎驗證
     // bing: 'YOUR-BING-VERIFICATION-CODE',
   },
+
+  // AdSense verification
+  other: {
+    'google-adsense-account': 'ca-pub-3744784797459022',
+  },
   
   alternates: {
     canonical: 'https://paruparu.vercel.app',
