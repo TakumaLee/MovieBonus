@@ -14,7 +14,6 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackFormNew from '@/components/FeedbackFormNew';
 import { MovieImage } from '@/components/MovieImage';
-import { HomePageTopAd, HomePageMiddleAd } from '@/components/AdSenseAd';
 import type { Movie } from '@/lib/types';
 import { getMovieStatus, getStatusText } from '@/lib/movie-utils';
 
@@ -167,8 +166,7 @@ export default function Home() {
         {/* 頁面頂部廣告 */}
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <HomePageTopAd />
-          </div>
+            </div>
         </div>
         
         <main className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -201,7 +199,6 @@ export default function Home() {
           
           {/* 分頁間廣告 */}
           <div className="my-8">
-            <HomePageMiddleAd />
           </div>
           
           <TabsContent value="coming-soon">
