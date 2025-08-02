@@ -92,6 +92,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       }
 
       try {
+        // Initialize test auth if enabled
+        if (adminApi.isTestAuthEnabled()) {
+          adminApi.initializeTestAuth();
+        }
+        
         const response = await adminApi.auth.verify();
         if (response.success) {
           setIsAuthenticated(true);
