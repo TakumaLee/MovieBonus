@@ -1,6 +1,0 @@
-https://paruparu.vercel.app/
-https://paruparu.vercel.app/about
-https://paruparu.vercel.app/contact
-https://paruparu.vercel.app/movies
-https://paruparu.vercel.app/promotions
-https://paruparu.vercel.app/search

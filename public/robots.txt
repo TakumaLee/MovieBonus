@@ -9,4 +9,4 @@ Disallow: /_next/
 Host: https://paruparu.vercel.app
 
 # Sitemaps
-Sitemap: https://paruparu.vercel.app/sitemap_index.xml
+Sitemap: https://paruparu.vercel.app/sitemap.xml
