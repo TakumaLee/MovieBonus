@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { StructuredData } from '@/components/SEO/StructuredData';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import GoogleAdSense from '@/components/GoogleAdSense';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://paruparu.vercel.app'),
@@ -97,6 +98,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <GoogleAnalytics />
+        <GoogleAdSense />
         {children}
         <Toaster />
       </body>

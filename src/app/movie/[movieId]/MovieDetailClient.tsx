@@ -13,6 +13,7 @@ import type { MoviePromotion } from '@/lib/types';
 import { format } from 'date-fns';
 import { use } from 'react';
 import { getMovieStatus, getStatusVariant, getStatusText } from '@/lib/movie-utils';
+import { MovieDetailTopAd, MovieDetailSidebarAd } from '@/components/AdSenseAd';
 
 interface MovieDetailClientProps {
   params: Promise<{
@@ -380,6 +381,11 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                     <p className="text-sm text-muted-foreground leading-relaxed">{movie.synopsis}</p>
                   </div>
                 )}
+                
+                {/* Sidebar Ad */}
+                <div className="mt-6">
+                  <MovieDetailSidebarAd />
+                </div>
               </CardHeader>
             </Card>
           </aside>
@@ -392,6 +398,11 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
             </div>
             
             <Separator key="bonuses-separator" className="mb-8" />
+
+            {/* Top Ad in Bonuses Section */}
+            <div className="mb-8">
+              <MovieDetailTopAd />
+            </div>
 
             {/* Connection Error Alert */}
             {error && (
