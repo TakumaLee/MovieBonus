@@ -13,6 +13,7 @@ cat > .env.local << EOF
 
 # API Configuration - 連接到 Cloud Run 服務
 NEXT_PUBLIC_API_URL=https://moviebonus-python-scrapers-777964931661.asia-east1.run.app
+NEXT_PUBLIC_NODE_API_URL=https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app
 NEXT_PUBLIC_API_TIMEOUT=30000
 
 # Application Settings

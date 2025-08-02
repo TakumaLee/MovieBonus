@@ -90,7 +90,22 @@ export default function MovieDetailPage() {
   // 處理新增特典
   const handleAddPromotion = async (data: any) => {
     try {
-      const response = await adminApi.movies.promotions.create(movieId, data);
+      // 轉換前端格式為後端預期格式
+      const backendData = {
+        movie_title: movie?.title || '',
+        bonuses: data.gifts?.map((gift: any) => ({
+          bonus_name: gift.gift_name,
+          acquisition_method: data.acquisition_method || gift.gift_description || '詳見活動規則',
+          release_date: data.release_date || '依活動公告',
+        })) || [{
+          bonus_name: data.title || '特典',
+          acquisition_method: data.acquisition_method || data.description || '詳見活動規則',
+          release_date: data.release_date || '依活動公告',
+        }],
+        check_duplicates: true
+      };
+      
+      const response = await adminApi.movies.promotions.create(movieId, backendData);
       
       if (response.success) {
         toast({
@@ -113,7 +128,20 @@ export default function MovieDetailPage() {
   // 處理編輯特典
   const handleEditPromotion = async (promotionId: string, data: any) => {
     try {
-      const response = await adminApi.movies.promotions.update(movieId, promotionId, data);
+      // 轉換前端格式為後端預期格式
+      const updateData: any = {
+        title: data.title,
+        description: data.description,
+        status: data.is_active ? 'active' : 'inactive',
+      };
+      
+      // 只包含有值的欄位
+      if (data.release_date) updateData.start_date = data.release_date;
+      if (data.end_date) updateData.end_date = data.end_date;
+      if (data.acquisition_method) updateData.purchase_condition = data.acquisition_method;
+      if (data.is_verified !== undefined) updateData.is_verified = data.is_verified;
+      
+      const response = await adminApi.movies.promotions.update(movieId, promotionId, updateData);
       
       if (response.success) {
         toast({
