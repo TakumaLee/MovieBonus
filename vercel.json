@@ -100,22 +100,5 @@
       ]
     }
   ],
-  "rewrites": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/robots.txt"
-    },
-    {
-      "source": "/sitemap-:path*.xml",
-      "destination": "/sitemap-:path*.xml"
-    },
-    {
-      "source": "/sitemap.txt",
-      "destination": "/sitemap.txt"
-    }
-  ]
+  "rewrites": []
 }
