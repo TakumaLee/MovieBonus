@@ -69,13 +69,6 @@ export const metadata: Metadata = {
     },
   },
   
-  verification: {
-    // Google Search Console 驗證碼
-    google: 'uhuWAZIse2zwAXrBThHqPQZhxruWaqyMgdm_m2EmKUk',
-    // 可選：其他搜尋引擎驗證
-    // bing: 'YOUR-BING-VERIFICATION-CODE',
-  },
-
   // AdSense verification
   other: {
     'google-adsense-account': 'ca-pub-3744784797459022',
@@ -94,6 +87,9 @@ export default function RootLayout({
   return (
     <html lang="zh-TW" className="light">
       <head>
+        {/* Google Search Console 驗證 */}
+        <meta name="google-site-verification" content="uhuWAZIse2zwAXrBThHqPQZhxruWaqyMgdm_m2EmKUk" />
+        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
