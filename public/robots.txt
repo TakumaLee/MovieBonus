@@ -10,3 +10,4 @@ Host: https://paruparu.vercel.app
 
 # Sitemaps
 Sitemap: https://paruparu.vercel.app/sitemap.xml
+Sitemap: https://paruparu.vercel.app/sitemap-dynamic.xml
