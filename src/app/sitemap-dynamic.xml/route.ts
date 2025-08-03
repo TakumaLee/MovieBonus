@@ -1,26 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const baseUrl = 'https://paruparu.vercel.app'
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://moviebonus-python-scrapers-777964931661.asia-east1.run.app'
+    const apiUrl = 'https://moviebonus-python-scrapers-777964931661.asia-east1.run.app'
     
     // 獲取電影資料
-    const response = await fetch(`${apiUrl}/api/v1/supabase/movies?limit=500`, {
+    const response = await fetch(`${apiUrl}/api/v1/supabase/movies?limit=100`, {
       headers: {
         'User-Agent': 'MovieBonus-Sitemap-Generator/1.0',
         'Accept': 'application/json'
       }
     })
     
-    if (!response.ok) {
-      throw new Error(`API response not ok: ${response.status}`)
+    let movies = []
+    
+    if (response.ok) {
+      const data = await response.json()
+      movies = data.data || []
     }
     
-    const data = await response.json()
-    const movies = data.data || []
-    
-    // 生成 XML
+    // 生成 XML sitemap
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -40,13 +40,11 @@ ${movies.map((movie: any) => `  <url>
     return new NextResponse(sitemap, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+        'Cache-Control': 'public, max-age=3600'
       }
     })
     
   } catch (error) {
-    console.error('Error generating movie sitemap:', error)
-    
     // 錯誤時返回基本 sitemap
     const basicSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -61,7 +59,7 @@ ${movies.map((movie: any) => `  <url>
     return new NextResponse(basicSitemap, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=300, s-maxage=300'
+        'Cache-Control': 'public, max-age=300'
       }
     })
   }

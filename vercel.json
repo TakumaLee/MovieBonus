@@ -48,7 +48,7 @@
       ]
     },
     {
-      "source": "/sitemap-movies.xml",
+      "source": "/sitemap-dynamic.xml",
       "headers": [
         {
           "key": "Content-Type",
