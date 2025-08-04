@@ -2,11 +2,21 @@ import { Movie, MovieStatus } from '@/lib/types';
 import { isAfter, isBefore, addMonths } from 'date-fns';
 
 /**
- * 根據電影的上映日期和下檔日期動態計算狀態
+ * 根據電影的資料庫狀態或上映日期和下檔日期計算狀態
+ * 優先使用資料庫中的狀態，只有在缺失時才使用日期計算
  * @param movie - 電影物件
  * @returns 電影狀態：showing | coming_soon | ended
  */
 export function getMovieStatus(movie: Movie): MovieStatus {
+  // 定義有效的狀態值
+  const validStatuses: MovieStatus[] = ['showing', 'coming_soon', 'ended'];
+  
+  // 優先使用資料庫中的狀態（如果存在且有效）
+  if (movie.status && validStatuses.includes(movie.status)) {
+    return movie.status;
+  }
+  
+  // 如果資料庫狀態無效或缺失，使用日期計算作為後備方案
   const today = new Date();
   const releaseDate = movie.release_date ? new Date(movie.release_date) : null;
   const endDate = movie.end_date ? new Date(movie.end_date) : null;
@@ -32,8 +42,8 @@ export function getMovieStatus(movie: Movie): MovieStatus {
     return 'showing';
   }
   
-  // 如果沒有日期資訊，使用資料庫中的狀態
-  return movie.status || 'showing';
+  // 如果沒有任何資訊，默認為正在上映
+  return 'showing';
 }
 
 /**
