@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { KofiSimpleButton } from './KofiWidget';
+import { IntegratedDonationModal } from './IntegratedDonationModal';
 
 interface DonationButtonProps {
   position?: 'header' | 'floating' | 'footer';
@@ -96,46 +96,54 @@ export function DonationButton({
       {renderButton()}
       
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={useEmbedded ? "sm:max-w-2xl" : "sm:max-w-md"}>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Coffee className="w-5 h-5 text-orange-500" />
-              支持特典速報
-            </DialogTitle>
-            {!useEmbedded && (
-              <DialogDescription className="pt-4 space-y-3">
-                <p>感謝您使用特典速報！</p>
-                <p>我們是由 {displayName} 維護的專案，您的支持能幫助我們：</p>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>維持伺服器運行</li>
-                  <li>持續更新電影資訊</li>
-                  <li>開發新功能</li>
-                </ul>
-              </DialogDescription>
-            )}
-          </DialogHeader>
-          
+        <DialogContent className={useEmbedded ? "sm:max-w-3xl max-h-[90vh] overflow-y-auto" : "sm:max-w-md"}>
           {useEmbedded ? (
-            <div className="mt-4">
-              <KofiSimpleButton id={kofiUsername} />
-            </div>
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Coffee className="w-5 h-5 text-orange-500" />
+                  支持特典速報
+                </DialogTitle>
+              </DialogHeader>
+              <IntegratedDonationModal 
+                displayName={displayName}
+                kofiUsername={kofiUsername}
+              />
+            </>
           ) : (
-            <div className="flex flex-col gap-3 mt-4">
-              <Button 
-                onClick={handleKofiClick}
-                className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600"
-              >
-                <Coffee className="w-4 h-4 mr-2" />
-                前往 Ko-fi 贊助
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                onClick={() => setIsOpen(false)}
-              >
-                稍後再說
-              </Button>
-            </div>
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Coffee className="w-5 h-5 text-orange-500" />
+                  支持特典速報
+                </DialogTitle>
+                <DialogDescription className="pt-4 space-y-3">
+                  <p>感謝您使用特典速報！</p>
+                  <p>我們是由 {displayName} 維護的專案，您的支持能幫助我們：</p>
+                  <ul className="list-disc list-inside space-y-1 text-sm">
+                    <li>維持伺服器運行</li>
+                    <li>持續更新電影資訊</li>
+                    <li>開發新功能</li>
+                  </ul>
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-3 mt-4">
+                <Button 
+                  onClick={handleKofiClick}
+                  className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600"
+                >
+                  <Coffee className="w-4 h-4 mr-2" />
+                  前往 Ko-fi 贊助
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsOpen(false)}
+                >
+                  稍後再說
+                </Button>
+              </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
