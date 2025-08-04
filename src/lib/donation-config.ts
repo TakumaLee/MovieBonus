@@ -2,6 +2,9 @@
 export const donationConfig = {
   kofiUsername: 'nebulab',
   displayName: 'Takuma Lee',
+  // Ko-fi 嵌入設定
+  useEmbeddedUI: true, // 使用嵌入式 Ko-fi UI
+  kofiColor: '#FF5E5B', // Ko-fi 品牌色
   // 可以在這裡加入其他相關配置
   messages: {
     buttonText: '請我們喝咖啡',
@@ -12,4 +15,6 @@ export const donationConfig = {
   showHeaderButton: true,
   showFloatingButton: false, // 預設關閉浮動按鈕，避免太多按鈕
   showFooterLink: true,
+  // Ko-fi 浮動小工具（全站顯示）
+  showKofiFloatingWidget: false, // 可選：顯示 Ko-fi 官方浮動按鈕
 };
