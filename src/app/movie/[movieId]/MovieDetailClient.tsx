@@ -147,7 +147,7 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
         <div className={hasImages ? "md:col-span-2" : "md:col-span-1"}>
         <CardHeader>
           <div key="header-title-section" className="flex items-center justify-between">
-            <CardTitle key="title" className="text-2xl font-headline text-accent">{promotion.title}</CardTitle>
+            <CardTitle key="title" className="text-2xl font-headline text-foreground">{promotion.title}</CardTitle>
             {promotion.is_active && (
               <Badge key="active-badge" variant="default" className="bg-green-500 text-white">
                 <Gift className="w-3 h-3 mr-1" />
@@ -155,7 +155,7 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
               </Badge>
             )}
           </div>
-          <Badge key="type-badge" variant="outline">{promotion.promotion_type}</Badge>
+          <Badge key="type-badge" className="bg-black/80 text-white border-white/20 font-medium">{promotion.promotion_type}</Badge>
         </CardHeader>
         <CardContent className="space-y-4">
           {promotion.description && (
@@ -304,11 +304,11 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                 
                 {/* Movie Status Badge */}
                 <div key="status-badges" className="flex items-center gap-2 mt-4">
-                  <Badge variant={getStatusVariant(getMovieStatus(movie))}>
+                  <Badge className="bg-black/80 text-white border-white/20 backdrop-blur-sm">
                     {getStatusText(getMovieStatus(movie))}
                   </Badge>
                   {bonuses.length > 0 && (
-                    <Badge variant="outline" className="bg-accent/10 text-accent">
+                    <Badge variant="secondary" className="bg-secondary/20 text-secondary-foreground border-secondary/30">
                       <Gift className="w-3 h-3 mr-1" />
                       {bonuses.length} 個特典
                     </Badge>
@@ -391,8 +391,8 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
           {/* Bonuses Section */}
           <div className="w-full lg:w-2/3 xl:w-3/4">
             <div key="bonuses-header" className="flex items-center gap-4 mb-6">
-              <Gift className="w-8 h-8 text-accent"/>
-              <h2 className="text-3xl md:text-4xl font-headline text-primary">Available Bonuses</h2>
+              <Gift className="w-8 h-8 text-secondary"/>
+              <h2 className="text-3xl md:text-4xl font-headline text-foreground">Available Bonuses</h2>
             </div>
             
             <Separator key="bonuses-separator" className="mb-8" />
