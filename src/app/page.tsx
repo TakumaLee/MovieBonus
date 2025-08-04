@@ -52,7 +52,7 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
             <p className="text-xs sm:text-sm text-white/80 font-medium line-clamp-1 mt-1">{movie.english_title}</p>
           )}
           <div className="flex items-center gap-2 mt-2">
-            <Badge variant="secondary" className="text-xs">
+            <Badge className="text-xs bg-black/80 text-white border-white/20 backdrop-blur-sm">
               {getStatusText(getMovieStatus(movie))}
             </Badge>
           </div>
