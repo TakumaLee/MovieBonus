@@ -14,11 +14,13 @@ import {
 interface DonationButtonProps {
   position?: 'header' | 'floating' | 'footer';
   kofiUsername?: string;
+  displayName?: string;
 }
 
 export function DonationButton({ 
   position = 'header',
-  kofiUsername = 'YOUR_KOFI_USERNAME' // 請替換成您的 Ko-fi 用戶名
+  kofiUsername = 'nebulab',
+  displayName = 'Takuma Lee'
 }: DonationButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showButton, setShowButton] = useState(false);
@@ -99,7 +101,7 @@ export function DonationButton({
             </DialogTitle>
             <DialogDescription className="pt-4 space-y-3">
               <p>感謝您使用特典速報！</p>
-              <p>我們是個人維護的專案，您的支持能幫助我們：</p>
+              <p>我們是由 {displayName} 維護的專案，您的支持能幫助我們：</p>
               <ul className="list-disc list-inside space-y-1 text-sm">
                 <li>維持伺服器運行</li>
                 <li>持續更新電影資訊</li>

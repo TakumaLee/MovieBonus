@@ -14,6 +14,8 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import FeedbackFormNew from '@/components/FeedbackFormNew';
 import { MovieImage } from '@/components/MovieImage';
+import { DonationButton } from '@/components/DonationButton';
+import { donationConfig } from '@/lib/donation-config';
 import type { Movie } from '@/lib/types';
 import { getMovieStatus, getStatusText } from '@/lib/movie-utils';
 
@@ -149,7 +151,12 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen w-full bg-background">
-        <header className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-card to-card/50 border-b">
+        <header className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-card to-card/50 border-b relative">
+          {donationConfig.showHeaderButton && (
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+              <DonationButton position="header" />
+            </div>
+          )}
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary mb-4">
               特典速報
@@ -231,6 +238,11 @@ export default function Home() {
             <p className="text-sm text-muted-foreground mb-4">
               台灣電影特典資訊的最佳選擇
             </p>
+            {donationConfig.showFooterLink && (
+              <div className="mb-4">
+                <DonationButton position="footer" />
+              </div>
+            )}
             <div className="flex justify-center space-x-6 text-xs text-muted-foreground">
               <span>資料來源：威秀影城、各大電影院</span>
               <span>即時更新</span>
@@ -242,6 +254,11 @@ export default function Home() {
       
       {/* Feedback Form */}
       <FeedbackFormNew />
+      
+      {/* Floating Donation Button */}
+      {donationConfig.showFloatingButton && (
+        <DonationButton position="floating" />
+      )}
     </div>
     </ErrorBoundary>
   );
