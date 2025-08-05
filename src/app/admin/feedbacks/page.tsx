@@ -227,15 +227,15 @@ function FeedbacksContent() {
   // 取得類型標籤樣式
   const getTypeBadge = (type: string) => {
     const typeConfig = {
-      bonus_completion: { label: '特典補完', icon: Gift, color: 'text-pink-600' },
-      suggestion: { label: '意見建議', icon: Lightbulb, color: 'text-indigo-600' },
-      data_correction: { label: '資料修正', icon: Bug, color: 'text-red-600' },
+      bonus_completion: { label: '特典補完', icon: Gift, color: 'text-secondary' },
+      suggestion: { label: '意見建議', icon: Lightbulb, color: 'text-info' },
+      data_correction: { label: '資料修正', icon: Bug, color: 'text-destructive' },
     };
 
     const config = typeConfig[type as keyof typeof typeConfig] || { 
       label: type, 
       icon: MessageSquare, 
-      color: 'text-gray-600' 
+      color: 'text-muted-foreground' 
     };
     const Icon = config.icon;
 
@@ -326,8 +326,8 @@ function FeedbacksContent() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="rounded-full bg-red-100 p-3">
-                <AlertCircle className="h-6 w-6 text-red-600" />
+              <div className="rounded-full bg-destructive/10 p-3">
+                <AlertCircle className="h-6 w-6 text-destructive" />
               </div>
             </div>
             <CardTitle>未授權存取</CardTitle>

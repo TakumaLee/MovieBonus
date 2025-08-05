@@ -447,7 +447,7 @@ export default function FeedbackFormSupabase() {
                   {submissionResult?.success ? (
                     // Success state
                     <div className="text-center space-y-4">
-                      <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
+                      <CheckCircle className="h-16 w-16 text-success mx-auto" />
                       <div>
                         <h3 className="text-lg font-semibold">回饋已成功提交！</h3>
                         <p className="text-muted-foreground mt-2">
@@ -605,9 +605,9 @@ export default function FeedbackFormSupabase() {
                       {/* Step 2: Bonus Completion Details */}
                       {currentStep === 2 && showBonusForm && (
                         <div className="space-y-4">
-                          <div className="bg-blue-50 p-4 rounded-lg">
-                            <h3 className="font-medium text-blue-900 mb-2">特典補完詳細資料</h3>
-                            <p className="text-sm text-blue-700">
+                          <div className="bg-info/10 border border-info/20 p-4 rounded-lg">
+                            <h3 className="font-medium text-info-foreground mb-2">特典補完詳細資料</h3>
+                            <p className="text-sm text-info">
                               請盡可能詳細填寫，這將幫助我們更準確地收錄特典資訊。
                             </p>
                           </div>

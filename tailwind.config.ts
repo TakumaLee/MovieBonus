@@ -64,6 +64,10 @@ export default {
           DEFAULT: 'hsl(var(--warning))',
           foreground: 'hsl(var(--warning-foreground))',
         },
+        kofi: {
+          primary: 'hsl(var(--kofi-primary))',
+          secondary: 'hsl(var(--kofi-secondary))',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

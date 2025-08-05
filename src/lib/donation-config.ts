@@ -4,7 +4,7 @@ export const donationConfig = {
   displayName: 'Takuma Lee',
   // Ko-fi 嵌入設定
   useEmbeddedUI: true, // 使用嵌入式 Ko-fi UI
-  kofiColor: '#FF5E5B', // Ko-fi 品牌色
+  kofiColor: 'hsl(var(--kofi-primary))', // Ko-fi 品牌色，使用 CSS 變數
   // 可以在這裡加入其他相關配置
   messages: {
     buttonText: '請我們喝咖啡',

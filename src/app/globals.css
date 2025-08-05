@@ -36,6 +36,9 @@
     --warning-foreground: 0 0% 100%;
     --info: 221.2 83.2% 35%;          /* Accessible blue variant */
     --info-foreground: 0 0% 100%;
+    /* Third-party brand colors */
+    --kofi-primary: 13 93% 66%;       /* Ko-fi brand orange #FF5E5B */
+    --kofi-secondary: 195 100% 50%;   /* Ko-fi brand blue #29ABE0 */
   }
 
   .dark {
@@ -70,6 +73,9 @@
     --warning-foreground: 0 0% 100%;
     --info: 217.2 91.2% 65%;
     --info-foreground: 222.2 84% 4.9%;
+    /* Third-party brand colors (same in dark mode) */
+    --kofi-primary: 13 93% 66%;       /* Ko-fi brand orange #FF5E5B */
+    --kofi-secondary: 195 100% 50%;   /* Ko-fi brand blue #29ABE0 */
   }
 }
 
@@ -95,12 +101,23 @@
 
   /* 贊助按鈕樣式 */
   .donation-button-header {
-    @apply bg-gradient-to-r from-orange-500/10 to-yellow-500/10 hover:from-orange-500/20 hover:to-yellow-500/20 border-orange-500/50;
+    background: linear-gradient(to right, hsl(var(--secondary) / 0.1), hsl(var(--warning) / 0.1));
+    border-color: hsl(var(--secondary) / 0.5);
+  }
+  
+  .donation-button-header:hover {
+    background: linear-gradient(to right, hsl(var(--secondary) / 0.2), hsl(var(--warning) / 0.2));
   }
 
   .donation-button-floating {
-    @apply bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white border-0;
+    background: linear-gradient(to right, hsl(var(--secondary)), hsl(var(--warning)));
+    color: hsl(var(--secondary-foreground));
+    border: 0;
     animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .donation-button-floating:hover {
+    background: linear-gradient(to right, hsl(var(--secondary) / 0.9), hsl(var(--warning) / 0.9));
   }
 
   @keyframes pulse-soft {

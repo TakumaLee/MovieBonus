@@ -101,7 +101,7 @@ export function DonationButton({
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
-                  <Coffee className="w-5 h-5 text-orange-500" />
+                  <Coffee className="w-5 h-5 text-secondary" />
                   支持特典速報
                 </DialogTitle>
               </DialogHeader>
@@ -114,7 +114,7 @@ export function DonationButton({
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
-                  <Coffee className="w-5 h-5 text-orange-500" />
+                  <Coffee className="w-5 h-5 text-secondary" />
                   支持特典速報
                 </DialogTitle>
                 <DialogDescription className="pt-4 space-y-3">
@@ -130,7 +130,7 @@ export function DonationButton({
               <div className="flex flex-col gap-3 mt-4">
                 <Button 
                   onClick={handleKofiClick}
-                  className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600"
+                  className="w-full bg-gradient-to-r from-secondary to-warning hover:from-secondary/90 hover:to-warning/90"
                 >
                   <Coffee className="w-4 h-4 mr-2" />
                   前往 Ko-fi 贊助

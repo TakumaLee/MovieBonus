@@ -76,7 +76,7 @@ export function MovieImage({
 
   // 服務器端渲染時顯示佔位符
   if (!isMounted) {
-    return <div ref={containerRef} className="bg-gray-200 animate-pulse" />;
+    return <div ref={containerRef} className="bg-muted animate-pulse" />;
   }
 
   return <div ref={containerRef} />;

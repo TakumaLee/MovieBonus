@@ -74,29 +74,29 @@ export default function AdminDashboard() {
       title: '總回報數',
       value: stats?.total || 0,
       icon: MessageSquare,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-info',
+      bgColor: 'bg-info/10',
     },
     {
       title: '待處理',
       value: stats?.pending || 0,
       icon: Clock,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
+      color: 'text-warning',
+      bgColor: 'bg-warning/10',
     },
     {
       title: '處理中',
       value: stats?.inProgress || 0,
       icon: TrendingUp,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
+      color: 'text-primary',
+      bgColor: 'bg-primary/10',
     },
     {
       title: '已解決',
       value: stats?.resolved || 0,
       icon: CheckCircle,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
+      color: 'text-success',
+      bgColor: 'bg-success/10',
     },
   ];
 
@@ -105,22 +105,22 @@ export default function AdminDashboard() {
       title: '特典補完',
       value: stats?.byType.bonus_completion || 0,
       icon: Gift,
-      color: 'text-pink-600',
-      bgColor: 'bg-pink-50',
+      color: 'text-secondary',
+      bgColor: 'bg-secondary/10',
     },
     {
       title: '意見建議',
       value: stats?.byType.suggestion || 0,
       icon: Lightbulb,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50',
+      color: 'text-info',
+      bgColor: 'bg-info/10',
     },
     {
       title: '資料修正',
       value: stats?.byType.data_correction || 0,
       icon: Bug,
-      color: 'text-red-600',
-      bgColor: 'bg-red-50',
+      color: 'text-destructive',
+      bgColor: 'bg-destructive/10',
     },
   ];
 
@@ -155,8 +155,8 @@ export default function AdminDashboard() {
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <div className="rounded-full bg-red-100 p-3">
-                  <AlertCircle className="h-6 w-6 text-red-600" />
+                <div className="rounded-full bg-destructive/10 p-3">
+                  <AlertCircle className="h-6 w-6 text-destructive" />
                 </div>
               </div>
               <CardTitle>未授權存取</CardTitle>
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
             href="/admin/feedbacks?status=pending"
             className="flex items-center gap-3 p-4 rounded-lg border hover:bg-accent transition-colors"
           >
-            <Clock className="h-5 w-5 text-orange-600" />
+            <Clock className="h-5 w-5 text-warning" />
             <div>
               <p className="font-medium">查看待處理回報</p>
               <p className="text-sm text-muted-foreground">
@@ -268,7 +268,7 @@ export default function AdminDashboard() {
             href="/admin/feedbacks?type=bonus_completion"
             className="flex items-center gap-3 p-4 rounded-lg border hover:bg-accent transition-colors"
           >
-            <Gift className="h-5 w-5 text-pink-600" />
+            <Gift className="h-5 w-5 text-secondary" />
             <div>
               <p className="font-medium">查看特典補完</p>
               <p className="text-sm text-muted-foreground">

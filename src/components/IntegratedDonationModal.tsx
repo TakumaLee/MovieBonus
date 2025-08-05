@@ -17,9 +17,9 @@ export function IntegratedDonationModal({
   return (
     <div className="space-y-4">
       {/* 支持理由區塊 */}
-      <Card className="p-6 bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 border-orange-200 dark:border-orange-800">
+      <Card className="p-6 bg-gradient-to-br from-secondary/10 to-warning/10 border-secondary/20">
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+          <div className="flex items-center gap-2 text-secondary">
             <Heart className="w-5 h-5" />
             <h3 className="font-semibold text-lg">感謝您使用特典速報！</h3>
           </div>
@@ -30,8 +30,8 @@ export function IntegratedDonationModal({
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30">
-                <Server className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+              <div className="p-2 rounded-lg bg-secondary/10">
+                <Server className="w-4 h-4 text-secondary" />
               </div>
               <div>
                 <div className="font-medium text-sm">維持伺服器</div>
@@ -40,8 +40,8 @@ export function IntegratedDonationModal({
             </div>
             
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30">
-                <RefreshCw className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+              <div className="p-2 rounded-lg bg-secondary/10">
+                <RefreshCw className="w-4 h-4 text-secondary" />
               </div>
               <div>
                 <div className="font-medium text-sm">持續更新</div>
@@ -50,8 +50,8 @@ export function IntegratedDonationModal({
             </div>
             
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30">
-                <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+              <div className="p-2 rounded-lg bg-secondary/10">
+                <Sparkles className="w-4 h-4 text-secondary" />
               </div>
               <div>
                 <div className="font-medium text-sm">開發新功能</div>
