@@ -304,7 +304,7 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                 
                 {/* Movie Status Badge */}
                 <div key="status-badges" className="flex items-center gap-2 mt-4">
-                  <Badge variant={getStatusVariant(getMovieStatus(movie))} className="backdrop-blur-sm bg-opacity-90">
+                  <Badge variant={getStatusVariant(getMovieStatus(movie))}>
                     {getStatusText(getMovieStatus(movie))}
                   </Badge>
                   {bonuses.length > 0 && (
