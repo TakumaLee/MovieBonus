@@ -17,7 +17,7 @@ import { MovieImage } from '@/components/MovieImage';
 import { DonationButton } from '@/components/DonationButton';
 import { donationConfig } from '@/lib/donation-config';
 import type { Movie } from '@/lib/types';
-import { getMovieStatus, getStatusText } from '@/lib/movie-utils';
+import { getMovieStatus, getStatusText, getStatusVariant } from '@/lib/movie-utils';
 
 interface MovieCardProps {
   movie: Movie;
@@ -52,7 +52,7 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
             <p className="text-xs sm:text-sm text-white/80 font-medium line-clamp-1 mt-1">{movie.english_title}</p>
           )}
           <div className="flex items-center gap-2 mt-2">
-            <Badge className="text-xs bg-black/80 text-white border-white/20 backdrop-blur-sm">
+            <Badge variant={getStatusVariant(getMovieStatus(movie))} className="text-xs backdrop-blur-sm bg-opacity-90">
               {getStatusText(getMovieStatus(movie))}
             </Badge>
           </div>

@@ -51,16 +51,16 @@ export function getMovieStatus(movie: Movie): MovieStatus {
  * @param status - 電影狀態
  * @returns Badge variant
  */
-export function getStatusVariant(status: MovieStatus) {
+export function getStatusVariant(status: MovieStatus): 'success' | 'info' | 'secondary' {
   switch (status) {
     case 'showing':
-      return 'default';
+      return 'success';      // Green for now showing
     case 'coming_soon':
-      return 'secondary';
+      return 'info';         // Blue for coming soon
     case 'ended':
-      return 'outline';
+      return 'secondary';    // Muted orange for ended
     default:
-      return 'default';
+      return 'info';
   }
 }
 

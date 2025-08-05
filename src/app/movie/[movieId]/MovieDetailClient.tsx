@@ -149,7 +149,7 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
           <div key="header-title-section" className="flex items-center justify-between">
             <CardTitle key="title" className="text-2xl font-headline text-foreground">{promotion.title}</CardTitle>
             {promotion.is_active && (
-              <Badge key="active-badge" variant="default" className="bg-green-500 text-white">
+              <Badge key="active-badge" variant="success">
                 <Gift className="w-3 h-3 mr-1" />
                 活躍中
               </Badge>
@@ -304,7 +304,7 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                 
                 {/* Movie Status Badge */}
                 <div key="status-badges" className="flex items-center gap-2 mt-4">
-                  <Badge className="bg-black/80 text-white border-white/20 backdrop-blur-sm">
+                  <Badge variant={getStatusVariant(getMovieStatus(movie))} className="backdrop-blur-sm bg-opacity-90">
                     {getStatusText(getMovieStatus(movie))}
                   </Badge>
                   {bonuses.length > 0 && (
