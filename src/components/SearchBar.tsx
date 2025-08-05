@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { trackEvent } from '@/lib/gtag';
 import Link from 'next/link';
 import { getMovieStatus, getStatusVariant, getStatusText } from '@/lib/movie-utils';
+import { MovieImage } from '@/components/MovieImage';
 
 interface SearchBarProps {
   className?: string;
@@ -206,7 +207,7 @@ export function SearchBar({
                         onClick={() => handleMovieSelect(movieIdentifier, movie.title)}
                         className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors"
                       >
-                      <img
+                      <MovieImage
                         src={movie.poster_url || 'https://placehold.co/40x60/gray/white?text=海報'}
                         alt={movie.title}
                         className="w-10 h-15 object-cover rounded-sm flex-shrink-0"
