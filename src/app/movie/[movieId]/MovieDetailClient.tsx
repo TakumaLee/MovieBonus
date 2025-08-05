@@ -308,7 +308,7 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                     {getStatusText(getMovieStatus(movie))}
                   </Badge>
                   {bonuses.length > 0 && (
-                    <Badge variant="secondary" className="bg-secondary/20 text-secondary-foreground border-secondary/30">
+                    <Badge variant="secondary" className="bg-secondary text-secondary-foreground border-secondary/30">
                       <Gift className="w-3 h-3 mr-1" />
                       {bonuses.length} 個特典
                     </Badge>
