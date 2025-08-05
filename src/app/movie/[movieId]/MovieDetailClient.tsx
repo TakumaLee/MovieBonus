@@ -155,7 +155,7 @@ const PromotionCard = ({ promotion }: { promotion: MoviePromotion }) => {
               </Badge>
             )}
           </div>
-          <Badge key="type-badge" className="bg-black/80 text-white border-white/20 font-medium">{promotion.promotion_type}</Badge>
+          <Badge key="type-badge" variant="info" className="font-medium">{promotion.promotion_type}</Badge>
         </CardHeader>
         <CardContent className="space-y-4">
           {promotion.description && (
@@ -308,7 +308,7 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
                     {getStatusText(getMovieStatus(movie))}
                   </Badge>
                   {bonuses.length > 0 && (
-                    <Badge variant="secondary" className="bg-secondary text-secondary-foreground border-secondary/30">
+                    <Badge variant="info">
                       <Gift className="w-3 h-3 mr-1" />
                       {bonuses.length} 個特典
                     </Badge>
