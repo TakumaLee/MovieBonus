@@ -276,7 +276,7 @@ export function BonusLinkProcessModal({
       case 'processing':
         return <Badge variant="default">處理中</Badge>;
       case 'success':
-        return <Badge variant="default" className="bg-green-600">處理完成</Badge>;
+        return <Badge variant="success">處理完成</Badge>;
       case 'error':
         return <Badge variant="destructive">處理失敗</Badge>;
       default:

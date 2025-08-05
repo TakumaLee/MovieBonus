@@ -41,7 +41,7 @@ const MovieCard = ({ movie, isClickable }: MovieCardProps) => {
           data-ai-hint="movie poster"
         />
         {hasBonuses && (
-          <Badge className="absolute top-3 right-3 bg-accent text-accent-foreground shadow-lg backdrop-blur-sm" variant="default">
+          <Badge variant="warning" className="absolute top-3 right-3 shadow-lg backdrop-blur-sm">
             <Award className="w-3 h-3 mr-1" />
             特典
           </Badge>
