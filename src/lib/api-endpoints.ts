@@ -308,85 +308,25 @@ export const movieApi = {
     }
 
     try {
-      // 使用新的搜尋 API endpoint
+      // 使用搜尋建議 API，後端已提供完整電影資訊
       const response = await apiClient.get<any>('/api/v1/movie-search/suggest', { 
         q: query, 
         limit: 10 
       });
       
       if (response.success && response.data?.suggestions) {
-        // 將搜尋建議轉換為 Movie 對象格式
+        // 直接使用後端提供的完整資料，不需要額外查找
         const searchResults = response.data.suggestions.map((suggestion: any) => ({
-          id: suggestion.movie_id, // 使用 movie_id 作為 id
+          id: suggestion.id || suggestion.movie_id, // 優先使用 id，備用 movie_id
           movie_id: suggestion.movie_id,
           title: suggestion.title,
           english_title: suggestion.english_title,
-          // 其他必要的 Movie 類型欄位可以設為默認值
-          poster_url: '',
-          release_date: '',
-          status: 'unknown',
+          poster_url: suggestion.poster_url || '', // 後端已提供
+          release_date: suggestion.release_date || '',
+          status: suggestion.status || 'unknown',
           score: suggestion.score,
           matched_field: suggestion.matched_field
         }));
-
-        // 嘗試從完整電影資料中獲取 poster_url 和其他詳細資訊
-        try {
-          // 獲取所有電影資料以進行 poster URL 查找
-          const moviesResponse = await api.movies.list({ limit: 1000 });
-          
-          if (moviesResponse.success && moviesResponse.data?.items) {
-            const moviesMap = new Map();
-            
-            // 建立多種查找索引：movie_id、title、english_title
-            moviesResponse.data.items.forEach((movie: any) => {
-              // 使用 movie_id 作為主要索引
-              if (movie.movie_id) {
-                moviesMap.set(movie.movie_id, movie);
-              }
-              // 使用 title 作為備用索引（正規化處理）
-              if (movie.title) {
-                const normalizedTitle = movie.title.toLowerCase().trim();
-                moviesMap.set(normalizedTitle, movie);
-              }
-              // 使用 english_title 作為備用索引
-              if (movie.english_title) {
-                const normalizedEnglishTitle = movie.english_title.toLowerCase().trim();
-                moviesMap.set(normalizedEnglishTitle, movie);
-              }
-            });
-
-            // 增強搜尋結果，添加 poster_url 和其他詳細資訊
-            return searchResults.map(result => {
-              // 嘗試多種方式查找匹配的電影
-              let movieData = moviesMap.get(result.movie_id);
-              
-              if (!movieData && result.title) {
-                movieData = moviesMap.get(result.title.toLowerCase().trim());
-              }
-              
-              if (!movieData && result.english_title) {
-                movieData = moviesMap.get(result.english_title.toLowerCase().trim());
-              }
-
-              // 如果找到匹配的電影資料，使用完整資料
-              if (movieData) {
-                return {
-                  ...result,
-                  poster_url: movieData.poster_url || '',
-                  release_date: movieData.release_date || '',
-                  status: movieData.status || 'unknown',
-                  id: movieData.id || result.id, // 使用資料庫的真實 ID
-                };
-              }
-
-              // 如果沒找到匹配，返回原始結果
-              return result;
-            });
-          }
-        } catch (lookupError) {
-          console.warn('Failed to lookup poster URLs for search results:', lookupError);
-          // 如果查找失敗，返回原始搜尋結果
-        }
 
         return searchResults;
       }
