@@ -59,6 +59,13 @@ class AdminApiClient {
     options: RequestInit = {},
     isRetry: boolean = false
   ): Promise<AdminApiResponse<T>> {
+    // Import cookie detection dynamically to avoid SSR issues
+    let cookieSupport = true;
+    if (typeof window !== 'undefined') {
+      const { detectCookieSupport } = await import('./cookie-support-detection');
+      cookieSupport = await detectCookieSupport();
+    }
+    
     // Set test auth cookie if enabled and not already set
     if (this.testAuthEnabled && typeof document !== 'undefined') {
       const existingCookie = document.cookie.includes(this.testCookieName);
@@ -77,9 +84,10 @@ class AdminApiClient {
       ...options.headers,
     };
     
-    // Add origin header for mobile browsers
+    // Add client capability headers
     if (typeof window !== 'undefined') {
       headers['X-Requested-With'] = 'XMLHttpRequest';
+      headers['X-Cookie-Support'] = String(cookieSupport);
       
       // Mobile browsers may need explicit origin
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {

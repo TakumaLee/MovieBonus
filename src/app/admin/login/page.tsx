@@ -23,31 +23,38 @@ export default function AdminLoginPage() {
 
   // Get CSRF token on component mount with better error handling
   useEffect(() => {
-    const fetchCsrfToken = async () => {
+    const initializeAuth = async () => {
       try {
-        // Clear any existing session cookies first on mobile
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          console.log('Mobile device detected, ensuring clean session');
-        }
+        // Check client capabilities
+        const { getClientCapabilities } = await import('@/lib/cookie-support-detection');
+        const capabilities = await getClientCapabilities();
         
-        const data = await adminApi.auth.getCsrfToken();
-        if (data.success && data.csrfToken) {
-          setCsrfToken(data.csrfToken);
-          if (data.sessionId) {
-            setSessionId(data.sessionId);
+        console.log('Client capabilities:', capabilities);
+        
+        // Only fetch CSRF token if we have cookie support
+        if (capabilities.cookieSupport) {
+          const data = await adminApi.auth.getCsrfToken();
+          if (data.success && data.csrfToken) {
+            setCsrfToken(data.csrfToken);
+            if (data.sessionId) {
+              setSessionId(data.sessionId);
+            }
+            console.log('CSRF token obtained successfully');
+          } else {
+            console.error('No CSRF token in response:', data);
+            setError('無法取得安全驗證，請重新整理頁面');
           }
-          console.log('CSRF token obtained successfully');
         } else {
-          console.error('No CSRF token in response:', data);
-          setError('無法取得安全驗證，請重新整理頁面');
+          console.log('Cookie support limited, will use mobile authentication');
+          // Don't fetch CSRF token for mobile mode
         }
       } catch (err) {
-        console.error('Failed to get CSRF token:', err);
+        console.error('Failed to initialize auth:', err);
         setError('無法連接到伺服器，請檢查網路連線');
       }
     };
     
-    fetchCsrfToken();
+    initializeAuth();
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -59,6 +66,12 @@ export default function AdminLoginPage() {
       const data = await adminApi.auth.login(email, password, csrfToken, sessionId);
 
       if (data.success) {
+        // Handle mobile auth response with token
+        if (data.token) {
+          console.log('Mobile authentication successful, received token');
+          localStorage.setItem('adminToken', data.token);
+        }
+        
         toast({
           title: '登入成功',
           description: '正在跳轉到管理後台...',
