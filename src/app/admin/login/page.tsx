@@ -31,8 +31,9 @@ export default function AdminLoginPage() {
         
         console.log('Client capabilities:', capabilities);
         
-        // Only fetch CSRF token if we have cookie support
-        if (capabilities.cookieSupport) {
+        // Always try to fetch CSRF token first
+        // The backend will handle the fallback if needed
+        try {
           const data = await adminApi.auth.getCsrfToken();
           if (data.success && data.csrfToken) {
             setCsrfToken(data.csrfToken);
@@ -40,13 +41,10 @@ export default function AdminLoginPage() {
               setSessionId(data.sessionId);
             }
             console.log('CSRF token obtained successfully');
-          } else {
-            console.error('No CSRF token in response:', data);
-            setError('無法取得安全驗證，請重新整理頁面');
           }
-        } else {
-          console.log('Cookie support limited, will use mobile authentication');
-          // Don't fetch CSRF token for mobile mode
+        } catch (csrfError) {
+          console.log('CSRF token fetch failed, will proceed without it:', csrfError);
+          // Don't set error - we can still try mobile auth
         }
       } catch (err) {
         console.error('Failed to initialize auth:', err);
@@ -63,7 +61,14 @@ export default function AdminLoginPage() {
     setIsLoading(true);
 
     try {
-      const data = await adminApi.auth.login(email, password, csrfToken, sessionId);
+      // Pass empty strings for CSRF/session if not available
+      // Backend will detect and use mobile auth if needed
+      const data = await adminApi.auth.login(
+        email, 
+        password, 
+        csrfToken || '', 
+        sessionId || ''
+      );
 
       if (data.success) {
         // Handle mobile auth response with token
