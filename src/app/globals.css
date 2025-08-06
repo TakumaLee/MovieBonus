@@ -186,9 +186,183 @@
   }
 }
 
-/* 響應式調整 */
+/* Mobile-first responsive adjustments */
+@layer utilities {
+  /* Touch-friendly interactions */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Better focus states for mobile */
+  .focus-mobile {
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  /* Smooth scrolling for mobile */
+  .scroll-smooth-mobile {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Safe area padding for mobile devices */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Mobile-first responsive design */
 @media (max-width: 640px) {
   .container {
     @apply px-4;
+  }
+  
+  /* Improve text readability on mobile */
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* Better spacing for mobile cards */
+  .admin-card-mobile {
+    @apply p-4 space-y-3;
+  }
+  
+  /* Touch-friendly form elements */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="date"],
+  select,
+  textarea {
+    min-height: 48px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+  
+  /* Mobile-optimized buttons */
+  button {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Better modal/dialog sizing on mobile */
+  .dialog-content-mobile {
+    @apply max-h-[90vh] overflow-y-auto;
+    margin: 5vh auto;
+    width: calc(100vw - 2rem);
+    max-width: 100%;
+  }
+  
+  /* Mobile table improvements */
+  .responsive-table-mobile {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Better spacing for mobile navigation */
+  .nav-item-mobile {
+    @apply min-h-[48px] px-4 py-3;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Maintain touch-friendly sizes for tablets */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="date"],
+  select,
+  textarea {
+    min-height: 44px;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  /* Standard desktop sizing */
+  button {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="date"],
+  select,
+  textarea {
+    min-height: 40px;
+  }
+  
+  /* Hover states only on desktop */
+  .hover-desktop:hover {
+    @apply bg-accent text-accent-foreground;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break-before {
+    page-break-before: always;
+  }
+  
+  .print-break-after {
+    page-break-after: always;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: 0 0% 0%;
+    --ring: 0 0% 0%;
+  }
+  
+  .dark {
+    --border: 0 0% 100%;
+    --ring: 0 0% 100%;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-spin {
+    animation: none;
+  }
+  
+  .animate-pulse {
+    animation: none;
   }
 }

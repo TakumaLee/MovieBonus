@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { adminApi } from '@/lib/api-client-admin';
 
 interface AdminLayoutProps {
@@ -37,7 +38,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
@@ -70,17 +71,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     },
   ];
 
-  // 檢查是否為手機版
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
 
   // 檢查登入狀態
   useEffect(() => {
@@ -184,20 +174,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 href={item.href}
                 onClick={() => setIsOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors",
+                  "min-h-[48px] touch-manipulation", // Touch-friendly sizing
                   isActive
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent hover:text-accent-foreground"
                 )}
               >
-                <item.icon className="h-4 w-4" />
+                <item.icon className="h-5 w-5 flex-shrink-0" />
                 <span className="flex-1">{item.title}</span>
                 {item.badge && (
                   <span className="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                     {item.badge}
                   </span>
                 )}
-                {isActive && <ChevronRight className="h-4 w-4" />}
+                {isActive && <ChevronRight className="h-4 w-4 flex-shrink-0" />}
               </Link>
             );
           })}
@@ -209,7 +200,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Link href="/admin/settings/profile">
               <Button
                 variant="ghost"
-                className="w-full justify-start"
+                className="w-full justify-start min-h-[48px] touch-manipulation"
                 onClick={() => setIsOpen(false)}
               >
                 <Settings className="mr-2 h-4 w-4" />
@@ -218,7 +209,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
             <Button
               variant="ghost"
-              className="w-full justify-start"
+              className="w-full justify-start min-h-[48px] touch-manipulation"
               onClick={handleLogout}
             >
               <LogOut className="mr-2 h-4 w-4" />
@@ -229,7 +220,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <Link href="/admin/login">
             <Button
               variant="ghost"
-              className="w-full justify-start"
+              className="w-full justify-start min-h-[48px] touch-manipulation"
               onClick={() => setIsOpen(false)}
             >
               <LogIn className="mr-2 h-4 w-4" />
@@ -262,18 +253,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="flex h-16 items-center gap-4 border-b bg-card px-6">
+        <header className="flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
           {isMobile && (
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(true)}
+              className="min-h-[48px] min-w-[48px] touch-manipulation md:min-h-[40px] md:min-w-[40px]"
             >
               <Menu className="h-5 w-5" />
+              <span className="sr-only">開啟選單</span>
             </Button>
           )}
-          <div className="flex-1">
-            <h1 className="text-lg font-semibold">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg font-semibold truncate">
               {navItems.find(item => pathname.startsWith(item.href))?.title || '管理後台'}
             </h1>
           </div>
@@ -285,6 +278,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   variant="ghost"
                   size="sm"
                   onClick={handleLogout}
+                  className="min-h-[40px] touch-manipulation"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   登出
@@ -293,7 +287,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <Link href="/admin/login">
                   <Button
                     variant="ghost"
-                    size="sm"
+                    size="sm" 
+                    className="min-h-[40px] touch-manipulation"
                   >
                     <LogIn className="mr-2 h-4 w-4" />
                     登入
@@ -305,7 +300,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
           {children}
         </main>
       </div>

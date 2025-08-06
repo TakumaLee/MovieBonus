@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, ResponsiveTable, ResponsiveTableBody, MobileCardItem, TouchFriendlyButton } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -370,14 +370,14 @@ function FeedbacksContent() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <Label htmlFor="status-filter">狀態</Label>
               <Select 
                 value={filters.status} 
                 onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}
               >
-                <SelectTrigger id="status-filter">
+                <SelectTrigger id="status-filter" className="min-h-[48px] md:min-h-[40px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -397,7 +397,7 @@ function FeedbacksContent() {
                 value={filters.type} 
                 onValueChange={(value) => setFilters(prev => ({ ...prev, type: value }))}
               >
-                <SelectTrigger id="type-filter">
+                <SelectTrigger id="type-filter" className="min-h-[48px] md:min-h-[40px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -416,6 +416,7 @@ function FeedbacksContent() {
                 type="date"
                 value={filters.dateFrom}
                 onChange={(e) => setFilters(prev => ({ ...prev, dateFrom: e.target.value }))}
+                className="min-h-[48px] md:min-h-[40px]"
               />
             </div>
 
@@ -426,41 +427,48 @@ function FeedbacksContent() {
                 type="date"
                 value={filters.dateTo}
                 onChange={(e) => setFilters(prev => ({ ...prev, dateTo: e.target.value }))}
+                className="min-h-[48px] md:min-h-[40px]"
               />
             </div>
           </div>
 
-          <div className="mt-4 flex gap-2">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="搜尋提交編號、標題或內容..."
-                  value={filters.search}
-                  onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                  className="pl-9"
-                />
-              </div>
+          <div className="mt-4 space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="搜尋提交編號、標題或內容..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                className="pl-9 min-h-[48px] md:min-h-[40px]"
+              />
             </div>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setFilters({
-                  status: 'all',
-                  type: 'all',
-                  search: '',
-                  dateFrom: '',
-                  dateTo: '',
-                });
-                setCurrentPage(1);
-              }}
-            >
-              重置
-            </Button>
-            <Button onClick={fetchFeedbacks} variant="outline">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              重新整理
-            </Button>
+            
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setFilters({
+                    status: 'all',
+                    type: 'all',
+                    search: '',
+                    dateFrom: '',
+                    dateTo: '',
+                  });
+                  setCurrentPage(1);
+                }}
+                className="min-h-[48px] md:min-h-[40px] touch-manipulation"
+              >
+                重置
+              </Button>
+              <Button 
+                onClick={fetchFeedbacks} 
+                variant="outline"
+                className="min-h-[48px] md:min-h-[40px] touch-manipulation"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                重新整理
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -484,43 +492,123 @@ function FeedbacksContent() {
               沒有符合條件的回報
             </div>
           ) : (
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>提交編號</TableHead>
-                    <TableHead>類型</TableHead>
-                    <TableHead>標題/內容</TableHead>
-                    <TableHead>聯絡人</TableHead>
-                    <TableHead>狀態</TableHead>
-                    <TableHead>提交時間</TableHead>
-                    <TableHead className="text-right">操作</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {feedbacks.map((feedback) => (
-                    <TableRow key={feedback.id}>
-                      <TableCell className="font-mono text-sm">
-                        {feedback.submission_id}
-                      </TableCell>
-                      <TableCell>
-                        {getTypeBadge(feedback.feedback_type)}
-                      </TableCell>
-                      <TableCell className="max-w-xs">
-                        <div className="space-y-1">
-                          {feedback.title && (
-                            <p className="font-medium text-sm">{feedback.title}</p>
-                          )}
-                          <p className="text-sm text-muted-foreground truncate">
-                            {feedback.content}
+            <ResponsiveTable>
+              {/* Desktop Table Header */}
+              <TableHeader className="hidden md:table-header-group">
+                <TableRow>
+                  <TableHead>提交編號</TableHead>
+                  <TableHead>類型</TableHead>
+                  <TableHead>標題/內容</TableHead>
+                  <TableHead>聯絡人</TableHead>
+                  <TableHead>狀態</TableHead>
+                  <TableHead>提交時間</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
+                </TableRow>
+              </TableHeader>
+              
+              <ResponsiveTableBody>
+                {feedbacks.map((feedback) => (
+                  <TableRow key={feedback.id}>
+                    {/* Desktop Table Cells */}
+                    <TableCell className="hidden md:table-cell font-mono text-sm">
+                      {feedback.submission_id}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {getTypeBadge(feedback.feedback_type)}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell max-w-xs">
+                      <div className="space-y-1">
+                        {feedback.title && (
+                          <p className="font-medium text-sm">{feedback.title}</p>
+                        )}
+                        <p className="text-sm text-muted-foreground truncate">
+                          {feedback.content}
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <div className="space-y-1">
+                        {feedback.contact_name && (
+                          <div className="flex items-center gap-1 text-sm">
+                            <User className="h-3 w-3" />
+                            {feedback.contact_name}
+                          </div>
+                        )}
+                        {feedback.contact_email && (
+                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <Mail className="h-3 w-3" />
+                            {feedback.contact_email}
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {getStatusBadge(feedback.status)}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                      {format(new Date(feedback.created_at), 'MM/dd HH:mm', { locale: zhTW })}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        {feedback.feedback_type === 'bonus_completion' && shouldShowProcessLinkButton(feedback) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleProcessLink(feedback)}
+                            title="處理 Facebook 連結"
+                          >
+                            <Link2 className="h-4 w-4 mr-2" />
+                            處理連結
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedFeedback(feedback);
+                            setDetailsOpen(true);
+                          }}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          檢視
+                        </Button>
+                      </div>
+                    </TableCell>
+
+                    {/* Mobile Card Layout */}
+                    <div className="md:hidden space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            {getTypeBadge(feedback.feedback_type)}
+                            {getStatusBadge(feedback.status)}
+                          </div>
+                          <p className="text-xs font-mono text-muted-foreground">
+                            #{feedback.submission_id}
                           </p>
                         </div>
-                      </TableCell>
-                      <TableCell>
+                        <span className="text-xs text-muted-foreground flex-shrink-0">
+                          {format(new Date(feedback.created_at), 'MM/dd HH:mm', { locale: zhTW })}
+                        </span>
+                      </div>
+
+                      {feedback.title && (
+                        <div>
+                          <h4 className="font-medium text-sm">{feedback.title}</h4>
+                        </div>
+                      )}
+
+                      <div>
+                        <p className="text-sm text-muted-foreground line-clamp-3">
+                          {feedback.content}
+                        </p>
+                      </div>
+
+                      {(feedback.contact_name || feedback.contact_email) && (
                         <div className="space-y-1">
                           {feedback.contact_name && (
                             <div className="flex items-center gap-1 text-sm">
-                              <User className="h-3 w-3" />
+                              <User className="h-3 w-3 text-muted-foreground" />
                               {feedback.contact_name}
                             </div>
                           )}
@@ -531,69 +619,68 @@ function FeedbacksContent() {
                             </div>
                           )}
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        {getStatusBadge(feedback.status)}
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {format(new Date(feedback.created_at), 'MM/dd HH:mm', { locale: zhTW })}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          {feedback.feedback_type === 'bonus_completion' && shouldShowProcessLinkButton(feedback) && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleProcessLink(feedback)}
-                              title="處理 Facebook 連結"
-                            >
-                              <Link2 className="h-4 w-4 mr-2" />
-                              處理連結
-                            </Button>
-                          )}
+                      )}
+
+                      <div className="pt-2 border-t flex flex-col gap-2">
+                        {feedback.feedback_type === 'bonus_completion' && shouldShowProcessLinkButton(feedback) && (
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={() => {
-                              setSelectedFeedback(feedback);
-                              setDetailsOpen(true);
-                            }}
+                            onClick={() => handleProcessLink(feedback)}
+                            className="w-full min-h-[48px] touch-manipulation"
                           >
-                            <Eye className="h-4 w-4 mr-2" />
-                            檢視
+                            <Link2 className="h-4 w-4 mr-2" />
+                            處理連結
                           </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedFeedback(feedback);
+                            setDetailsOpen(true);
+                          }}
+                          className="w-full min-h-[48px] touch-manipulation"
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          檢視詳情
+                        </Button>
+                      </div>
+                    </div>
+                  </TableRow>
+                ))}
+              </ResponsiveTableBody>
+            </ResponsiveTable>
           )}
 
           {/* 分頁控制 */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4">
-              <p className="text-sm text-muted-foreground">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
+              <p className="text-sm text-muted-foreground text-center md:text-left">
                 第 {currentPage} 頁，共 {totalPages} 頁
               </p>
-              <div className="flex gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
+                  className="min-h-[48px] md:min-h-[40px] touch-manipulation"
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  上一頁
+                  <span className="hidden sm:inline ml-2">上一頁</span>
                 </Button>
+                <span className="text-sm px-3 py-2 bg-muted rounded text-center min-w-[80px]">
+                  {currentPage} / {totalPages}
+                </span>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
+                  className="min-h-[48px] md:min-h-[40px] touch-manipulation"
                 >
-                  下一頁
+                  <span className="hidden sm:inline mr-2">下一頁</span>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>

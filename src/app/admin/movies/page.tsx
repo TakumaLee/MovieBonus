@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, ResponsiveTable, ResponsiveTableBody, MobileCardItem, TouchFriendlyButton } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
@@ -116,7 +116,7 @@ export default function MoviesPage() {
           <CardTitle>搜尋電影</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSearch} className="flex gap-4">
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
@@ -124,10 +124,15 @@ export default function MoviesPage() {
                 placeholder="搜尋電影名稱..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 min-h-[48px] md:min-h-[40px]"
               />
             </div>
-            <Button type="submit">搜尋</Button>
+            <Button 
+              type="submit" 
+              className="min-h-[48px] md:min-h-[40px] w-full sm:w-auto touch-manipulation"
+            >
+              搜尋
+            </Button>
           </form>
         </CardContent>
       </Card>
@@ -152,8 +157,9 @@ export default function MoviesPage() {
             />
           ) : (
             <>
-              <Table>
-                <TableHeader>
+              <ResponsiveTable>
+                {/* Desktop Table Header */}
+                <TableHeader className="hidden md:table-header-group">
                   <TableRow>
                     <TableHead>電影名稱</TableHead>
                     <TableHead>狀態</TableHead>
@@ -163,10 +169,12 @@ export default function MoviesPage() {
                     <TableHead className="text-right">操作</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                
+                <ResponsiveTableBody>
                   {movies.map((movie) => (
                     <TableRow key={movie.id}>
-                      <TableCell>
+                      {/* Desktop Table Cells */}
+                      <TableCell className="hidden md:table-cell">
                         <div>
                           <div className="font-medium">{movie.title}</div>
                           {movie.english_title && (
@@ -174,29 +182,29 @@ export default function MoviesPage() {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden md:table-cell">
                         <Badge variant={getStatusVariant(getMovieStatus(movie))}>
                           {getStatusText(getMovieStatus(movie))}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden md:table-cell">
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           {formatDate(movie.release_date)}
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden md:table-cell">
                         <div className="flex items-center gap-2 text-sm">
                           <Clock className="h-4 w-4 text-muted-foreground" />
                           {formatDate(movie.end_date)}
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="hidden md:table-cell">
                         <Badge variant="secondary">
                           {movie.bonus_count || 0} 個特典
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="hidden md:table-cell text-right">
                         <Button
                           variant="outline"
                           size="sm"
@@ -205,38 +213,88 @@ export default function MoviesPage() {
                           管理特典
                         </Button>
                       </TableCell>
+
+                      {/* Mobile Card Layout */}
+                      <div className="md:hidden space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-medium truncate">{movie.title}</h3>
+                            {movie.english_title && (
+                              <p className="text-sm text-muted-foreground truncate">{movie.english_title}</p>
+                            )}
+                          </div>
+                          <Badge variant={getStatusVariant(getMovieStatus(movie))} className="flex-shrink-0">
+                            {getStatusText(getMovieStatus(movie))}
+                          </Badge>
+                        </div>
+
+                        <div className="space-y-2">
+                          <MobileCardItem label="上映日期">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4 text-muted-foreground" />
+                              {formatDate(movie.release_date)}
+                            </div>
+                          </MobileCardItem>
+                          
+                          <MobileCardItem label="下檔日期">
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-4 w-4 text-muted-foreground" />
+                              {formatDate(movie.end_date)}
+                            </div>
+                          </MobileCardItem>
+                          
+                          <MobileCardItem label="特典數量">
+                            <Badge variant="secondary">
+                              {movie.bonus_count || 0} 個特典
+                            </Badge>
+                          </MobileCardItem>
+                        </div>
+
+                        <div className="pt-2 border-t">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => router.push(`/admin/movies/${movie.id}`)}
+                            className="w-full min-h-[48px] touch-manipulation"
+                          >
+                            管理特典
+                          </Button>
+                        </div>
+                      </div>
                     </TableRow>
                   ))}
-                </TableBody>
-              </Table>
+                </ResponsiveTableBody>
+              </ResponsiveTable>
               
               {/* 分頁控制 */}
               {pagination.totalPages > 1 && (
-                <div className="flex items-center justify-between mt-6">
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-6">
+                  <p className="text-sm text-muted-foreground text-center md:text-left">
                     顯示 {(pagination.page - 1) * pagination.limit + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} 筆，
                     共 {pagination.total} 筆
                   </p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handlePageChange(pagination.page - 1)}
                       disabled={pagination.page === 1}
+                      className="min-h-[48px] md:min-h-[40px] touch-manipulation"
                     >
                       <ChevronLeft className="h-4 w-4" />
-                      上一頁
+                      <span className="hidden sm:inline ml-2">上一頁</span>
                     </Button>
-                    <span className="text-sm">
-                      第 {pagination.page} / {pagination.totalPages} 頁
+                    <span className="text-sm px-3 py-2 bg-muted rounded text-center min-w-[80px]">
+                      {pagination.page} / {pagination.totalPages}
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handlePageChange(pagination.page + 1)}
                       disabled={pagination.page === pagination.totalPages}
+                      className="min-h-[48px] md:min-h-[40px] touch-manipulation"
                     >
-                      下一頁
+                      <span className="hidden sm:inline mr-2">下一頁</span>
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>

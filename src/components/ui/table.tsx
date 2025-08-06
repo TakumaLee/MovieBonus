@@ -16,6 +16,124 @@ const Table = React.forwardRef<
 ))
 Table.displayName = "Table"
 
+// Responsive Table component that switches between table and card layout
+interface ResponsiveTableProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const ResponsiveTable = React.forwardRef<HTMLDivElement, ResponsiveTableProps>(
+  ({ children, className }, ref) => (
+    <div ref={ref} className={cn("w-full", className)}>
+      {/* Desktop Table View */}
+      <div className="hidden md:block">
+        <div className="relative w-full overflow-auto">
+          <table className="w-full caption-bottom text-sm">
+            {children}
+          </table>
+        </div>
+      </div>
+      
+      {/* Mobile Card View - will be handled by ResponsiveTableBody */}
+      <div className="md:hidden">
+        {children}
+      </div>
+    </div>
+  )
+)
+ResponsiveTable.displayName = "ResponsiveTable"
+
+// ResponsiveTableBody that renders cards on mobile
+interface ResponsiveTableBodyProps {
+  children: React.ReactNode;
+  className?: string;
+  cardClassName?: string;
+}
+
+const ResponsiveTableBody = React.forwardRef<HTMLElement, ResponsiveTableBodyProps>(
+  ({ children, className, cardClassName }, ref) => {
+    // On desktop, render as normal tbody
+    const desktopContent = (
+      <tbody
+        ref={ref as React.Ref<HTMLTableSectionElement>}
+        className={cn("[&_tr:last-child]:border-0", className)}
+      >
+        {children}
+      </tbody>
+    )
+
+    // On mobile, extract data from table rows and render as cards
+    const mobileContent = (
+      <div className="space-y-4">
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child) && child.type === TableRow) {
+            return (
+              <div
+                key={child.key}
+                className={cn(
+                  "border rounded-lg p-4 bg-card shadow-sm touch-manipulation",
+                  cardClassName
+                )}
+              >
+                {child.props.children}
+              </div>
+            )
+          }
+          return child
+        })}
+      </div>
+    )
+
+    return (
+      <>
+        <div className="hidden md:block">{desktopContent}</div>
+        <div className="md:hidden">{mobileContent}</div>
+      </>
+    )
+  }
+)
+ResponsiveTableBody.displayName = "ResponsiveTableBody"
+
+// Mobile-optimized card item component
+interface MobileCardItemProps {
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
+const MobileCardItem: React.FC<MobileCardItemProps> = ({ label, children, className }) => (
+  <div className={cn("flex justify-between items-start gap-3 min-h-[48px]", className)}>
+    <span className="text-sm font-medium text-muted-foreground flex-shrink-0">{label}:</span>
+    <div className="text-sm text-right flex-1">{children}</div>
+  </div>
+)
+
+// Touch-friendly button wrapper
+interface TouchFriendlyButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
+const TouchFriendlyButton: React.FC<TouchFriendlyButtonProps> = ({ 
+  children, 
+  className,
+  onClick 
+}) => (
+  <button
+    onClick={onClick}
+    className={cn(
+      "min-h-[48px] min-w-[48px] p-3 rounded-lg transition-colors",
+      "touch-manipulation active:scale-95",
+      "hover:bg-accent hover:text-accent-foreground",
+      "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+      className
+    )}
+  >
+    {children}
+  </button>
+)
+
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
@@ -114,4 +232,8 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  ResponsiveTable,
+  ResponsiveTableBody,
+  MobileCardItem,
+  TouchFriendlyButton,
 }
