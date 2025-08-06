@@ -71,12 +71,26 @@ class AdminApiClient {
     // Construct full URL with Node.js backend
     const url = `${this.baseUrl}${endpoint}`;
     
+    // Enhanced headers for mobile compatibility
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    };
+    
+    // Add origin header for mobile browsers
+    if (typeof window !== 'undefined') {
+      headers['X-Requested-With'] = 'XMLHttpRequest';
+      
+      // Mobile browsers may need explicit origin
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        headers['X-Mobile-Request'] = 'true';
+      }
+    }
+    
     const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers,
       credentials: 'include', // Important: include cookies for session management
+      mode: 'cors', // Explicit CORS mode
       ...options,
     };
 

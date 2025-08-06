@@ -20,15 +20,30 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  // Get CSRF token on component mount
+  // Get CSRF token on component mount with better error handling
   useEffect(() => {
-    adminApi.auth.getCsrfToken()
-      .then(data => {
+    const fetchCsrfToken = async () => {
+      try {
+        // Clear any existing session cookies first on mobile
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          console.log('Mobile device detected, ensuring clean session');
+        }
+        
+        const data = await adminApi.auth.getCsrfToken();
         if (data.success && data.csrfToken) {
           setCsrfToken(data.csrfToken);
+          console.log('CSRF token obtained successfully');
+        } else {
+          console.error('No CSRF token in response:', data);
+          setError('無法取得安全驗證，請重新整理頁面');
         }
-      })
-      .catch(err => console.error('Failed to get CSRF token:', err));
+      } catch (err) {
+        console.error('Failed to get CSRF token:', err);
+        setError('無法連接到伺服器，請檢查網路連線');
+      }
+    };
+    
+    fetchCsrfToken();
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
