@@ -17,6 +17,7 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [csrfToken, setCsrfToken] = useState('');
+  const [sessionId, setSessionId] = useState('');
   const router = useRouter();
   const { toast } = useToast();
 
@@ -32,6 +33,9 @@ export default function AdminLoginPage() {
         const data = await adminApi.auth.getCsrfToken();
         if (data.success && data.csrfToken) {
           setCsrfToken(data.csrfToken);
+          if (data.sessionId) {
+            setSessionId(data.sessionId);
+          }
           console.log('CSRF token obtained successfully');
         } else {
           console.error('No CSRF token in response:', data);
@@ -52,7 +56,7 @@ export default function AdminLoginPage() {
     setIsLoading(true);
 
     try {
-      const data = await adminApi.auth.login(email, password, csrfToken);
+      const data = await adminApi.auth.login(email, password, csrfToken, sessionId);
 
       if (data.success) {
         toast({

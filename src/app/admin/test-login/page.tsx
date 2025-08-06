@@ -49,12 +49,14 @@ export default function TestLoginPage() {
       addResult('2. Attempting Login', { 
         email,
         csrfToken: csrfData.csrfToken,
+        sessionId: csrfData.sessionId,
       });
       
       const loginBody = JSON.stringify({
         email,
         password,
         csrfToken: csrfData.csrfToken,
+        sessionId: csrfData.sessionId, // Include sessionId as fallback
       });
       
       const loginResponse = await fetch('https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app/api/admin/login', {

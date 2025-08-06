@@ -219,8 +219,8 @@ export const adminApi = {
   // Authentication
   auth: {
     getCsrfToken: () => adminApiClient.get('/api/admin/csrf-token'),
-    login: (email: string, password: string, csrfToken: string) => 
-      adminApiClient.post('/api/admin/login', { email, password, csrfToken }),
+    login: (email: string, password: string, csrfToken: string, sessionId?: string) => 
+      adminApiClient.post('/api/admin/login', { email, password, csrfToken, sessionId }),
     logout: () => adminApiClient.post('/api/admin/logout'),
     verify: () => adminApiClient.get('/api/admin/verify'),
     forgotPassword: (email: string) => 
