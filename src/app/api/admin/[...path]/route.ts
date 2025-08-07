@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 const BACKEND_URL = process.env.NODE_ENV === 'production'
   ? 'https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app'
@@ -15,23 +14,21 @@ async function handler(
     const url = new URL(request.url);
     const queryString = url.search;
     
-    // Get cookies to forward
-    const cookieStore = cookies();
-    const adminSession = cookieStore.get('admin-session');
-    const adminToken = cookieStore.get('admin-token');
+    // Get ALL cookies from the request header directly
+    const cookieHeader = request.headers.get('cookie') || '';
     
     // Build headers
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       'X-Forwarded-For': request.headers.get('x-forwarded-for') || request.ip || '',
       'User-Agent': request.headers.get('user-agent') || '',
+      'Origin': request.headers.get('origin') || '',
+      'X-Same-Origin-Proxy': 'true',
     };
     
-    // Forward authentication
-    if (adminSession) {
-      headers['Cookie'] = `admin-session=${adminSession.value}`;
-    } else if (adminToken) {
-      headers['Authorization'] = `Bearer ${adminToken.value}`;
+    // Forward ALL cookies as-is
+    if (cookieHeader) {
+      headers['Cookie'] = cookieHeader;
     }
     
     // Build request options
@@ -74,22 +71,31 @@ async function handler(
     // Forward any cookies from backend
     const setCookieHeader = response.headers.get('set-cookie');
     if (setCookieHeader) {
-      const cookies = setCookieHeader.split(',').map(c => c.trim());
-      cookies.forEach(cookie => {
-        const [nameValue] = cookie.split(';');
-        const [name, value] = nameValue.split('=');
+      try {
+        // Parse the cookie more carefully to handle values that may contain special characters
+        const cookieParts = setCookieHeader.split(';');
+        const nameValuePart = cookieParts[0];
         
-        if (name && value) {
-          nextResponse.cookies.set({
-            name: name.trim(),
-            value: value.trim(),
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            path: '/',
-          });
+        if (nameValuePart) {
+          // Find the first = to split name and value
+          const firstEqualIndex = nameValuePart.indexOf('=');
+          if (firstEqualIndex > 0) {
+            const name = nameValuePart.substring(0, firstEqualIndex).trim();
+            const value = nameValuePart.substring(firstEqualIndex + 1).trim();
+            
+            nextResponse.cookies.set({
+              name: name,
+              value: value,
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              path: '/',
+            });
+          }
         }
-      });
+      } catch (error) {
+        console.error('Error parsing cookie:', error);
+      }
     }
     
     return nextResponse;
