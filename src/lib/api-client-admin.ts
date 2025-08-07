@@ -33,16 +33,13 @@ class AdminApiClient {
   private testCookieName: string = 'test-admin-token';
 
   constructor() {
-    // Use Node.js backend URL
-    // In production, use the Cloud Run URL
-    // In development, use localhost
-    const isProduction = process.env.NODE_ENV === 'production';
-    this.baseUrl = isProduction 
-      ? 'https://moviebonus-nodejs-backend-777964931661.asia-east1.run.app'
-      : (process.env.NEXT_PUBLIC_NODE_API_URL || 'http://localhost:3000');
+    // Use same-origin API routes to avoid CORS and Safari tracking issues
+    // This proxies requests through Next.js to the backend
+    this.baseUrl = ''; // Empty string means same origin
     this.timeout = 30000; // 30 seconds timeout
     
     // Enable test auth in development or when explicitly enabled
+    const isProduction = process.env.NODE_ENV === 'production';
     this.testAuthEnabled = !isProduction || process.env.NEXT_PUBLIC_ENABLE_TEST_AUTH === 'true';
   }
 
@@ -59,13 +56,6 @@ class AdminApiClient {
     options: RequestInit = {},
     isRetry: boolean = false
   ): Promise<AdminApiResponse<T>> {
-    // Import cookie detection dynamically to avoid SSR issues
-    let cookieSupport = true;
-    if (typeof window !== 'undefined') {
-      const { detectCookieSupport } = await import('./cookie-support-detection');
-      cookieSupport = await detectCookieSupport();
-    }
-    
     // Set test auth cookie if enabled and not already set
     if (this.testAuthEnabled && typeof document !== 'undefined') {
       const existingCookie = document.cookie.includes(this.testCookieName);
@@ -75,36 +65,18 @@ class AdminApiClient {
       }
     }
 
-    // Construct full URL with Node.js backend
+    // Construct URL (empty baseUrl means same origin)
     const url = `${this.baseUrl}${endpoint}`;
     
-    // Enhanced headers for mobile compatibility
+    // Simple headers - no need for CORS headers with same-origin
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       ...options.headers,
     };
     
-    // Add client capability headers
-    if (typeof window !== 'undefined') {
-      headers['X-Requested-With'] = 'XMLHttpRequest';
-      headers['X-Cookie-Support'] = String(cookieSupport);
-      
-      // Mobile browsers may need explicit origin
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        headers['X-Mobile-Request'] = 'true';
-      }
-      
-      // Add JWT token from localStorage if available (for mobile auth)
-      const storedToken = localStorage.getItem('adminToken');
-      if (storedToken && !headers['Authorization']) {
-        headers['Authorization'] = `Bearer ${storedToken}`;
-      }
-    }
-    
     const config: RequestInit = {
       headers,
       credentials: 'include', // Important: include cookies for session management
-      mode: 'cors', // Explicit CORS mode
       ...options,
     };
 

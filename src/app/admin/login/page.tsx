@@ -21,38 +21,25 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  // Get CSRF token on component mount with better error handling
+  // Get CSRF token on component mount
   useEffect(() => {
-    const initializeAuth = async () => {
+    const fetchCsrfToken = async () => {
       try {
-        // Check client capabilities
-        const { getClientCapabilities } = await import('@/lib/cookie-support-detection');
-        const capabilities = await getClientCapabilities();
-        
-        console.log('Client capabilities:', capabilities);
-        
-        // Always try to fetch CSRF token first
-        // The backend will handle the fallback if needed
-        try {
-          const data = await adminApi.auth.getCsrfToken();
-          if (data.success && data.csrfToken) {
-            setCsrfToken(data.csrfToken);
-            if (data.sessionId) {
-              setSessionId(data.sessionId);
-            }
-            console.log('CSRF token obtained successfully');
+        const data = await adminApi.auth.getCsrfToken();
+        if (data.success && data.csrfToken) {
+          setCsrfToken(data.csrfToken);
+          if (data.sessionId) {
+            setSessionId(data.sessionId);
           }
-        } catch (csrfError) {
-          console.log('CSRF token fetch failed, will proceed without it:', csrfError);
-          // Don't set error - we can still try mobile auth
+          console.log('CSRF token obtained successfully');
         }
       } catch (err) {
-        console.error('Failed to initialize auth:', err);
-        setError('無法連接到伺服器，請檢查網路連線');
+        console.error('Failed to get CSRF token:', err);
+        // Don't show error - login can still work without CSRF token
       }
     };
     
-    initializeAuth();
+    fetchCsrfToken();
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -137,9 +124,6 @@ export default function AdminLoginPage() {
         } else {
           setError(error.message || '登入失敗');
         }
-      } else if (error?.message === 'Load failed') {
-        // Safari specific error
-        setError('Safari 瀏覽器連線問題，請嘗試：\n1. 檢查網路連線\n2. 關閉「防止跨網站追蹤」設定\n3. 使用其他瀏覽器');
       } else if (error?.name === 'TypeError' && error?.message?.includes('fetch')) {
         // Network error
         setError('無法連接到伺服器，請檢查網路連線');
