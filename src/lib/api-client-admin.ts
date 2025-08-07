@@ -93,6 +93,12 @@ class AdminApiClient {
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         headers['X-Mobile-Request'] = 'true';
       }
+      
+      // Add JWT token from localStorage if available (for mobile auth)
+      const storedToken = localStorage.getItem('adminToken');
+      if (storedToken && !headers['Authorization']) {
+        headers['Authorization'] = `Bearer ${storedToken}`;
+      }
     }
     
     const config: RequestInit = {
