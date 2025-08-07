@@ -31,22 +31,33 @@ export async function GET(request: NextRequest) {
     // Forward any cookies from backend
     const setCookieHeader = response.headers.get('set-cookie');
     if (setCookieHeader) {
-      // Parse and set cookies with same-origin
-      const cookies = setCookieHeader.split(',').map(c => c.trim());
-      cookies.forEach(cookie => {
-        const [nameValue, ...options] = cookie.split(';');
-        const [name, value] = nameValue.split('=');
+      try {
+        // Parse the cookie more carefully to handle values that may contain special characters
+        const cookieParts = setCookieHeader.split(';');
+        const nameValuePart = cookieParts[0];
         
-        nextResponse.cookies.set({
-          name: name.trim(),
-          value: value.trim(),
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          path: '/',
-          maxAge: 60 * 60, // 1 hour
-        });
-      });
+        if (nameValuePart) {
+          // Find the first = to split name and value
+          const firstEqualIndex = nameValuePart.indexOf('=');
+          if (firstEqualIndex > 0) {
+            const name = nameValuePart.substring(0, firstEqualIndex).trim();
+            const value = nameValuePart.substring(firstEqualIndex + 1).trim();
+            
+            nextResponse.cookies.set({
+              name: name,
+              value: value,
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              path: '/',
+              maxAge: 60 * 60, // 1 hour
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing cookie:', error);
+        // Don't throw - continue with response even if cookie parsing fails
+      }
     }
     
     return nextResponse;

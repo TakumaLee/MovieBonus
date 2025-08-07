@@ -34,25 +34,39 @@ export async function POST(request: NextRequest) {
     const nextResponse = NextResponse.json(data, { status: response.status });
     
     // Forward any cookies from backend
+    // Note: Due to fetch API limitations, we can only get the first set-cookie header
+    // But that's usually enough for our auth cookies
     const setCookieHeader = response.headers.get('set-cookie');
+    
     if (setCookieHeader) {
-      // Parse and set cookies
-      const cookies = setCookieHeader.split(',').map(c => c.trim());
-      cookies.forEach(cookie => {
-        const [nameValue, ...options] = cookie.split(';');
-        const [name, value] = nameValue.split('=');
+      try {
+        // Parse the cookie more carefully to handle values that may contain special characters
+        const cookieParts = setCookieHeader.split(';');
+        const nameValuePart = cookieParts[0];
         
-        // Set cookie with same-site lax for better compatibility
-        nextResponse.cookies.set({
-          name: name.trim(),
-          value: value.trim(),
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          path: '/',
-          maxAge: 60 * 60 * 24 * 7, // 7 days
-        });
-      });
+        if (nameValuePart) {
+          // Find the first = to split name and value
+          const firstEqualIndex = nameValuePart.indexOf('=');
+          if (firstEqualIndex > 0) {
+            const name = nameValuePart.substring(0, firstEqualIndex).trim();
+            const value = nameValuePart.substring(firstEqualIndex + 1).trim();
+            
+            // Set cookie with same-site lax for better compatibility
+            nextResponse.cookies.set({
+              name: name,
+              value: value,
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              path: '/',
+              maxAge: 60 * 60 * 24 * 7, // 7 days
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing cookie:', error);
+        // Don't throw - continue with response even if cookie parsing fails
+      }
     }
     
     // If login successful and token provided, also set it as HTTP-only cookie
