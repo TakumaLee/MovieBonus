@@ -61,6 +61,13 @@ export default function AdminLoginPage() {
     setIsLoading(true);
 
     try {
+      console.log('Starting login process...', {
+        email,
+        hasCsrfToken: !!csrfToken,
+        hasSessionId: !!sessionId,
+        userAgent: navigator.userAgent
+      });
+      
       // Pass empty strings for CSRF/session if not available
       // Backend will detect and use mobile auth if needed
       const data = await adminApi.auth.login(
@@ -90,8 +97,14 @@ export default function AdminLoginPage() {
         router.push(redirectPath || '/admin/feedbacks');
         router.refresh();
       }
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (error: any) {
+      console.error('Login error details:', {
+        error,
+        message: error?.message,
+        status: error?.status,
+        name: error?.name,
+        stack: error?.stack
+      });
       
       if (error instanceof AdminApiError) {
         if (error.status === 429) {
@@ -124,19 +137,15 @@ export default function AdminLoginPage() {
         } else {
           setError(error.message || '登入失敗');
         }
+      } else if (error?.message === 'Load failed') {
+        // Safari specific error
+        setError('Safari 瀏覽器連線問題，請嘗試：\n1. 檢查網路連線\n2. 關閉「防止跨網站追蹤」設定\n3. 使用其他瀏覽器');
+      } else if (error?.name === 'TypeError' && error?.message?.includes('fetch')) {
+        // Network error
+        setError('無法連接到伺服器，請檢查網路連線');
       } else {
-        // Network or unknown error
-        setError('網路連線異常，請檢查您的網路設定');
-        
-        // Try to get new CSRF token
-        setTimeout(async () => {
-          try {
-            const tokenData = await adminApi.auth.getCsrfToken();
-            if (tokenData.success && tokenData.csrfToken) {
-              setCsrfToken(tokenData.csrfToken);
-            }
-          } catch {}
-        }, 1000);
+        // Unknown error
+        setError(`登入失敗: ${error?.message || '未知錯誤'}`);
       }
     } finally {
       setIsLoading(false);

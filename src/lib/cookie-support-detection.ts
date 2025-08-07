@@ -14,14 +14,29 @@ export async function detectCookieSupport(): Promise<boolean> {
     return false;
   }
 
-  // Test third-party cookie support
   try {
-    // Create a test cookie
+    // Safari detection
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    
+    // For Safari, especially on iOS, assume limited cookie support in cross-origin context
+    if (isSafari || isIOS) {
+      const isLocalhost = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1';
+      
+      // Only trust cookies in localhost for Safari
+      if (!isLocalhost) {
+        console.log('Safari detected in production, assuming limited cookie support');
+        return false;
+      }
+    }
+    
+    // For other browsers, do a simple test
     const testName = '_cookie_test_' + Date.now();
     const testValue = 'test';
     
-    // Set test cookie
-    document.cookie = `${testName}=${testValue}; path=/; SameSite=None; Secure`;
+    // Set test cookie with simpler settings
+    document.cookie = `${testName}=${testValue}; path=/`;
     
     // Check if cookie was set
     const cookieSet = document.cookie.includes(testName);
@@ -31,23 +46,10 @@ export async function detectCookieSupport(): Promise<boolean> {
       document.cookie = `${testName}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     }
     
-    // Additional check for iOS Safari
-    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      // iOS Safari has stricter cookie policies
-      // Check if we're in a cross-origin context
-      const isLocalhost = window.location.hostname === 'localhost' || 
-                         window.location.hostname === '127.0.0.1';
-      const isSameOrigin = window.location.hostname === new URL(process.env.NEXT_PUBLIC_NODE_API_URL || '').hostname;
-      
-      if (!isLocalhost && !isSameOrigin) {
-        // Likely to have cookie issues in cross-origin context on iOS
-        return false;
-      }
-    }
-    
     return cookieSet;
   } catch (error) {
     console.error('Cookie support detection error:', error);
+    // On error, assume no cookie support for safety
     return false;
   }
 }
