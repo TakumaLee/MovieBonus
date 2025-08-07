@@ -8,6 +8,9 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
+    // Get cookies from the request
+    const cookieHeader = request.headers.get('cookie') || '';
+    
     // Forward the request to backend
     const response = await fetch(`${BACKEND_URL}/api/admin/login`, {
       method: 'POST',
@@ -16,6 +19,11 @@ export async function POST(request: NextRequest) {
         // Forward important headers
         'X-Forwarded-For': request.headers.get('x-forwarded-for') || request.ip || '',
         'User-Agent': request.headers.get('user-agent') || '',
+        'Origin': request.headers.get('origin') || '',
+        // Identify this as a trusted same-origin proxy request
+        'X-Same-Origin-Proxy': 'true',
+        // Forward cookies
+        ...(cookieHeader && { 'Cookie': cookieHeader }),
       },
       body: JSON.stringify(body),
     });

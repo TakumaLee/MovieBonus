@@ -6,12 +6,20 @@ const BACKEND_URL = process.env.NODE_ENV === 'production'
 
 export async function GET(request: NextRequest) {
   try {
+    // Get cookies from the request
+    const cookieHeader = request.headers.get('cookie') || '';
+    
     // Forward the request to backend
     const response = await fetch(`${BACKEND_URL}/api/admin/csrf-token`, {
       method: 'GET',
       headers: {
         'X-Forwarded-For': request.headers.get('x-forwarded-for') || request.ip || '',
         'User-Agent': request.headers.get('user-agent') || '',
+        'Origin': request.headers.get('origin') || '',
+        // Identify this as a trusted same-origin proxy request
+        'X-Same-Origin-Proxy': 'true',
+        // Forward cookies
+        ...(cookieHeader && { 'Cookie': cookieHeader }),
       },
     });
 
