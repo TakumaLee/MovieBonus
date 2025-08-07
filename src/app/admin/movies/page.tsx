@@ -103,7 +103,7 @@ export default function MoviesPage() {
   };
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-full overflow-x-hidden">
       {/* 頁面標題 */}
       <div>
         <h1 className="text-3xl font-bold">電影管理</h1>
@@ -111,7 +111,7 @@ export default function MoviesPage() {
       </div>
       
       {/* 搜尋區塊 */}
-      <Card>
+      <Card className="max-w-full overflow-hidden">
         <CardHeader>
           <CardTitle>搜尋電影</CardTitle>
         </CardHeader>
@@ -138,7 +138,7 @@ export default function MoviesPage() {
       </Card>
       
       {/* 電影列表 */}
-      <Card>
+      <Card className="max-w-full overflow-hidden">
         <CardHeader>
           <CardTitle>電影列表</CardTitle>
         </CardHeader>

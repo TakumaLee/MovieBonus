@@ -233,7 +233,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   );
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-x-hidden max-w-[100vw]">
       {/* Desktop Sidebar */}
       {!isMobile && (
         <aside className="hidden md:flex w-64 flex-col border-r bg-card">
@@ -300,7 +300,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 max-w-full">
           {children}
         </main>
       </div>

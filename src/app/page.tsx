@@ -150,14 +150,14 @@ export default function Home() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen w-full bg-background">
+      <div className="min-h-screen w-full bg-background overflow-x-hidden">
         <header className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-card to-card/50 border-b relative">
           {donationConfig.showHeaderButton && (
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
               <DonationButton position="header" />
             </div>
           )}
-          <div className="max-w-6xl mx-auto text-center">
+          <div className="w-full max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl mx-auto text-center px-2">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary mb-4">
               特典速報
             </h1>
@@ -165,7 +165,7 @@ export default function Home() {
               台灣電影院特典與限定禮品的完整追蹤平台，不錯過任何精彩好康！
             </p>
             <div className="mt-6 sm:mt-8 flex justify-center">
-              <SearchBar className="w-full max-w-2xl" placeholder="搜尋電影、演員、導演..." />
+              <SearchBar className="w-full max-w-full sm:max-w-lg lg:max-w-2xl" placeholder="搜尋電影、演員、導演..." />
             </div>
           </div>
         </header>
@@ -177,7 +177,7 @@ export default function Home() {
         </div>
         
         <main className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <Tabs defaultValue="now-playing" className="w-full max-w-7xl mx-auto">
+          <Tabs defaultValue="now-playing" className="w-full max-w-full sm:max-w-4xl md:max-w-6xl lg:max-w-7xl mx-auto">
             <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto h-12 mb-8">
               <TabsTrigger value="now-playing" className="text-sm sm:text-base">正在上映</TabsTrigger>
               <TabsTrigger value="coming-soon" className="text-sm sm:text-base">即將上映</TabsTrigger>
