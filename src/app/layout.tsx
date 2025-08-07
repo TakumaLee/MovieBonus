@@ -9,6 +9,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' }
@@ -98,6 +99,32 @@ export default function RootLayout({
   return (
     <html lang="zh-TW" className="light">
       <head>
+        {/* Enhanced Safari iOS viewport handling */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes, maximum-scale=5" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        
+        {/* Critical CSS for Safari iOS overflow prevention */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            html { 
+              overflow-x: hidden !important; 
+              max-width: 100vw !important; 
+            }
+            body { 
+              overflow-x: hidden !important; 
+              max-width: 100vw !important; 
+              position: relative; 
+            }
+            * { 
+              box-sizing: border-box; 
+              max-width: 100vw; 
+            }
+          `
+        }} />
+        
         {/* Google Search Console 驗證 */}
         <meta name="google-site-verification" content="uhuWAZIse2zwAXrBThHqPQZhxruWaqyMgdm_m2EmKUk" />
         

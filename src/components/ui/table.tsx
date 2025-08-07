@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState, useEffect } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -16,42 +17,137 @@ const Table = React.forwardRef<
 ))
 Table.displayName = "Table"
 
-// Responsive Table component that switches between table and card layout
+// Enhanced mobile detection hook for Safari iOS compatibility
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+    
+    const checkIsMobile = () => {
+      // Multiple detection methods for Safari iOS compatibility
+      const userAgent = navigator.userAgent.toLowerCase();
+      const viewportWidth = window.innerWidth;
+      const devicePixelRatio = window.devicePixelRatio;
+      
+      // Enhanced mobile detection specifically for Safari iOS
+      const isSafariMobile = (
+        /safari/.test(userAgent) && 
+        /mobile/.test(userAgent) && 
+        !/chrome|crios|fxios/.test(userAgent)
+      );
+      
+      const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+      const isSmallViewport = viewportWidth <= 768;
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      
+      // Conservative mobile detection - if any mobile indicator is true, use mobile layout
+      const mobile = isSafariMobile || isIOSDevice || isSmallViewport || 
+        (isTouchDevice && viewportWidth <= 1024);
+      
+      setIsMobile(mobile);
+    };
+    
+    // Check immediately
+    checkIsMobile();
+    
+    // Check on resize with debounce
+    let timeoutId: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkIsMobile, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', checkIsMobile);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+  
+  return { isMobile, isClient };
+};
+
+// Responsive Table component with enhanced JavaScript-based mobile detection
 interface ResponsiveTableProps {
   children: React.ReactNode;
   className?: string;
+  forceMobile?: boolean;
 }
 
 const ResponsiveTable = React.forwardRef<HTMLDivElement, ResponsiveTableProps>(
-  ({ children, className }, ref) => (
-    <div ref={ref} className={cn("w-full", className)}>
-      {/* Desktop Table View */}
-      <div className="hidden md:block">
-        <div className="relative w-full overflow-auto">
-          <table className="w-full caption-bottom text-sm">
+  ({ children, className, forceMobile = false }, ref) => {
+    const { isMobile, isClient } = useIsMobile();
+    const shouldUseMobileLayout = forceMobile || isMobile;
+    
+    // Show loading state or fallback during hydration
+    if (!isClient) {
+      return (
+        <div ref={ref} className={cn("w-full max-w-full overflow-hidden", className)}>
+          <div className="hidden md:block">
+            <div className="relative w-full overflow-auto max-w-full">
+              <table className="w-full caption-bottom text-sm max-w-full">
+                {children}
+              </table>
+            </div>
+          </div>
+          <div className="md:hidden">
             {children}
-          </table>
+          </div>
         </div>
+      );
+    }
+    
+    return (
+      <div ref={ref} className={cn("w-full max-w-full overflow-hidden", className)}>
+        {shouldUseMobileLayout ? (
+          // Mobile Card View - JavaScript detected mobile
+          <div className="w-full max-w-full overflow-hidden">
+            {children}
+          </div>
+        ) : (
+          // Desktop Table View
+          <div className="w-full max-w-full">
+            <div className="relative w-full overflow-auto max-w-full">
+              <table className="w-full caption-bottom text-sm max-w-full">
+                {children}
+              </table>
+            </div>
+          </div>
+        )}
+        
+        {/* Fallback CSS-only detection for edge cases */}
+        <style jsx>{`
+          @media screen and (max-width: 768px) {
+            .responsive-table-container {
+              max-width: 100vw !important;
+              overflow-x: hidden !important;
+            }
+          }
+        `}</style>
       </div>
-      
-      {/* Mobile Card View - will be handled by ResponsiveTableBody */}
-      <div className="md:hidden">
-        {children}
-      </div>
-    </div>
-  )
+    );
+  }
 )
 ResponsiveTable.displayName = "ResponsiveTable"
 
-// ResponsiveTableBody that renders cards on mobile
+// Enhanced ResponsiveTableBody with JavaScript-based mobile detection
 interface ResponsiveTableBodyProps {
   children: React.ReactNode;
   className?: string;
   cardClassName?: string;
+  forceMobile?: boolean;
 }
 
 const ResponsiveTableBody = React.forwardRef<HTMLElement, ResponsiveTableBodyProps>(
-  ({ children, className, cardClassName }, ref) => {
+  ({ children, className, cardClassName, forceMobile = false }, ref) => {
+    const { isMobile, isClient } = useIsMobile();
+    const shouldUseMobileLayout = forceMobile || isMobile;
+    
     // On desktop, render as normal tbody
     const desktopContent = (
       <tbody
@@ -64,18 +160,25 @@ const ResponsiveTableBody = React.forwardRef<HTMLElement, ResponsiveTableBodyPro
 
     // On mobile, extract data from table rows and render as cards
     const mobileContent = (
-      <div className="space-y-4">
+      <div className="space-y-4 w-full max-w-full overflow-hidden px-4 box-border">
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child) && child.type === TableRow) {
             return (
               <div
                 key={child.key}
                 className={cn(
-                  "border rounded-lg p-4 bg-card shadow-sm touch-manipulation",
+                  "border rounded-lg p-4 bg-card shadow-sm touch-manipulation w-full max-w-full overflow-hidden box-border",
                   cardClassName
                 )}
+                style={{
+                  maxWidth: 'calc(100vw - 2rem)',
+                  overflowX: 'hidden',
+                  boxSizing: 'border-box'
+                }}
               >
-                {child.props.children}
+                <div className="w-full max-w-full overflow-hidden">
+                  {child.props.children}
+                </div>
               </div>
             )
           }
@@ -83,18 +186,23 @@ const ResponsiveTableBody = React.forwardRef<HTMLElement, ResponsiveTableBodyPro
         })}
       </div>
     )
+    
+    // Show loading state during hydration with CSS fallback
+    if (!isClient) {
+      return (
+        <>
+          <div className="hidden md:block">{desktopContent}</div>
+          <div className="md:hidden">{mobileContent}</div>
+        </>
+      );
+    }
 
-    return (
-      <>
-        <div className="hidden md:block">{desktopContent}</div>
-        <div className="md:hidden">{mobileContent}</div>
-      </>
-    )
+    return shouldUseMobileLayout ? mobileContent : desktopContent;
   }
 )
 ResponsiveTableBody.displayName = "ResponsiveTableBody"
 
-// Mobile-optimized card item component
+// Enhanced mobile-optimized card item component with overflow protection
 interface MobileCardItemProps {
   label: string;
   children: React.ReactNode;
@@ -102,13 +210,17 @@ interface MobileCardItemProps {
 }
 
 const MobileCardItem: React.FC<MobileCardItemProps> = ({ label, children, className }) => (
-  <div className={cn("flex justify-between items-start gap-3 min-h-[48px]", className)}>
-    <span className="text-sm font-medium text-muted-foreground flex-shrink-0">{label}:</span>
-    <div className="text-sm text-right flex-1">{children}</div>
+  <div className={cn("flex justify-between items-start gap-3 min-h-[48px] w-full max-w-full overflow-hidden", className)}>
+    <span className="text-sm font-medium text-muted-foreground flex-shrink-0 max-w-[40%] overflow-hidden text-ellipsis">
+      {label}:
+    </span>
+    <div className="text-sm text-right flex-1 max-w-[60%] overflow-hidden break-words">
+      {children}
+    </div>
   </div>
 )
 
-// Touch-friendly button wrapper
+// Enhanced touch-friendly button wrapper with overflow protection
 interface TouchFriendlyButtonProps {
   children: React.ReactNode;
   className?: string;
@@ -127,10 +239,16 @@ const TouchFriendlyButton: React.FC<TouchFriendlyButtonProps> = ({
       "touch-manipulation active:scale-95",
       "hover:bg-accent hover:text-accent-foreground",
       "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+      "max-w-full overflow-hidden box-border",
+      "whitespace-nowrap text-ellipsis",
       className
     )}
+    style={{
+      maxWidth: 'calc(100vw - 2rem)',
+      boxSizing: 'border-box'
+    }}
   >
-    {children}
+    <span className="block truncate">{children}</span>
   </button>
 )
 
