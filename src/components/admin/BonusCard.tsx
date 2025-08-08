@@ -3,8 +3,15 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { MoviePromotion, GiftType } from '@/lib/types';
-import { Calendar, Edit, Gift, MapPin, Power, Trash2 } from 'lucide-react';
+import { Calendar, Edit, Gift, MapPin, MoreVertical, Power, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { zhTW } from 'date-fns/locale';
 
@@ -66,20 +73,22 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
   
   return (
     <Card className={!promotion.is_active ? 'opacity-60' : ''}>
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">{promotion.title}</h3>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">
+      <CardHeader className="px-4 py-3 md:px-6 md:py-4">
+        <div className="flex items-start justify-between gap-2">
+          <div className="space-y-2 flex-1 min-w-0">
+            <h3 className="text-base md:text-lg font-semibold line-clamp-2">{promotion.title}</h3>
+            <div className="flex flex-wrap items-center gap-1 md:gap-2">
+              <Badge variant="outline" className="text-xs md:text-sm">
                 {getPromotionTypeLabel(promotion.promotion_type)}
               </Badge>
-              <Badge variant={promotion.is_active ? 'default' : 'secondary'}>
+              <Badge variant={promotion.is_active ? 'default' : 'secondary'} className="text-xs md:text-sm">
                 {promotion.is_active ? '啟用中' : '已停用'}
               </Badge>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -109,18 +118,54 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
               </span>
             </Button>
           </div>
+          
+          {/* Mobile Actions Dropdown */}
+          <div className="flex md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                >
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">更多選項</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem onClick={onToggleStatus}>
+                  <Power className="mr-2 h-4 w-4" />
+                  {promotion.is_active ? '停用' : '啟用'}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onEdit}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  編輯
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={onDelete}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  刪除
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="p-4 md:p-6 space-y-3 md:space-y-4">
         {/* 特典說明 */}
         {promotion.description && (
-          <p className="text-sm text-muted-foreground">{promotion.description}</p>
+          <p className="text-xs md:text-sm text-muted-foreground line-clamp-3 md:line-clamp-none break-words">
+            {promotion.description}
+          </p>
         )}
         
         {/* 日期資訊 */}
         {(promotion.release_date || promotion.end_date) && (
-          <div className="flex items-center gap-4 text-sm">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-2 md:gap-4 text-xs md:text-sm flex-wrap">
+            <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground flex-shrink-0" />
             <span>
               {promotion.release_date && formatDate(promotion.release_date)}
               {promotion.release_date && promotion.end_date && ' ~ '}
@@ -132,11 +177,11 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
         {/* 取得方式 */}
         {promotion.acquisition_method && (
           <div className="space-y-1">
-            <p className="text-sm font-medium flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
+            <p className="text-xs md:text-sm font-medium flex items-center gap-2">
+              <MapPin className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
               取得方式
             </p>
-            <p className="text-sm text-muted-foreground pl-6">
+            <p className="text-xs md:text-sm text-muted-foreground pl-5 md:pl-6 break-words">
               {promotion.acquisition_method}
             </p>
           </div>
@@ -145,23 +190,24 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
         {/* 禮品列表 */}
         {promotion.gifts && promotion.gifts.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium flex items-center gap-2">
-              <Gift className="h-4 w-4" />
+            <p className="text-xs md:text-sm font-medium flex items-center gap-2">
+              <Gift className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
               禮品項目 ({promotion.gifts.length})
             </p>
-            <div className="grid gap-2 pl-6">
+            <div className="grid gap-2 md:pl-6">
               {promotion.gifts.map((gift, index) => (
-                <div key={gift.id || index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                <div key={gift.id || index} className="flex flex-col md:flex-row items-start gap-2 md:gap-3 p-2 md:p-3 bg-muted/50 rounded-lg">
                   {gift.gift_image_url && (
                     <img
                       src={gift.gift_image_url}
                       alt={gift.gift_name}
-                      className="w-16 h-16 object-cover rounded"
+                      className="w-full md:w-16 h-24 md:h-16 object-cover rounded"
+                      loading="lazy"
                     />
                   )}
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-sm">{gift.gift_name}</p>
+                  <div className="flex-1 space-y-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-1 md:gap-2">
+                      <p className="font-medium text-xs md:text-sm break-words">{gift.gift_name}</p>
                       {gift.gift_type && (
                         <Badge variant={getGiftTypeVariant(gift.gift_type)} className="text-xs">
                           {getGiftTypeLabel(gift.gift_type)}
@@ -174,9 +220,11 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
                       )}
                     </div>
                     {gift.gift_description && (
-                      <p className="text-xs text-muted-foreground">{gift.gift_description}</p>
+                      <p className="text-xs text-muted-foreground line-clamp-2 break-words">
+                        {gift.gift_description}
+                      </p>
                     )}
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs text-muted-foreground">
                       {gift.quantity && (
                         <span>數量限制: {gift.quantity}</span>
                       )}
@@ -195,8 +243,8 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
         {/* 注意事項 */}
         {promotion.terms_and_conditions && (
           <div className="space-y-1">
-            <p className="text-sm font-medium">注意事項</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs md:text-sm font-medium">注意事項</p>
+            <p className="text-xs md:text-sm text-muted-foreground break-words">
               {promotion.terms_and_conditions}
             </p>
           </div>
