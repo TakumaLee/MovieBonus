@@ -2,7 +2,7 @@
 
 import { useEffect, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { pageview, GA_TRACKING_ID } from '@/lib/gtag';
+import { pageview, GA_TRACKING_ID, event } from '@/lib/gtag';
 import Script from 'next/script';
 
 function GoogleAnalyticsInner() {
@@ -13,6 +13,20 @@ function GoogleAnalyticsInner() {
     if (GA_TRACKING_ID) {
       const url = pathname + searchParams.toString();
       pageview(url);
+
+      // Enhanced tracking for movie pages
+      if (pathname.startsWith('/movie/')) {
+        const movieId = pathname.split('/movie/')[1];
+        if (movieId) {
+          // Track movie page view with custom dimensions
+          event({
+            action: 'page_view',
+            category: 'Movie',
+            label: `movie_id_${movieId}`,
+            value: 1,
+          });
+        }
+      }
     }
   }, [pathname, searchParams]);
 
@@ -36,6 +50,12 @@ function GoogleAnalyticsInner() {
             gtag('js', new Date());
             gtag('config', '${GA_TRACKING_ID}', {
               page_path: window.location.pathname,
+              custom_map: {
+                'custom_dimension_1': 'movie_id',
+                'custom_dimension_2': 'movie_title',
+                'custom_dimension_3': 'has_bonuses',
+                'custom_dimension_4': 'bonus_count'
+              }
             });
           `,
         }}

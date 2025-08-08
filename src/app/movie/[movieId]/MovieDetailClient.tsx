@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, ChevronLeft, Film, Gift, Info, ShieldCheck, TriangleAlert, RefreshCw, AlertCircle, Clock, Users, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useMovieDetail } from '@/hooks/useMovieDetail';
+import { useMovieAnalytics } from '@/hooks/useMovieAnalytics';
 import type { MoviePromotion } from '@/lib/types';
 import { format } from 'date-fns';
 import { use } from 'react';
@@ -257,6 +258,13 @@ export function MovieDetailClient({ params }: MovieDetailClientProps) {
   const { movie, bonuses, isLoading, error, refetch } = useMovieDetail({
     movieId,
     autoFetch: true,
+  });
+
+  // Initialize analytics tracking
+  const { trackBonusView, trackBonusInterest, trackExternalLink } = useMovieAnalytics({
+    movie,
+    promotions: bonuses,
+    isLoading,
   });
 
   // Loading state

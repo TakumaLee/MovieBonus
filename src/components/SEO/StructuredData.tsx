@@ -126,7 +126,7 @@ export function StructuredData({ type, data }: StructuredDataProps) {
         const organizationSchema: OrganizationSchema = {
           '@context': 'https://schema.org',
           '@type': 'Organization',
-          name: '特典速報',
+          name: '特典速報 パルパル',
           url: baseUrl,
           description: '台灣最完整的電影特典與限定禮品追蹤平台',
           // logo: `${baseUrl}/logo.png`, // Uncomment when logo is available
@@ -140,12 +140,12 @@ export function StructuredData({ type, data }: StructuredDataProps) {
         const websiteSchema: WebsiteSchema = {
           '@context': 'https://schema.org',
           '@type': 'WebSite',
-          name: '特典速報',
+          name: '特典速報 パルパル',
           url: baseUrl,
           description: '台灣最完整的電影特典與限定禮品追蹤平台。即時更新威秀影城、各大電影院的獨家特典資訊，不錯過任何精彩好康！',
           publisher: {
             '@type': 'Organization',
-            name: '特典速報',
+            name: '特典速報 パルパル',
           },
           potentialAction: {
             '@type': 'SearchAction',
@@ -170,7 +170,7 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           url: data?.url || baseUrl,
           publisher: {
             '@type': 'Organization',
-            name: '特典速報',
+            name: '特典速報 パルパル',
           },
         };
 

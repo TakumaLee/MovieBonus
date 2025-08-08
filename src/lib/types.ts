@@ -35,6 +35,13 @@ export interface Movie {
   // Bonus information (populated by API)
   has_bonuses?: boolean;
   bonus_count?: number;
+  // SEO fields (new fields from backend SEO implementation)
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string[];
+  og_title?: string;
+  og_description?: string;
+  canonical_url?: string;
   created_at: string;
   updated_at: string;
 }
