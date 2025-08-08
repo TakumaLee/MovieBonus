@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './admin-layout.css';
+import './admin.css';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -233,7 +235,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   );
 
   return (
-    <div className="flex h-screen bg-background overflow-x-hidden max-w-[100vw]">
+    <div className="admin-layout flex h-screen bg-background">
       {/* Desktop Sidebar */}
       {!isMobile && (
         <aside className="hidden md:flex w-64 flex-col border-r bg-card">
@@ -300,7 +302,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 max-w-full">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
           {children}
         </main>
       </div>

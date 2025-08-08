@@ -1,0 +1,135 @@
+/* Admin-specific styles for Safari iOS overflow fixes */
+
+/* Only apply aggressive overflow fixes to admin layouts */
+.admin-layout {
+  /* Critical Safari iOS horizontal overflow fixes for admin pages */
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+/* Safari iOS specific fixes for admin pages only */
+@supports (-webkit-appearance: none) {
+  .admin-layout {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    position: relative;
+  }
+  
+  /* Container constraints for admin pages */
+  .admin-layout main,
+  .admin-layout section,
+  .admin-layout article,
+  .admin-layout div,
+  .admin-layout form {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Admin responsive table */
+  .admin-layout .responsive-table-mobile {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Admin cards */
+  .admin-layout .card,
+  .admin-layout [class*="card"],
+  .admin-layout [data-card] {
+    max-width: calc(100vw - 2rem) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Admin grid and flex containers */
+  .admin-layout .grid,
+  .admin-layout [class*="grid-"],
+  .admin-layout .flex,
+  .admin-layout [class*="flex"] {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Mobile-specific admin fixes */
+@media screen and (max-width: 768px) {
+  .admin-layout {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Admin input zoom prevention */
+  .admin-layout input[type="text"],
+  .admin-layout input[type="email"],
+  .admin-layout input[type="password"],
+  .admin-layout input[type="search"],
+  .admin-layout input[type="tel"],
+  .admin-layout input[type="number"],
+  .admin-layout input[type="date"],
+  .admin-layout textarea,
+  .admin-layout select {
+    font-size: 16px !important;
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Admin safe area adjustments */
+  .admin-layout {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  /* Admin containers */
+  .admin-layout main,
+  .admin-layout section,
+  .admin-layout article,
+  .admin-layout div,
+  .admin-layout nav,
+  .admin-layout header,
+  .admin-layout footer,
+  .admin-layout form {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Admin buttons */
+  .admin-layout button,
+  .admin-layout [role="button"],
+  .admin-layout .btn,
+  .admin-layout [class*="button"],
+  .admin-layout a[class*="button"] {
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Admin tables */
+  .admin-layout table,
+  .admin-layout .table,
+  .admin-layout [class*="table"] {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Admin search containers */
+  .admin-layout .search-container,
+  .admin-layout [class*="search"],
+  .admin-layout .input-group,
+  .admin-layout [class*="input"] {
+    max-width: calc(100vw - 2rem) !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+}

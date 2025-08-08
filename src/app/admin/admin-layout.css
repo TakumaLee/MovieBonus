@@ -1,0 +1,281 @@
+/* Admin-specific Safari iOS horizontal overflow fixes */
+/* These styles only apply to admin layouts to prevent RWD issues */
+
+/* Global admin layout container */
+.admin-layout {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+/* Safari iOS specific fixes with admin layout targeting */
+@supports (-webkit-appearance: none) {
+  /* Critical viewport width constraints for Safari iOS - Admin only */
+  .admin-layout {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    position: relative;
+  }
+  
+  /* Enhanced container constraints - Admin only */
+  .admin-layout main, 
+  .admin-layout section, 
+  .admin-layout article, 
+  .admin-layout div, 
+  .admin-layout form {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* iOS Safari specific responsive fixes - Admin only */
+  .admin-layout .responsive-table-mobile {
+    /* Force hardware acceleration */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    
+    /* Better scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    
+    /* Prevent horizontal overflow */
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Enhanced card overflow prevention on Safari iOS - Admin only */
+  .admin-layout .card, 
+  .admin-layout [class*="card"], 
+  .admin-layout [data-card] {
+    max-width: calc(100vw - 2rem) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Grid and flex containers - Admin only */
+  .admin-layout .grid, 
+  .admin-layout [class*="grid-"], 
+  .admin-layout .flex, 
+  .admin-layout [class*="flex"] {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Fix iOS Safari table layout with higher specificity - Admin only */
+  @media screen and (max-width: 768px) {
+    .admin-layout .md\:hidden {
+      display: none !important;
+    }
+    
+    .admin-layout .md\:table-cell {
+      display: none !important;
+    }
+    
+    .admin-layout .md\:table-header-group {
+      display: none !important;
+    }
+    
+    .admin-layout .md\:block {
+      display: none !important;
+    }
+    
+    /* Force mobile responsive behavior - Admin only */
+    .admin-layout .hidden.md\:table-cell,
+    .admin-layout .hidden.md\:table-header-group,
+    .admin-layout .hidden.md\:block {
+      display: none !important;
+    }
+  }
+  
+  /* Enhanced touch targets for iOS Safari - Admin only */
+  .admin-layout button, 
+  .admin-layout [role="button"], 
+  .admin-layout .touch-manipulation, 
+  .admin-layout [class*="button"] {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 16px;
+  }
+  
+  /* Fix iOS Safari flexbox issues with enhanced support - Admin only */
+  .admin-layout .flex {
+    display: -webkit-flex;
+    display: flex;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Enhanced card spacing fix for iOS Safari - Admin only */
+  .admin-layout .admin-card-mobile {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: calc(100vw - 2rem) !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Enhanced iOS Safari specific media query adjustments - Admin only */
+@media screen and (max-width: 767px) and (-webkit-min-device-pixel-ratio: 1) {
+  /* Critical viewport constraints for iOS Safari - Admin only */
+  .admin-layout {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Force mobile layout on iOS Safari - Admin only */
+  .admin-layout .hidden.md\:table-cell,
+  .admin-layout .hidden.md\:table-header-group,
+  .admin-layout .hidden.md\:block {
+    display: none !important;
+  }
+  
+  .admin-layout .md\:hidden {
+    display: block !important;
+  }
+  
+  /* Enhanced container width constraints - Admin only */
+  .admin-layout main, 
+  .admin-layout section, 
+  .admin-layout article, 
+  .admin-layout div, 
+  .admin-layout form, 
+  .admin-layout nav, 
+  .admin-layout header, 
+  .admin-layout footer {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Grid system constraints - Admin only */
+  .admin-layout .grid, 
+  .admin-layout [class*="grid-"] {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Button width constraints - Admin only */
+  .admin-layout button, 
+  .admin-layout [role="button"], 
+  .admin-layout .btn, 
+  .admin-layout [class*="button"] {
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Critical Safari iOS optimizations with enhanced specificity - Admin only */
+@media screen and (max-width: 768px) {
+  /* Fix input zoom on iOS - Admin only */
+  .admin-layout input[type="text"],
+  .admin-layout input[type="email"],
+  .admin-layout input[type="password"],
+  .admin-layout input[type="search"],
+  .admin-layout input[type="tel"],
+  .admin-layout input[type="number"],
+  .admin-layout input[type="date"],
+  .admin-layout textarea,
+  .admin-layout select {
+    font-size: 16px !important;
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Enhanced safe area adjustments for notched devices - Admin only */
+  .admin-layout {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Improve scrolling performance - Admin only */
+  .admin-layout .overflow-auto,
+  .admin-layout .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100vw !important;
+  }
+  
+  .admin-layout .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100vw !important;
+  }
+  
+  /* Critical horizontal overflow prevention on all containers - Admin only */
+  .admin-layout main, 
+  .admin-layout section, 
+  .admin-layout article, 
+  .admin-layout div, 
+  .admin-layout nav, 
+  .admin-layout header, 
+  .admin-layout footer, 
+  .admin-layout form {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Enhanced card overflow prevention - Admin only */
+  .admin-layout .card, 
+  .admin-layout [class*="card"], 
+  .admin-layout [data-card] {
+    max-width: calc(100vw - 2rem) !important;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Grid system overflow prevention - Admin only */
+  .admin-layout .grid, 
+  .admin-layout [class*="grid-"] {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Button and interactive element constraints - Admin only */
+  .admin-layout button, 
+  .admin-layout [role="button"], 
+  .admin-layout .btn, 
+  .admin-layout [class*="button"], 
+  .admin-layout a[class*="button"] {
+    max-width: calc(100vw - 2rem) !important;
+    box-sizing: border-box !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Table and responsive table constraints - Admin only */
+  .admin-layout table, 
+  .admin-layout .table, 
+  .admin-layout [class*="table"] {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Search and input containers - Admin only */
+  .admin-layout .search-container, 
+  .admin-layout [class*="search"], 
+  .admin-layout .input-group, 
+  .admin-layout [class*="input"] {
+    max-width: calc(100vw - 2rem) !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+}

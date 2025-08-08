@@ -106,21 +106,18 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         
-        {/* Critical CSS for Safari iOS overflow prevention */}
+        {/* Basic CSS for iOS overflow prevention */}
         <style dangerouslySetInnerHTML={{
           __html: `
             html { 
               overflow-x: hidden !important; 
-              max-width: 100vw !important; 
             }
             body { 
               overflow-x: hidden !important; 
-              max-width: 100vw !important; 
               position: relative; 
             }
             * { 
               box-sizing: border-box; 
-              max-width: 100vw; 
             }
           `
         }} />
