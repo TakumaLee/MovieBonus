@@ -73,7 +73,7 @@ export function generateOgImageUrl(imagePath?: string): string {
   const baseUrl = 'https://paruparu.vercel.app';
   
   if (!imagePath) {
-    return `${baseUrl}/og-image.jpg`;
+    return `${baseUrl}/og-image.png`;
   }
   
   // 如果是相對路徑，轉換為絕對路徑

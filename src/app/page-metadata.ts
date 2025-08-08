@@ -27,7 +27,7 @@ export const homePageMetadata: Metadata = {
     siteName: '特典速報 パルパル',
     images: [
       {
-        url: 'https://paruparu.vercel.app/og-image.jpg',
+        url: 'https://paruparu.vercel.app/og-image.png',
         width: 1200,
         height: 630,
         alt: '特典速報 - 台灣電影特典資訊',
@@ -41,7 +41,7 @@ export const homePageMetadata: Metadata = {
     card: 'summary_large_image',
     title: '特典速報 パルパル - 台灣電影特典資訊追蹤平台',
     description: '台灣最完整的電影特典與限定禮品追蹤平台。即時更新威秀影城、各大電影院的獨家特典資訊！',
-    images: ['https://paruparu.vercel.app/og-image.jpg'],
+    images: ['https://paruparu.vercel.app/og-image.png'],
   },
   
   alternates: {

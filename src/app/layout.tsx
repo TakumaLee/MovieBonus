@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     description: '台灣最完整的電影特典與限定禮品追蹤平台 パルパル。即時更新威秀影城、各大電影院的獨家特典資訊，movie bonus、perk、限定商品一網打盡！',
     siteName: '特典速報 パルパル',
     images: [{
-      url: '/og-image.jpg',
+      url: '/og-image.png',
       width: 1200,
       height: 630,
       alt: '特典速報 - 台灣電影特典資訊',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: '特典速報 パルパル - 台灣電影特典資訊追蹤平台 | Movie Bonus Tracker',
     description: '台灣最完整的電影特典與限定禮品追蹤平台 パルパル。即時更新威秀影城、各大電影院的獨家特典資訊，movie bonus、perk、限定商品一網打盡！',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   
   // 其他 meta tags

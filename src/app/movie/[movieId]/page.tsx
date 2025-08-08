@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: MovieDetailsPageProps): Promi
       `${movieData.title} - 電影資訊與特典情報完整收錄！${promotionsCount > 0 ? `共${promotionsCount}個特典活動，${giftsCount}項限定贈品。` : ''}即時更新威秀影城等各大電影院的獨家特典資訊，movie bonus、電影周邊、限定商品一網打盡！` :
       `${title}的詳細資訊、特典情報、上映時間等完整資料。查看最新的電影特典和限定商品資訊。`);
   
-  const posterUrl = movieData?.poster_url || '/og-image.jpg';
+  const posterUrl = movieData?.poster_url || '/og-image.png';
   const canonicalUrl = movieData?.canonical_url || `https://paruparu.vercel.app/movie/${movieId}`;
   
   // Build keywords array with SEO keywords and fallbacks
