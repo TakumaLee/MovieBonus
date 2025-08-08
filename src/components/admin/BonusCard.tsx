@@ -99,12 +99,14 @@ export default function BonusCard({ promotion, onEdit, onDelete, onToggleStatus 
               variant="ghost"
               size="sm"
               onClick={onDelete}
-              className="safari-icon-fix text-destructive hover:text-destructive/90 md:w-10 md:p-0"
+              className="text-destructive hover:text-destructive/90"
               aria-label="刪除特典"
-              title="刪除"
+              title="刪除特典"
             >
-              <Trash2 className="h-4 w-4 lucide-trash-2 hidden md:block" />
-              <span className="md:sr-only">刪除</span>
+              <span className="flex items-center gap-1">
+                <Trash2 className="h-4 w-4 hidden md:inline" />
+                <span>刪除</span>
+              </span>
             </Button>
           </div>
         </div>
