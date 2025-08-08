@@ -174,3 +174,44 @@
     opacity: 0.999; /* Force repaint */
   }
 }
+
+/* Enhanced Safari Mobile Icon Fixes */
+@media screen and (max-width: 768px) {
+  @supports (-webkit-appearance: none) {
+    /* Force all button icons to show on mobile Safari */
+    button svg,
+    [role="button"] svg,
+    .safari-icon-fix svg {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 16px !important;
+      height: 16px !important;
+      min-width: 16px !important;
+      min-height: 16px !important;
+      stroke: currentColor !important;
+      stroke-width: 2px !important;
+      fill: none !important;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    
+    /* Specific fix for destructive (delete) buttons */
+    .text-destructive {
+      color: hsl(var(--destructive)) !important;
+    }
+    
+    /* Ensure Trash2 icon specifically works */
+    .lucide-trash-2 {
+      display: inline-block !important;
+      visibility: visible !important;
+    }
+    
+    /* Force repaint on all icon buttons */
+    button:has(svg) {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+}
