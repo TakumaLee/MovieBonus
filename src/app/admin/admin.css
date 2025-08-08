@@ -133,3 +133,44 @@
     box-sizing: border-box !important;
   }
 }
+
+/* Safari Icon Fixes */
+@supports (-webkit-appearance: none) {
+  /* Force Safari to render Lucide icons properly */
+  .lucide,
+  svg.lucide {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  /* Specific fix for icons in buttons */
+  button svg,
+  [role="button"] svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1em;
+    height: 1em;
+    stroke-width: 2;
+    stroke: currentColor;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  
+  /* Fix for the delete button specifically */
+  .text-destructive svg {
+    color: hsl(var(--destructive)) !important;
+    opacity: 0.999; /* Triggers repaint in Safari */
+  }
+  
+  /* Force icon visibility in Safari */
+  .admin-layout button svg,
+  .admin-layout [role="button"] svg {
+    -webkit-appearance: none;
+    appearance: none;
+    visibility: visible !important;
+    opacity: 0.999; /* Force repaint */
+  }
+}
