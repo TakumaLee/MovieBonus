@@ -11,6 +11,9 @@ export * from './useMovieDetail';
 // Search-related hooks
 export * from './useSearch';
 
+// Admin-related hooks
+export * from './use-admin-role';
+
 // Re-export existing hooks
 export * from './use-mobile';
 export * from './use-toast';

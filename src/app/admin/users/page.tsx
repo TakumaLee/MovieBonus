@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -11,8 +12,9 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, AlertCircle, UserPlus, Mail, Shield, ShieldCheck, Loader2 } from 'lucide-react';
+import { Users, AlertCircle, UserPlus, Mail, Shield, ShieldCheck, Loader2, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAdminRole } from '@/hooks/use-admin-role';
 import { adminApiClient, AdminApiError } from '@/lib/api-client-admin';
 
 interface AdminUser {
@@ -28,6 +30,7 @@ interface AdminUser {
 }
 
 export default function UsersPage() {
+  const router = useRouter();
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<AdminUser | null>(null);
@@ -36,17 +39,31 @@ export default function UsersPage() {
   const [inviting, setInviting] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const { toast } = useToast();
+  const { canManageUsers, isLoading: roleLoading, role } = useAdminRole();
 
+  // 權限檢查 - 如果不能管理用戶，重定向到儀表板
   useEffect(() => {
-    fetchAdmins();
-    getCurrentUser();
-  }, []);
+    if (!roleLoading && !canManageUsers) {
+      toast({
+        title: '權限不足',
+        description: '您沒有權限訪問用戶管理頁面',
+        variant: 'destructive',
+      });
+      router.push('/admin');
+      return;
+    }
+
+    if (canManageUsers) {
+      fetchAdmins();
+      getCurrentUser();
+    }
+  }, [roleLoading, canManageUsers, router, toast]);
 
   const getCurrentUser = async () => {
     try {
       const response = await adminApiClient.get<{ profile: AdminUser }>('/api/admin/profile');
-      if (response.success && response.profile) {
-        setCurrentUser(response.profile);
+      if (response.success && response.data && (response.data as any).profile) {
+        setCurrentUser((response.data as any).profile);
       }
     } catch (error) {
       console.error('Error fetching current user:', error);
@@ -57,8 +74,8 @@ export default function UsersPage() {
     try {
       const response = await adminApiClient.get<{ admins: AdminUser[] }>('/api/admin/users');
       
-      if (response.success && response.admins) {
-        setAdmins(response.admins || []);
+      if (response.success && response.data && (response.data as any).admins) {
+        setAdmins((response.data as any).admins || []);
       } else {
         throw new Error(response.error || '無法載入管理員列表');
       }
@@ -161,6 +178,45 @@ export default function UsersPage() {
       });
     }
   };
+
+  // 如果正在檢查權限，顯示載入中
+  if (roleLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">檢查權限中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 如果沒有權限，顯示錯誤訊息
+  if (!canManageUsers) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Alert className="max-w-md">
+          <Lock className="h-4 w-4" />
+          <AlertDescription className="font-medium">
+            <div className="space-y-2">
+              <p>權限不足</p>
+              <p className="text-sm text-muted-foreground">
+                只有超級管理員才能訪問用戶管理頁面。您的權限為：{role || '未知'}
+              </p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => router.push('/admin')}
+                className="mt-2"
+              >
+                返回儀表板
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

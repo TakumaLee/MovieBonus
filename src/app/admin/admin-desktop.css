@@ -1,0 +1,148 @@
+/* Admin Desktop-specific styles */
+/* These styles enhance the desktop experience and override mobile constraints */
+
+/* Desktop Layout Enhancements */
+@media screen and (min-width: 769px) {
+  /* Reset mobile constraints on desktop */
+  .admin-layout {
+    width: 100%;
+    max-width: none;
+    overflow-x: visible;
+  }
+  
+  /* Desktop sidebar */
+  .admin-layout aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  /* Desktop main content area */
+  .admin-layout main {
+    max-width: none;
+    overflow-x: visible;
+  }
+  
+  /* Desktop cards - Natural sizing */
+  .admin-layout .card,
+  .admin-layout [class*="card"] {
+    max-width: none;
+    width: auto;
+  }
+  
+  /* Desktop grids - Proper column layouts */
+  .admin-layout .grid {
+    max-width: none;
+  }
+  
+  /* Desktop buttons - Standard sizing */
+  .admin-layout button,
+  .admin-layout [role="button"],
+  .admin-layout .touch-manipulation {
+    min-height: 36px;
+    min-width: auto;
+    padding: 0.5rem 1rem;
+  }
+  
+  /* Small buttons on desktop */
+  .admin-layout button[size="sm"],
+  .admin-layout .btn-sm {
+    min-height: 32px;
+    padding: 0.25rem 0.75rem;
+  }
+  
+  /* Icon buttons on desktop */
+  .admin-layout button[size="icon"],
+  .admin-layout .btn-icon {
+    min-height: 40px;
+    min-width: 40px;
+    padding: 0.5rem;
+  }
+  
+  /* Desktop table layouts */
+  .admin-layout table {
+    width: 100%;
+    max-width: none;
+  }
+  
+  /* Desktop form elements */
+  .admin-layout input,
+  .admin-layout textarea,
+  .admin-layout select {
+    max-width: none;
+    font-size: 14px;
+  }
+  
+  /* Settings page specific - 3 column grid on desktop */
+  .admin-layout .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  
+  /* Dashboard stat cards - 4 columns on desktop */
+  .admin-layout .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  
+  /* Login page - Centered with max width */
+  .login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  
+  .login-container .card {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+/* Large Desktop Enhancements */
+@media screen and (min-width: 1280px) {
+  /* Wider content area on large screens */
+  .admin-layout main {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  /* Larger spacing on big screens */
+  .admin-layout .grid {
+    gap: 1.5rem;
+  }
+}
+
+/* Desktop hover states */
+@media (hover: hover) and (pointer: fine) {
+  /* Enhanced hover effects for desktop */
+  .admin-layout button:hover,
+  .admin-layout [role="button"]:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+  }
+  
+  .admin-layout .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+}
+
+/* Desktop-specific utility classes */
+@media screen and (min-width: 769px) {
+  /* Override mobile-first utilities */
+  .admin-layout .desktop\:w-auto {
+    width: auto !important;
+  }
+  
+  .admin-layout .desktop\:max-w-none {
+    max-width: none !important;
+  }
+  
+  .admin-layout .desktop\:overflow-visible {
+    overflow: visible !important;
+  }
+}

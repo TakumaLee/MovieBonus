@@ -199,7 +199,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* 狀態統計卡片 */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card) => (
           <Card key={card.title} className="touch-manipulation">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
       {/* 類型統計卡片 */}
       <div>
         <h2 className="text-xl font-semibold mb-4">回報類型分布</h2>
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {typeCards.map((card) => (
             <Card key={card.title} className="touch-manipulation">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
@@ -251,10 +251,10 @@ export default function AdminDashboard() {
           <CardTitle>快速操作</CardTitle>
           <CardDescription>常用功能快捷方式</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
+        <CardContent className="grid gap-4 grid-cols-1 md:grid-cols-2">
           <a
             href="/admin/feedbacks?status=pending"
-            className="flex items-center gap-3 p-4 rounded-lg border hover:bg-accent transition-colors min-h-[72px] touch-manipulation"
+            className="flex items-center gap-3 p-4 rounded-lg border hover:bg-accent transition-colors touch-manipulation"
           >
             <Clock className="h-6 w-6 text-warning flex-shrink-0" />
             <div className="flex-1 min-w-0">
@@ -266,7 +266,7 @@ export default function AdminDashboard() {
           </a>
           <a
             href="/admin/feedbacks?type=bonus_completion"
-            className="flex items-center gap-3 p-4 rounded-lg border hover:bg-accent transition-colors min-h-[72px] touch-manipulation"
+            className="flex items-center gap-3 p-4 rounded-lg border hover:bg-accent transition-colors touch-manipulation"
           >
             <Gift className="h-6 w-6 text-secondary flex-shrink-0" />
             <div className="flex-1 min-w-0">

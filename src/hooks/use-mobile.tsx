@@ -7,18 +7,24 @@ export function useIsMobile() {
 
   React.useEffect(() => {
     const checkDevice = () => {
-      // Enhanced mobile detection including Safari iOS specific checks
+      // Proper mobile detection with correct Safari handling
       const userAgent = navigator.userAgent.toLowerCase();
-      const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-      const isSafariMobile = /safari/.test(userAgent) && /mobile/.test(userAgent);
+      
+      // Check for actual mobile devices (not iPads in desktop mode)
+      const isMobileDevice = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      
+      // Check for mobile Safari (iPhone only, not iPad or desktop)
+      const isIPhoneSafari = /iphone/.test(userAgent) && /safari/.test(userAgent);
+      
+      // Check for iPad in mobile viewport
+      const isIPadMobile = /ipad/.test(userAgent) && window.innerWidth < MOBILE_BREAKPOINT;
+      
+      // Screen size check for responsive behavior
       const isSmallScreen = window.innerWidth < MOBILE_BREAKPOINT;
       
-      // Safari iOS specific detection
-      const isIOS = /ipad|iphone|ipod/.test(userAgent);
-      const isSafariIOS = isIOS && /safari/.test(userAgent);
-      
-      // Force mobile layout for Safari iOS regardless of screen size
-      const shouldBeMobile = isMobileUserAgent || isSafariMobile || isSafariIOS || isSmallScreen;
+      // Only treat as mobile if it's actually a mobile device OR small screen
+      // Don't force desktop Safari or iPad in desktop mode to mobile
+      const shouldBeMobile = isMobileDevice || isIPhoneSafari || isIPadMobile || isSmallScreen;
       
       setIsMobile(shouldBeMobile);
     }

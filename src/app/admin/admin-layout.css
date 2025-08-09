@@ -1,97 +1,108 @@
-/* Admin-specific Safari iOS horizontal overflow fixes */
-/* These styles only apply to admin layouts to prevent RWD issues */
+/* Admin-specific responsive design with proper breakpoints */
+/* Desktop-first approach with mobile overrides */
 
-/* Global admin layout container */
+/* Base admin layout - Desktop optimized */
 .admin-layout {
-  overflow-x: hidden !important;
-  max-width: 100vw !important;
-  box-sizing: border-box !important;
+  box-sizing: border-box;
 }
 
-/* Safari iOS specific fixes with admin layout targeting */
-@supports (-webkit-appearance: none) {
-  /* Critical viewport width constraints for Safari iOS - Admin only */
+/* Mobile-specific overflow fixes */
+@media screen and (max-width: 768px) {
   .admin-layout {
-    width: 100vw !important;
-    max-width: 100vw !important;
     overflow-x: hidden !important;
-    position: relative;
-  }
-  
-  /* Enhanced container constraints - Admin only */
-  .admin-layout main, 
-  .admin-layout section, 
-  .admin-layout article, 
-  .admin-layout div, 
-  .admin-layout form {
     max-width: 100vw !important;
-    overflow-x: hidden !important;
-    box-sizing: border-box !important;
   }
-  
-  /* iOS Safari specific responsive fixes - Admin only */
-  .admin-layout .responsive-table-mobile {
-    /* Force hardware acceleration */
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    
-    /* Better scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
-    overflow-scrolling: touch;
-    
-    /* Prevent horizontal overflow */
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
-  }
-  
-  /* Enhanced card overflow prevention on Safari iOS - Admin only */
-  .admin-layout .card, 
-  .admin-layout [class*="card"], 
-  .admin-layout [data-card] {
-    max-width: calc(100vw - 2rem) !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  /* Grid and flex containers - Admin only */
-  .admin-layout .grid, 
-  .admin-layout [class*="grid-"], 
-  .admin-layout .flex, 
-  .admin-layout [class*="flex"] {
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
-    box-sizing: border-box !important;
-  }
-  
-  /* Fix iOS Safari table layout with higher specificity - Admin only */
-  @media screen and (max-width: 768px) {
-    .admin-layout .md\:hidden {
-      display: none !important;
+}
+
+/* Safari iOS specific fixes - Mobile only */
+@media screen and (max-width: 768px) {
+  @supports (-webkit-appearance: none) {
+    /* Critical viewport width constraints for Safari iOS - Mobile only */
+    .admin-layout {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+      position: relative;
     }
     
-    .admin-layout .md\:table-cell {
-      display: none !important;
+    /* Enhanced container constraints - Mobile only */
+    .admin-layout main, 
+    .admin-layout section, 
+    .admin-layout article, 
+    .admin-layout div, 
+    .admin-layout form {
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
     }
     
-    .admin-layout .md\:table-header-group {
-      display: none !important;
+    /* iOS Safari specific responsive fixes - Mobile only */
+    .admin-layout .responsive-table-mobile {
+      /* Force hardware acceleration */
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      
+      /* Better scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
+      overflow-scrolling: touch;
+      
+      /* Prevent horizontal overflow */
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
     }
     
-    .admin-layout .md\:block {
-      display: none !important;
+    /* Enhanced card overflow prevention on Safari iOS - Mobile only */
+    .admin-layout .card, 
+    .admin-layout [class*="card"], 
+    .admin-layout [data-card] {
+      max-width: calc(100vw - 2rem) !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      margin-left: auto;
+      margin-right: auto;
     }
     
-    /* Force mobile responsive behavior - Admin only */
-    .admin-layout .hidden.md\:table-cell,
-    .admin-layout .hidden.md\:table-header-group,
-    .admin-layout .hidden.md\:block {
-      display: none !important;
+    /* Grid and flex containers - Mobile only */
+    .admin-layout .grid, 
+    .admin-layout [class*="grid-"], 
+    .admin-layout .flex, 
+    .admin-layout [class*="flex"] {
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
     }
   }
+}
+
+/* Table responsive behavior - Mobile specific */
+@media screen and (max-width: 768px) {
+  .admin-layout .md\:hidden {
+    display: none !important;
+  }
   
-  /* Enhanced touch targets for iOS Safari - Admin only */
+  .admin-layout .md\:table-cell {
+    display: none !important;
+  }
+  
+  .admin-layout .md\:table-header-group {
+    display: none !important;
+  }
+  
+  .admin-layout .md\:block {
+    display: none !important;
+  }
+  
+  /* Force mobile responsive behavior */
+  .admin-layout .hidden.md\:table-cell,
+  .admin-layout .hidden.md\:table-header-group,
+  .admin-layout .hidden.md\:block {
+    display: none !important;
+  }
+}
+
+/* Touch targets - Mobile vs Desktop */
+@media screen and (max-width: 768px) {
+  /* Enhanced touch targets for mobile */
   .admin-layout button, 
   .admin-layout [role="button"], 
   .admin-layout .touch-manipulation, 
@@ -104,16 +115,37 @@
     min-width: 44px;
     padding: 8px 16px;
   }
+}
+
+@media screen and (min-width: 769px) {
+  /* Desktop button sizing */
+  .admin-layout button, 
+  .admin-layout [role="button"], 
+  .admin-layout [class*="button"] {
+    min-height: 36px;
+    padding: 6px 12px;
+  }
   
-  /* Fix iOS Safari flexbox issues with enhanced support - Admin only */
+  /* Override touch-manipulation class on desktop */
+  .admin-layout .touch-manipulation {
+    min-height: 36px !important;
+  }
+}
+
+/* Flexbox support */
+.admin-layout .flex {
+  display: -webkit-flex;
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  /* Mobile flex constraints */
   .admin-layout .flex {
-    display: -webkit-flex;
-    display: flex;
     max-width: 100vw !important;
     overflow-x: hidden !important;
   }
   
-  /* Enhanced card spacing fix for iOS Safari - Admin only */
+  /* Mobile card spacing */
   .admin-layout .admin-card-mobile {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -124,8 +156,8 @@
   }
 }
 
-/* Enhanced iOS Safari specific media query adjustments - Admin only */
-@media screen and (max-width: 767px) and (-webkit-min-device-pixel-ratio: 1) {
+/* iOS Safari specific adjustments - Mobile only */
+@media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
   /* Critical viewport constraints for iOS Safari - Admin only */
   .admin-layout {
     max-width: 100vw !important;

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import './admin-layout.css';
 import './admin.css';
+import './admin-desktop.css';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,8 @@ import {
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { adminApi } from '@/lib/api-client-admin';
+import { useAdminRole } from '@/hooks/use-admin-role';
+import { adminApi, adminApiClient } from '@/lib/api-client-admin';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -43,8 +45,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const isMobile = useIsMobile();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const { canManageUsers, isLoading: roleLoading } = useAdminRole();
 
-  // 導航項目
+  // 導航項目 - 根據權限動態生成
   const navItems: NavItem[] = [
     {
       title: '儀表板',
@@ -61,11 +64,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       href: '/admin/feedbacks',
       icon: MessageSquare,
     },
-    {
+    // 只有超級管理員能看到使用者管理
+    ...(canManageUsers ? [{
       title: '使用者',
       href: '/admin/users',
       icon: Users,
-    },
+    }] : []),
     {
       title: '設定',
       href: '/admin/settings',
@@ -85,8 +89,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       try {
         // Initialize test auth if enabled
-        if (adminApi.isTestAuthEnabled()) {
-          adminApi.initializeTestAuth();
+        if (adminApiClient.isTestAuthEnabled()) {
+          adminApiClient.initializeTestAuth();
         }
         
         const response = await adminApi.auth.verify();
@@ -111,8 +115,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return <>{children}</>;
   }
 
-  // 如果還在檢查登入狀態，顯示載入中
-  if (checkingAuth) {
+  // 如果還在檢查登入狀態或權限，顯示載入中
+  if (checkingAuth || roleLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
@@ -177,7 +181,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 onClick={() => setIsOpen(false)}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors",
-                  "min-h-[48px] touch-manipulation", // Touch-friendly sizing
+                  "touch-manipulation", // Class for responsive sizing
                   isActive
                     ? "bg-primary text-primary-foreground"
                     : "hover:bg-accent hover:text-accent-foreground"
@@ -202,7 +206,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Link href="/admin/settings/profile">
               <Button
                 variant="ghost"
-                className="w-full justify-start min-h-[48px] touch-manipulation"
+                className="w-full justify-start touch-manipulation"
                 onClick={() => setIsOpen(false)}
               >
                 <Settings className="mr-2 h-4 w-4" />
@@ -261,7 +265,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(true)}
-              className="min-h-[48px] min-w-[48px] touch-manipulation md:min-h-[40px] md:min-w-[40px]"
+              className="touch-manipulation"
             >
               <Menu className="h-5 w-5" />
               <span className="sr-only">開啟選單</span>
@@ -280,7 +284,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   variant="ghost"
                   size="sm"
                   onClick={handleLogout}
-                  className="min-h-[40px] touch-manipulation"
+                  className="touch-manipulation"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   登出
@@ -290,7 +294,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <Button
                     variant="ghost"
                     size="sm" 
-                    className="min-h-[40px] touch-manipulation"
+                    className="touch-manipulation"
                   >
                     <LogIn className="mr-2 h-4 w-4" />
                     登入
