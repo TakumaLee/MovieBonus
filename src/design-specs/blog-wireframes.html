@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieBonus Blog Wireframes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .wireframe-section {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .wireframe-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #1e3a8a;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 10px;
+        }
+        
+        .wireframe-subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 30px 0 20px;
+            color: #666;
+        }
+        
+        /* Blog Homepage Wireframe */
+        .blog-homepage {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .hero-carousel {
+            height: 450px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            color: white;
+            z-index: 1;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: #fbbf24;
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .hero-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        
+        .hero-excerpt {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+        
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+        }
+        
+        .dot.active {
+            background: white;
+            width: 30px;
+            border-radius: 5px;
+        }
+        
+        /* Category Cards */
+        .category-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+        
+        .category-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: #3b82f6;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+        }
+        
+        .category-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .category-count {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* Blog Grid with Sidebar */
+        .blog-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        .post-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+        
+        .post-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #fbbf24;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .post-excerpt {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .sidebar-widget {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .popular-post {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .popular-post:last-child {
+            border-bottom: none;
+        }
+        
+        .popular-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-right: 16px;
+            width: 30px;
+        }
+        
+        .popular-title {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .tag:hover {
+            background: #3b82f6;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        /* Individual Post Page */
+        .post-page {
+            display: grid;
+            grid-template-columns: 200px 1fr 300px;
+            gap: 40px;
+            position: relative;
+        }
+        
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e5e7eb;
+            z-index: 100;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 45%;
+            background: #3b82f6;
+            transition: width 0.3s;
+        }
+        
+        .toc {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .toc-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .toc-list {
+            list-style: none;
+        }
+        
+        .toc-item {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #6b7280;
+            border-left: 2px solid transparent;
+            padding-left: 12px;
+            transition: all 0.3s;
+        }
+        
+        .toc-item:hover {
+            color: #3b82f6;
+            border-left-color: #3b82f6;
+        }
+        
+        .toc-item.active {
+            color: #3b82f6;
+            font-weight: 600;
+            border-left-color: #3b82f6;
+        }
+        
+        .article-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+        }
+        
+        .article-header {
+            margin-bottom: 32px;
+        }
+        
+        .article-category {
+            display: inline-block;
+            background: #fbbf24;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .article-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            color: #6b7280;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .share-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .share-btn.line {
+            background: #00C300;
+            color: white;
+            width: 48px;
+            height: 48px;
+        }
+        
+        .share-btn.facebook {
+            background: #1877F2;
+            color: white;
+        }
+        
+        .share-btn.twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .article-body {
+            margin-top: 32px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        .article-body h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 48px 0 24px;
+        }
+        
+        .article-body p {
+            margin-bottom: 24px;
+        }
+        
+        .author-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 48px;
+            display: flex;
+            gap: 24px;
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+        
+        .author-info {
+            flex: 1;
+        }
+        
+        .author-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .author-bio {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-carousel {
+                height: 300px;
+                padding: 24px;
+            }
+            
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .category-nav {
+                grid-template-columns: repeat(2, 1fr);
+                overflow-x: auto;
+            }
+            
+            .blog-content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .post-page {
+                grid-template-columns: 1fr;
+            }
+            
+            .toc {
+                display: none;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+            
+            .mobile-bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid #e5e7eb;
+                display: flex;
+                justify-content: space-around;
+                padding: 12px 0;
+                z-index: 100;
+            }
+            
+            .nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 12px;
+                color: #6b7280;
+            }
+            
+            .nav-icon {
+                width: 24px;
+                height: 24px;
+                background: #6b7280;
+                border-radius: 4px;
+                margin-bottom: 4px;
+            }
+            
+            .share-buttons-mobile {
+                position: fixed;
+                bottom: 60px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid #e5e7eb;
+                padding: 12px;
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Blog Homepage Wireframe -->
+        <div class="wireframe-section">
+            <h1 class="wireframe-title">📰 Blog Homepage Design</h1>
+            
+            <!-- Hero Carousel -->
+            <div class="hero-carousel">
+                <div class="hero-content">
+                    <span class="hero-badge">新片速報</span>
+                    <h2 class="hero-title">《蜘蛛人：無家日》台灣限定特典<br>威秀影城獨家首賣</h2>
+                    <p class="hero-excerpt">Marvel最新力作將在台灣推出獨家限定特典，包含精美海報、收藏卡片等...</p>
+                    <div class="hero-meta">
+                        <span>MovieBonus 編輯部</span>
+                        <span>•</span>
+                        <span>5 分鐘閱讀</span>
+                        <span>•</span>
+                        <span>2024年1月15日</span>
+                    </div>
+                </div>
+                <div class="carousel-dots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            
+            <h2 class="wireframe-subtitle">分類導覽</h2>
+            <div class="category-nav">
+                <div class="category-card">
+                    <div class="category-icon"></div>
+                    <div class="category-name">新片速報</div>
+                    <div class="category-count">156 篇文章</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #fbbf24;"></div>
+                    <div class="category-name">特典情報</div>
+                    <div class="category-count">89 篇文章</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #10b981;"></div>
+                    <div class="category-name">影城導覽</div>
+                    <div class="category-count">45 篇文章</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #ef4444;"></div>
+                    <div class="category-name">觀影推薦</div>
+                    <div class="category-count">234 篇文章</div>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #8b5cf6;"></div>
+                    <div class="category-name">票房快訊</div>
+                    <div class="category-count">67 篇文章</div>
+                </div>
+            </div>
+            
+            <h2 class="wireframe-subtitle">最新文章</h2>
+            <div class="blog-content-grid">
+                <div class="posts-grid">
+                    <div class="post-card">
+                        <div class="post-image">
+                            <span class="post-badge">特典情報</span>
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title">威秀影城推出《沙丘2》限量特典組合</h3>
+                            <p class="post-excerpt">即日起預購《沙丘2》IMAX場次，即可獲得獨家設計海報與收藏卡...</p>
+                            <div class="post-meta">
+                                <span>2 小時前</span>
+                                <span>3 分鐘閱讀</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <span class="post-badge">新片速報</span>
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title">2024年三月必看電影TOP10</h3>
+                            <p class="post-excerpt">春季檔期強片雲集，從動作大片到感人劇情片應有盡有...</p>
+                            <div class="post-meta">
+                                <span>5 小時前</span>
+                                <span>5 分鐘閱讀</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <span class="post-badge">影城導覽</span>
+                        </div>
+                        <div class="post-content">
+                            <h3 class="post-title">台北信義威秀全新IMAX廳開幕</h3>
+                            <p class="post-excerpt">全台最大IMAX銀幕正式啟用，首週票價優惠中...</p>
+                            <div class="post-meta">
+                                <span>昨天</span>
+                                <span>4 分鐘閱讀</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">🔥 熱門文章</h3>
+                        <div class="popular-post">
+                            <span class="popular-number">1</span>
+                            <span class="popular-title">《功夫熊貓4》台灣獨家周邊商品搶先看</span>
+                        </div>
+                        <div class="popular-post">
+                            <span class="popular-number">2</span>
+                            <span class="popular-title">威秀影城2024會員優惠總整理</span>
+                        </div>
+                        <div class="popular-post">
+                            <span class="popular-number">3</span>
+                            <span class="popular-title">IMAX vs 4DX 觀影體驗完整比較</span>
+                        </div>
+                        <div class="popular-post">
+                            <span class="popular-number">4</span>
+                            <span class="popular-title">三月電影預售票開賣時間一覽</span>
+                        </div>
+                        <div class="popular-post">
+                            <span class="popular-number">5</span>
+                            <span class="popular-title">2024奧斯卡入圍電影觀影指南</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">🏷️ 熱門標籤</h3>
+                        <div class="tag-cloud">
+                            <span class="tag">#Marvel</span>
+                            <span class="tag">#皮克斯</span>
+                            <span class="tag">#特典</span>
+                            <span class="tag">#威秀</span>
+                            <span class="tag">#IMAX</span>
+                            <span class="tag">#預售票</span>
+                            <span class="tag">#首映會</span>
+                            <span class="tag">#限量商品</span>
+                            <span class="tag">#會員優惠</span>
+                            <span class="tag">#4DX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Individual Post Page Wireframe -->
+        <div class="wireframe-section">
+            <h1 class="wireframe-title">📄 Individual Post Page Design</h1>
+            
+            <div class="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+            
+            <div class="post-page">
+                <aside class="toc">
+                    <h3 class="toc-title">本文目錄</h3>
+                    <ul class="toc-list">
+                        <li class="toc-item active">簡介</li>
+                        <li class="toc-item">電影資訊</li>
+                        <li class="toc-item">特典詳情</li>
+                        <li class="toc-item">購票方式</li>
+                        <li class="toc-item">注意事項</li>
+                        <li class="toc-item">結語</li>
+                    </ul>
+                </aside>
+                
+                <article class="article-content">
+                    <header class="article-header">
+                        <span class="article-category">特典情報</span>
+                        <h1 class="article-title">《蜘蛛人：無家日》台灣限定特典完整攻略</h1>
+                        <div class="article-meta">
+                            <span>MovieBonus 編輯部</span>
+                            <span>2024年1月15日</span>
+                            <span>8 分鐘閱讀</span>
+                            <span>1,234 次瀏覽</span>
+                        </div>
+                        <div class="share-buttons">
+                            <button class="share-btn line">LINE</button>
+                            <button class="share-btn facebook">f</button>
+                            <button class="share-btn twitter">𝕏</button>
+                        </div>
+                    </header>
+                    
+                    <div class="article-body">
+                        <p>Marvel影業最新力作《蜘蛛人：無家日》即將在台灣上映，這次特別為台灣影迷準備了獨家限定特典組合。從精美海報到限量收藏卡，每一項都值得Marvel粉絲收藏。本文將為您詳細介紹所有特典內容及購買方式。</p>
+                        
+                        <h2>電影資訊</h2>
+                        <p>《蜘蛛人：無家日》延續前作劇情，彼得帕克的身份曝光後，他向奇異博士求助，卻意外開啟了多重宇宙的大門。這部電影不僅有精彩的動作場面，更有令人感動的劇情發展...</p>
+                        
+                        <h2>特典詳情</h2>
+                        <p>威秀影城這次推出的限定特典包含：<br>
+                        1. A3尺寸獨家設計海報（限量3000份）<br>
+                        2. 角色收藏卡套組（6張一組）<br>
+                        3. IMAX專屬紀念票根<br>
+                        4. 蜘蛛人造型爆米花桶（加購價）</p>
+                        
+                        <h2>購票方式</h2>
+                        <p>特典組合僅限預購IMAX或4DX場次的觀眾購買，每人限購兩組。建議使用威秀影城APP預訂，可以確保取得特典資格...</p>
+                    </div>
+                    
+                    <div class="author-box">
+                        <div class="author-avatar"></div>
+                        <div class="author-info">
+                            <div class="author-name">MovieBonus 編輯部</div>
+                            <div class="author-bio">
+                                專注於台灣電影特典資訊，為影迷提供最即時、最完整的電影優惠與限定商品情報。追蹤我們，不錯過任何精彩好康！
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <aside class="sidebar">
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">相關電影</h3>
+                        <div style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; padding: 20px; color: white;">
+                            <div style="font-weight: bold; margin-bottom: 8px;">蜘蛛人：無家日</div>
+                            <div style="font-size: 14px; margin-bottom: 12px;">Spider-Man: No Way Home</div>
+                            <div style="font-size: 12px;">上映中 | 動作/冒險</div>
+                            <button style="margin-top: 20px; background: white; color: #667eea; padding: 8px 16px; border-radius: 20px; border: none; font-weight: 600;">查看場次</button>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">相關文章</h3>
+                        <div style="padding: 12px 0; border-bottom: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Marvel電影宇宙時間線整理</div>
+                            <div style="font-size: 12px; color: #6b7280;">3天前</div>
+                        </div>
+                        <div style="padding: 12px 0; border-bottom: 1px solid #e5e7eb;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">2024年Marvel電影上映時程</div>
+                            <div style="font-size: 12px; color: #6b7280;">5天前</div>
+                        </div>
+                        <div style="padding: 12px 0;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">威秀IMAX廳觀影體驗分享</div>
+                            <div style="font-size: 12px; color: #6b7280;">1週前</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+        
+        <!-- Mobile Bottom Navigation -->
+        <div class="mobile-bottom-nav" style="display: none;">
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>首頁</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>分類</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>搜尋</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>收藏</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>更多</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simulate progress bar animation
+        setTimeout(() => {
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                progressBar.style.width = '65%';
+            }
+        }, 1000);
+        
+        // Show mobile nav on smaller screens
+        if (window.innerWidth <= 768) {
+            document.querySelector('.mobile-bottom-nav').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

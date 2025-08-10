@@ -447,4 +447,337 @@ export interface AsyncState<T> {
   error?: string;
 }
 
+// ============================================================================
+// Blog System Types (New Blog Feature)
+// ============================================================================
+
+export type BlogPostStatus = 'draft' | 'published' | 'scheduled' | 'archived';
+
+export interface BlogAuthor {
+  id: string;
+  name: string;
+  email: string;
+  bio?: string;
+  avatar_url?: string;
+  social_links?: {
+    twitter?: string;
+    facebook?: string;
+    line?: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogCategory {
+  id: string;
+  slug: string;
+  name: string;
+  name_en?: string;
+  description?: string;
+  description_en?: string;
+  color?: string;
+  icon?: string;
+  parent_id?: string;
+  sort_order: number;
+  is_active: boolean;
+  post_count?: number;
+  children?: BlogCategory[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt?: string;
+  content: string;
+  cover_image?: string;
+  status: BlogPostStatus;
+  author_id: string;
+  category_id: string;
+  primary_movie_id?: string;
+  related_movie_ids?: string[];
+  tags: string[];
+  reading_time?: number;
+  view_count: number;
+  like_count: number;
+  share_count: number;
+  comment_count: number;
+  is_featured: boolean;
+  
+  // SEO fields
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string[];
+  canonical_url?: string;
+  og_title?: string;
+  og_description?: string;
+  og_image?: string;
+  twitter_title?: string;
+  twitter_description?: string;
+  twitter_image?: string;
+  
+  // Scheduling
+  published_at?: string;
+  scheduled_at?: string;
+  
+  // Content metadata
+  content_blocks?: BlogContentBlock[];
+  related_posts?: string[];
+  
+  // Populated relationships
+  author?: BlogAuthor;
+  category?: BlogCategory;
+  primary_movie?: Movie;
+  related_movies?: Movie[];
+  
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogContentBlock {
+  id: string;
+  post_id: string;
+  block_type: 'text' | 'image' | 'video' | 'quote' | 'code' | 'movie_card' | 'promotion_card';
+  content: any; // JSON content specific to block type
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogSEOData {
+  title: string;
+  description: string;
+  keywords: string[];
+  canonical_url: string;
+  og_title: string;
+  og_description: string;
+  og_image: string;
+  og_type: string;
+  og_url: string;
+  twitter_card: string;
+  twitter_title: string;
+  twitter_description: string;
+  twitter_image: string;
+  structured_data: any; // JSON-LD structured data
+  robots: string;
+  author: string;
+  publish_date: string;
+  modified_date: string;
+}
+
+export interface BlogAnalytics {
+  id: string;
+  post_id?: string;
+  event_type: 'view' | 'like' | 'share' | 'comment' | 'read_complete';
+  user_id?: string;
+  session_id: string;
+  ip_hash: string;
+  user_agent: string;
+  referrer?: string;
+  device_type: 'desktop' | 'mobile' | 'tablet';
+  country?: string;
+  page_url: string;
+  engagement_data?: {
+    scroll_depth?: number;
+    time_on_page?: number;
+    interactions?: number;
+  };
+  created_at: string;
+}
+
+// ============================================================================
+// Blog API Request/Response Types
+// ============================================================================
+
+export interface BlogPostQueryParams {
+  status?: BlogPostStatus;
+  category?: string;
+  tag?: string;
+  author?: string;
+  movie_id?: string;
+  featured?: boolean;
+  search?: string;
+  limit?: number;
+  offset?: number;
+  sort?: 'newest' | 'oldest' | 'popular' | 'trending';
+  include_related?: boolean;
+}
+
+export interface BlogPostsResponse extends PaginatedResponse<BlogPost> {
+  categories?: BlogCategory[];
+  tags?: string[];
+  featured_posts?: BlogPost[];
+}
+
+export interface BlogSearchParams {
+  q: string;
+  category?: string;
+  tag?: string;
+  date_from?: string;
+  date_to?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export interface BlogSearchResult {
+  posts: BlogPost[];
+  suggestions: string[];
+  trending_searches: string[];
+  total_results: number;
+  search_time: number;
+}
+
+export interface PopularPost {
+  id: string;
+  slug: string;
+  title: string;
+  view_count: number;
+  published_at: string;
+}
+
+export interface RelatedPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  cover_image?: string;
+  category: BlogCategory;
+  published_at: string;
+  reading_time: number;
+}
+
+export interface BlogDashboardStats {
+  total_posts: number;
+  published_posts: number;
+  draft_posts: number;
+  total_views: number;
+  total_likes: number;
+  total_shares: number;
+  popular_posts: PopularPost[];
+  recent_posts: BlogPost[];
+  categories_stats: Array<{
+    category: BlogCategory;
+    post_count: number;
+    total_views: number;
+  }>;
+  performance_metrics: {
+    avg_reading_time: number;
+    bounce_rate: number;
+    engagement_rate: number;
+  };
+}
+
+// ============================================================================
+// Blog Content Generation Types
+// ============================================================================
+
+export interface ContentTemplate {
+  id: string;
+  name: string;
+  description: string;
+  target_length: number;
+  structure: string[];
+  seo_focus: string[];
+}
+
+export interface ContentGenerationRequest {
+  template_id: string;
+  movie_id?: string;
+  custom_parameters?: {
+    tone?: 'professional' | 'casual' | 'enthusiastic';
+    target_audience?: 'general' | 'film_enthusiasts' | 'families';
+    focus_keywords?: string[];
+    include_promotions?: boolean;
+  };
+}
+
+export interface GeneratedContent {
+  title: string;
+  content: string;
+  excerpt: string;
+  seo_title: string;
+  seo_description: string;
+  suggested_tags: string[];
+  estimated_reading_time: number;
+  content_quality_score: number;
+}
+
+// ============================================================================
+// Blog UI State Types
+// ============================================================================
+
+export interface BlogState {
+  posts: BlogPost[];
+  categories: BlogCategory[];
+  currentPost?: BlogPost;
+  isLoading: boolean;
+  error?: string;
+  searchQuery: string;
+  searchResults: BlogPost[];
+  popularPosts: PopularPost[];
+  featuredPosts: BlogPost[];
+  pagination: {
+    current_page: number;
+    total_pages: number;
+    has_more: boolean;
+  };
+}
+
+export interface ReadingProgress {
+  totalHeight: number;
+  currentPosition: number;
+  percentage: number;
+  currentSection: string;
+  timeSpent: number;
+}
+
+export interface ShareData {
+  url: string;
+  title: string;
+  description: string;
+  image?: string;
+  hashtags?: string[];
+}
+
+export interface CommentData {
+  id: string;
+  post_id: string;
+  author_name: string;
+  author_email: string;
+  content: string;
+  parent_id?: string;
+  is_approved: boolean;
+  created_at: string;
+  replies?: CommentData[];
+}
+
+export interface TableOfContentsItem {
+  id: string;
+  text: string;
+  level: number;
+  slug: string;
+  isActive: boolean;
+}
+
+// ============================================================================
+// Taiwan-Specific Types
+// ============================================================================
+
+export interface LineShareConfig {
+  enabled: boolean;
+  app_id?: string;
+  share_text_template: string;
+}
+
+export interface LocalizationConfig {
+  primary_language: 'zh-TW';
+  fallback_language: 'en-US';
+  date_format: string;
+  number_format: string;
+  social_platforms: ('line' | 'facebook' | 'twitter' | 'instagram')[];
+}
+
 export default {};

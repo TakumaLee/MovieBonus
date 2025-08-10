@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>離線模式 | 特典速報 パルパル 部落格</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .offline-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .offline-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+        
+        .offline-description {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+        
+        .offline-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .offline-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .offline-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .offline-button.secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .offline-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .cached-posts {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .cached-posts h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+        
+        .cached-post-list {
+            text-align: left;
+        }
+        
+        .cached-post-item {
+            display: block;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f9fafb;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #374151;
+            transition: background 0.2s ease;
+        }
+        
+        .cached-post-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .cached-post-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .cached-post-meta {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .connection-status {
+            margin-top: 24px;
+            padding: 12px;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            color: #92400e;
+            font-size: 14px;
+        }
+        
+        .connection-status.online {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #166534;
+        }
+        
+        @media (max-width: 480px) {
+            .offline-container {
+                padding: 24px;
+            }
+            
+            .offline-title {
+                font-size: 24px;
+            }
+            
+            .offline-description {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📱</div>
+        <h1 class="offline-title">目前處於離線模式</h1>
+        <p class="offline-description">
+            您的網路連線似乎有問題，但別擔心！<br>
+            我們已經為您準備了一些離線內容。
+        </p>
+        
+        <div class="offline-actions">
+            <button class="offline-button" onclick="retryConnection()">
+                重新連線
+            </button>
+            <a href="/blog" class="offline-button secondary">
+                回到部落格首頁
+            </a>
+        </div>
+        
+        <div class="cached-posts" id="cachedPosts" style="display: none;">
+            <h3>📖 已快取的文章</h3>
+            <div class="cached-post-list" id="cachedPostList">
+                <!-- Cached posts will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="connection-status" id="connectionStatus">
+            ⚠️ 網路連線中斷，正在嘗試重新連接...
+        </div>
+    </div>
+
+    <script>
+        // Check network status
+        function updateConnectionStatus() {
+            const statusEl = document.getElementById('connectionStatus');
+            if (navigator.onLine) {
+                statusEl.textContent = '✅ 網路連線已恢復！';
+                statusEl.className = 'connection-status online';
+            } else {
+                statusEl.textContent = '⚠️ 網路連線中斷，正在嘗試重新連接...';
+                statusEl.className = 'connection-status';
+            }
+        }
+
+        // Retry connection
+        function retryConnection() {
+            if (navigator.onLine) {
+                window.location.reload();
+            } else {
+                alert('請檢查您的網路連線後再試一次。');
+            }
+        }
+
+        // Load cached blog posts
+        async function loadCachedPosts() {
+            try {
+                const cacheNames = await caches.keys();
+                const blogCaches = cacheNames.filter(name => name.includes('blog-'));
+                
+                if (blogCaches.length === 0) return;
+                
+                const cache = await caches.open(blogCaches[0]);
+                const cachedRequests = await cache.keys();
+                
+                const blogPosts = cachedRequests.filter(request => 
+                    request.url.includes('/blog/') && 
+                    !request.url.includes('/api/') &&
+                    !request.url.includes('offline.html')
+                );
+
+                if (blogPosts.length > 0) {
+                    const cachedPostsEl = document.getElementById('cachedPosts');
+                    const cachedPostListEl = document.getElementById('cachedPostList');
+                    
+                    cachedPostsEl.style.display = 'block';
+                    
+                    blogPosts.slice(0, 5).forEach(request => {
+                        const url = new URL(request.url);
+                        const pathParts = url.pathname.split('/');
+                        const slug = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+                        
+                        const postItem = document.createElement('a');
+                        postItem.className = 'cached-post-item';
+                        postItem.href = request.url;
+                        
+                        postItem.innerHTML = `
+                            <div class="cached-post-title">${decodeURIComponent(slug)}</div>
+                            <div class="cached-post-meta">已快取 • 可離線閱讀</div>
+                        `;
+                        
+                        cachedPostListEl.appendChild(postItem);
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load cached posts:', error);
+            }
+        }
+
+        // Event listeners
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        
+        // Initialize
+        updateConnectionStatus();
+        loadCachedPosts();
+        
+        // Auto-retry connection every 30 seconds
+        setInterval(() => {
+            if (navigator.onLine) {
+                window.location.reload();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

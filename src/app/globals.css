@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import blog-specific styles */
+@import '../styles/blog.css';
+
 /* Prevent horizontal overflow on all pages */
 html, body {
   overflow-x: hidden;

@@ -14,6 +14,9 @@ export * from './useSearch';
 // Admin-related hooks
 export * from './use-admin-role';
 
+// Utility hooks
+export * from './useDebounce';
+
 // Re-export existing hooks
 export * from './use-mobile';
 export * from './use-toast';

@@ -1,0 +1,352 @@
+/**
+ * Blog-specific CSS with Traditional Chinese Typography Optimizations
+ * Optimized for Taiwan market with proper font rendering and spacing
+ */
+
+/* Traditional Chinese Font Stack */
+.blog-content {
+  font-family: 
+    'Noto Sans TC',
+    'PingFang TC',
+    'Microsoft JhengHei',
+    'Source Han Sans TC',
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    'Hiragino Sans GB',
+    'Microsoft YaHei',
+    sans-serif;
+}
+
+/* Chinese Text Optimization */
+.chinese-text-optimized {
+  /* Better line height for Chinese characters */
+  line-height: 1.8;
+  
+  /* Improved letter spacing for readability */
+  letter-spacing: 0.02em;
+  
+  /* Better word wrap for mixed language content */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  
+  /* Optimize text rendering */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Blog Post Typography */
+.blog-post-content {
+  @apply chinese-text-optimized;
+  
+  /* Font sizes optimized for Chinese reading */
+  font-size: 18px;
+  
+  /* Proper paragraph spacing */
+  p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+    text-justify: inter-ideograph;
+  }
+  
+  /* Heading styles with Chinese optimization */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 
+      'Noto Serif TC',
+      'PingFang TC',
+      'Microsoft JhengHei',
+      serif;
+    line-height: 1.4;
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+    font-weight: 600;
+  }
+  
+  h1 { font-size: 2.25em; }
+  h2 { font-size: 1.875em; }
+  h3 { font-size: 1.5em; }
+  h4 { font-size: 1.25em; }
+  h5 { font-size: 1.125em; }
+  h6 { font-size: 1em; }
+  
+  /* Lists with proper spacing */
+  ul, ol {
+    margin: 1.5em 0;
+    padding-left: 2em;
+    
+    li {
+      margin-bottom: 0.5em;
+      line-height: 1.6;
+    }
+  }
+  
+  /* Blockquotes with Chinese styling */
+  blockquote {
+    margin: 2em 0;
+    padding: 1.5em 2em;
+    border-left: 4px solid theme('colors.primary');
+    background: theme('colors.muted') / 0.3;
+    border-radius: 0 8px 8px 0;
+    font-style: normal;
+    
+    p {
+      margin-bottom: 0;
+      font-size: 1.1em;
+      color: theme('colors.muted-foreground');
+    }
+  }
+  
+  /* Code blocks */
+  code {
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.875em;
+    padding: 0.2em 0.4em;
+    background: theme('colors.muted');
+    border-radius: 4px;
+  }
+  
+  pre {
+    margin: 1.5em 0;
+    padding: 1.5em;
+    background: theme('colors.muted');
+    border-radius: 8px;
+    overflow-x: auto;
+    
+    code {
+      padding: 0;
+      background: none;
+    }
+  }
+}
+
+/* Mobile optimizations for Chinese text */
+@media (max-width: 768px) {
+  .blog-post-content {
+    font-size: 16px;
+    line-height: 1.75;
+    
+    p {
+      text-align: left; /* Better for mobile reading */
+    }
+    
+    h1 { font-size: 1.875em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.25em; }
+  }
+}
+
+/* Gradient text effect for headlines */
+.gradient-text {
+  background: linear-gradient(135deg, theme('colors.primary'), theme('colors.secondary'));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* LINE brand color for sharing buttons */
+.line-green {
+  background-color: #00C300;
+}
+.line-green:hover {
+  background-color: #00A000;
+}
+
+/* Reading progress animations */
+.reading-progress-smooth {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card hover effects optimized for touch */
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Image lazy loading effect */
+.image-lazy-loading {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.image-lazy-loaded {
+  opacity: 1;
+}
+
+/* Share button pulse animation for LINE */
+@keyframes line-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.line-pulse {
+  animation: line-pulse 2s ease-in-out infinite;
+}
+
+/* Table of contents active indicator */
+.toc-active-indicator {
+  position: relative;
+}
+
+.toc-active-indicator::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 4px;
+  height: 20px;
+  background: theme('colors.primary');
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+/* Search highlight styling */
+mark {
+  background: rgba(255, 235, 59, 0.4);
+  color: inherit;
+  padding: 0.1em 0.2em;
+  border-radius: 2px;
+}
+
+/* Loading skeleton animations */
+@keyframes skeleton-loading {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, theme('colors.muted') 0%, rgba(255,255,255,0.2) 50%, theme('colors.muted') 100%);
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+/* Taiwan-specific social platform colors */
+.facebook-blue { background-color: #1877F2; }
+.facebook-blue:hover { background-color: #166FE5; }
+
+.twitter-black { background-color: #000000; }
+.twitter-black:hover { background-color: #1a1a1a; }
+
+.whatsapp-green { background-color: #25D366; }
+.whatsapp-green:hover { background-color: #128C7E; }
+
+/* Responsive image containers */
+.responsive-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.responsive-image-container img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.responsive-image-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Category badge colors */
+.category-news { @apply bg-blue-500 text-white; }
+.category-bonus { @apply bg-orange-500 text-white; }
+.category-theater { @apply bg-green-500 text-white; }
+.category-review { @apply bg-purple-500 text-white; }
+.category-boxoffice { @apply bg-red-500 text-white; }
+
+/* Print styles for articles */
+@media print {
+  .blog-post-content {
+    font-size: 12pt;
+    line-height: 1.6;
+    color: black;
+    
+    h1, h2, h3, h4, h5, h6 {
+      color: black;
+      page-break-after: avoid;
+    }
+    
+    p {
+      orphans: 3;
+      widows: 3;
+    }
+    
+    blockquote {
+      page-break-inside: avoid;
+    }
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Accessibility improvements */
+.focus-visible:focus {
+  outline: 2px solid theme('colors.primary');
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .blog-post-content {
+    color: black;
+    background: white;
+  }
+  
+  .card-hover-effect {
+    border: 2px solid black;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .card-hover-effect:hover {
+    transform: none;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .blog-post-content {
+    color: theme('colors.foreground');
+    
+    mark {
+      background: rgba(255, 193, 7, 0.3);
+      color: theme('colors.foreground');
+    }
+  }
+}
+
+/* Custom scrollbar for blog content */
+.blog-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.muted-foreground') transparent;
+}
+
+.blog-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.blog-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.blog-scrollbar::-webkit-scrollbar-thumb {
+  background: theme('colors.muted-foreground');
+  border-radius: 4px;
+}
+
+.blog-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.foreground');
+}
