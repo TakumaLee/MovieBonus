@@ -7,9 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Award, AlertCircle, RefreshCw, Film, BookOpen, Gift, MapPin, Star, TrendingUp } from 'lucide-react';
+import { Award, AlertCircle, RefreshCw, Film } from 'lucide-react';
 import { useNowPlayingMovies, useComingSoonMovies } from '@/hooks';
 import { SearchBar } from '@/components/SearchBar';
+import { SmartNavigation } from '@/components/SmartNavigation';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
@@ -152,47 +153,20 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen w-full bg-background">
-        <header className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-card to-card/50 border-b relative">
+        <SmartNavigation />
+        <header className="pt-8 pb-12 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-card to-card/50 border-b relative">
           {donationConfig.showHeaderButton && (
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
               <DonationButton position="header" />
             </div>
           )}
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary mb-4 mt-8">
               特典速報
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-muted-foreground font-body max-w-3xl mx-auto leading-relaxed">
               台灣電影院特典與限定禮品的完整追蹤平台，不錯過任何精彩好康！
             </p>
-            
-            {/* Header Navigation Pills */}
-            <div className="mt-6 sm:mt-8 flex justify-center">
-              <div className="flex items-center gap-2 p-1 bg-muted rounded-full">
-                <Button 
-                  variant="default" 
-                  size="sm" 
-                  className="rounded-full px-4 py-2 text-sm font-medium"
-                  asChild
-                >
-                  <div className="flex items-center gap-2 cursor-default">
-                    <Film className="w-4 h-4" />
-                    電影特典
-                  </div>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="rounded-full px-4 py-2 text-sm font-medium hover:bg-background"
-                  asChild
-                >
-                  <Link href="/blog" className="flex items-center gap-2">
-                    <BookOpen className="w-4 h-4" />
-                    電影專欄
-                  </Link>
-                </Button>
-              </div>
-            </div>
             
             <div className="mt-6 sm:mt-8 flex justify-center">
               <SearchBar className="w-full max-w-lg" placeholder="搜尋電影、演員、導演..." />
@@ -200,47 +174,6 @@ export default function Home() {
           </div>
         </header>
         
-        {/* Quick Category Links */}
-        <div className="px-4 sm:px-6 lg:px-8 py-6 bg-card/50 border-b">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-4">
-              <h2 className="text-lg font-headline text-foreground mb-2">電影專欄分類</h2>
-              <p className="text-sm text-muted-foreground">探索更多電影相關內容</p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Button variant="outline" size="sm" className="rounded-full" asChild>
-                <Link href="/blog/category/news" className="flex items-center gap-2">
-                  <Film className="w-4 h-4" />
-                  電影新聞
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" className="rounded-full" asChild>
-                <Link href="/blog/category/bonus" className="flex items-center gap-2">
-                  <Gift className="w-4 h-4" />
-                  特典情報
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" className="rounded-full" asChild>
-                <Link href="/blog/category/review" className="flex items-center gap-2">
-                  <Star className="w-4 h-4" />
-                  影評專欄
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" className="rounded-full" asChild>
-                <Link href="/blog/category/theater" className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  戲院資訊
-                </Link>
-              </Button>
-              <Button variant="outline" size="sm" className="rounded-full" asChild>
-                <Link href="/blog/category/boxoffice" className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" />
-                  票房分析
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
         
         <main className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <Tabs defaultValue="now-playing" className="max-w-7xl mx-auto">

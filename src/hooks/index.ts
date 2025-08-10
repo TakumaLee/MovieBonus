@@ -16,6 +16,7 @@ export * from './use-admin-role';
 
 // Utility hooks
 export * from './useDebounce';
+export * from './useScrollDirection';
 
 // Re-export existing hooks
 export * from './use-mobile';
