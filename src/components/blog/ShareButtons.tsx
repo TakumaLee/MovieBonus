@@ -27,7 +27,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { ShareData } from '@/lib/types';
 import { generateSocialShareUrls } from '@/lib/blog-seo-utils';
 import { trackEngagement } from '@/lib/blog-api-client';

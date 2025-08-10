@@ -85,15 +85,15 @@
   blockquote {
     margin: 2em 0;
     padding: 1.5em 2em;
-    border-left: 4px solid theme('colors.primary');
-    background: theme('colors.muted') / 0.3;
+    border-left: 4px solid theme('colors.primary.DEFAULT');
+    background: theme('colors.muted.DEFAULT') / 0.3;
     border-radius: 0 8px 8px 0;
     font-style: normal;
     
     p {
       margin-bottom: 0;
       font-size: 1.1em;
-      color: theme('colors.muted-foreground');
+      color: theme('colors.muted.foreground');
     }
   }
   
@@ -102,14 +102,14 @@
     font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
     font-size: 0.875em;
     padding: 0.2em 0.4em;
-    background: theme('colors.muted');
+    background: theme('colors.muted.DEFAULT');
     border-radius: 4px;
   }
   
   pre {
     margin: 1.5em 0;
     padding: 1.5em;
-    background: theme('colors.muted');
+    background: theme('colors.muted.DEFAULT');
     border-radius: 8px;
     overflow-x: auto;
     
@@ -138,7 +138,7 @@
 
 /* Gradient text effect for headlines */
 .gradient-text {
-  background: linear-gradient(135deg, theme('colors.primary'), theme('colors.secondary'));
+  background: linear-gradient(135deg, theme('colors.primary.DEFAULT'), theme('colors.secondary.DEFAULT'));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -201,7 +201,7 @@
   top: 50%;
   width: 4px;
   height: 20px;
-  background: theme('colors.primary');
+  background: theme('colors.primary.DEFAULT');
   border-radius: 2px;
   transform: translateY(-50%);
 }
@@ -221,7 +221,7 @@ mark {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, theme('colors.muted') 0%, rgba(255,255,255,0.2) 50%, theme('colors.muted') 100%);
+  background: linear-gradient(90deg, theme('colors.muted.DEFAULT') 0%, rgba(255,255,255,0.2) 50%, theme('colors.muted.DEFAULT') 100%);
   background-size: 200px 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
 }
@@ -287,7 +287,7 @@ mark {
 
 /* Accessibility improvements */
 .focus-visible:focus {
-  outline: 2px solid theme('colors.primary');
+  outline: 2px solid theme('colors.primary.DEFAULT');
   outline-offset: 2px;
 }
 
@@ -331,7 +331,7 @@ mark {
 /* Custom scrollbar for blog content */
 .blog-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: theme('colors.muted-foreground') transparent;
+  scrollbar-color: theme('colors.muted.foreground') transparent;
 }
 
 .blog-scrollbar::-webkit-scrollbar {
@@ -343,7 +343,7 @@ mark {
 }
 
 .blog-scrollbar::-webkit-scrollbar-thumb {
-  background: theme('colors.muted-foreground');
+  background: theme('colors.muted.foreground');
   border-radius: 4px;
 }
 
