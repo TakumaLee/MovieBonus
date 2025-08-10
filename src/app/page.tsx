@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Award, AlertCircle, RefreshCw, Film } from 'lucide-react';
 import { useNowPlayingMovies, useComingSoonMovies } from '@/hooks';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 import { SearchBar } from '@/components/SearchBar';
 import { SmartNavigation } from '@/components/SmartNavigation';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -20,6 +21,7 @@ import { DonationButton } from '@/components/DonationButton';
 import { donationConfig } from '@/lib/donation-config';
 import type { Movie } from '@/lib/types';
 import { getMovieStatus, getStatusText, getStatusVariant } from '@/lib/movie-utils';
+import { cn } from '@/lib/utils';
 
 interface MovieCardProps {
   movie: Movie;
@@ -149,6 +151,13 @@ const MovieGrid = ({
 export default function Home() {
   const nowPlayingHook = useNowPlayingMovies();
   const comingSoonHook = useComingSoonMovies();
+  
+  // Use scroll direction hook to control title visibility
+  const { isAtTop } = useScrollDirection({
+    threshold: 5,
+    scrollUpThreshold: 20,
+    offset: 10
+  });
 
   return (
     <ErrorBoundary>
@@ -161,7 +170,12 @@ export default function Home() {
             </div>
           )}
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary mb-4 mt-8">
+            <h1 
+              className={cn(
+                "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-headline text-primary mb-4 mt-8 transition-all duration-500 ease-out",
+                isAtTop ? "opacity-100 translate-y-0 scale-100" : "opacity-0 -translate-y-4 scale-95"
+              )}
+            >
               特典速報
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-muted-foreground font-body max-w-3xl mx-auto leading-relaxed">
@@ -253,13 +267,13 @@ export default function Home() {
                 <Link href="/blog" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                   最新文章
                 </Link>
-                <Link href="/blog/category/review" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/reviews" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                   影評專欄
                 </Link>
                 <Link href="/blog/category/news" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                   電影新聞
                 </Link>
-                <Link href="/blog/category/bonus" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/bonuses" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                   特典情報
                 </Link>
               </div>
@@ -269,10 +283,10 @@ export default function Home() {
             <div className="text-center md:text-left">
               <h4 className="font-semibold text-foreground mb-3">更多分類</h4>
               <div className="space-y-2">
-                <Link href="/blog/category/theater" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/theaters" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                   戲院資訊
                 </Link>
-                <Link href="/blog/category/boxoffice" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/boxoffice" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
                   票房分析
                 </Link>
                 <Link href="/blog/search" className="block text-sm text-muted-foreground hover:text-primary transition-colors">

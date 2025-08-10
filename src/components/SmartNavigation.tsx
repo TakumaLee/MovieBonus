@@ -43,25 +43,25 @@ const navItems: NavItem[] = [
   },
   {
     title: '特典情報',
-    href: '/blog/category/bonus',
+    href: '/bonuses',
     icon: <Gift className="w-4 h-4" />,
     description: '限定禮品資訊'
   },
   {
     title: '影評專欄',
-    href: '/blog/category/review',
+    href: '/reviews',
     icon: <Star className="w-4 h-4" />,
     description: '專業影評分析'
   },
   {
     title: '戲院資訊',
-    href: '/blog/category/theater',
+    href: '/theaters',
     icon: <MapPin className="w-4 h-4" />,
     description: '影城最新消息'
   },
   {
     title: '票房分析',
-    href: '/blog/category/boxoffice',
+    href: '/boxoffice',
     icon: <TrendingUp className="w-4 h-4" />,
     description: '票房數據追蹤'
   }
@@ -108,10 +108,20 @@ export function SmartNavigation() {
               <div className="relative">
                 <Sparkles className="w-6 h-6 text-primary transition-transform group-hover:scale-110" />
               </div>
-              <span className="font-headline text-xl font-bold text-primary hidden sm:inline-block">
+              <span 
+                className={cn(
+                  "font-headline text-xl font-bold text-primary hidden sm:inline-block transition-all duration-500 ease-out",
+                  isAtTop ? "opacity-0 translate-y-2 scale-95" : "opacity-100 translate-y-0 scale-100"
+                )}
+              >
                 特典速報
               </span>
-              <span className="font-headline text-lg font-bold text-primary sm:hidden">
+              <span 
+                className={cn(
+                  "font-headline text-lg font-bold text-primary sm:hidden transition-all duration-500 ease-out",
+                  isAtTop ? "opacity-0 translate-y-2 scale-95" : "opacity-100 translate-y-0 scale-100"
+                )}
+              >
                 特典速報
               </span>
             </Link>
