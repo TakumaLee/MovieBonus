@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Award, AlertCircle, RefreshCw, Film } from 'lucide-react';
+import { Award, AlertCircle, RefreshCw, Film, BookOpen, Gift, MapPin, Star, TrendingUp } from 'lucide-react';
 import { useNowPlayingMovies, useComingSoonMovies } from '@/hooks';
 import { SearchBar } from '@/components/SearchBar';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -164,16 +165,81 @@ export default function Home() {
             <p className="text-base sm:text-lg lg:text-xl text-muted-foreground font-body max-w-3xl mx-auto leading-relaxed">
               台灣電影院特典與限定禮品的完整追蹤平台，不錯過任何精彩好康！
             </p>
+            
+            {/* Header Navigation Pills */}
+            <div className="mt-6 sm:mt-8 flex justify-center">
+              <div className="flex items-center gap-2 p-1 bg-muted rounded-full">
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  className="rounded-full px-4 py-2 text-sm font-medium"
+                  asChild
+                >
+                  <div className="flex items-center gap-2 cursor-default">
+                    <Film className="w-4 h-4" />
+                    電影特典
+                  </div>
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="rounded-full px-4 py-2 text-sm font-medium hover:bg-background"
+                  asChild
+                >
+                  <Link href="/blog" className="flex items-center gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    電影專欄
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            
             <div className="mt-6 sm:mt-8 flex justify-center">
               <SearchBar className="w-full max-w-lg" placeholder="搜尋電影、演員、導演..." />
             </div>
           </div>
         </header>
         
-        {/* 頁面頂部廣告 */}
-        <div className="px-4 sm:px-6 lg:px-8">
+        {/* Quick Category Links */}
+        <div className="px-4 sm:px-6 lg:px-8 py-6 bg-card/50 border-b">
           <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-4">
+              <h2 className="text-lg font-headline text-foreground mb-2">電影專欄分類</h2>
+              <p className="text-sm text-muted-foreground">探索更多電影相關內容</p>
             </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button variant="outline" size="sm" className="rounded-full" asChild>
+                <Link href="/blog/category/news" className="flex items-center gap-2">
+                  <Film className="w-4 h-4" />
+                  電影新聞
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" className="rounded-full" asChild>
+                <Link href="/blog/category/bonus" className="flex items-center gap-2">
+                  <Gift className="w-4 h-4" />
+                  特典情報
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" className="rounded-full" asChild>
+                <Link href="/blog/category/review" className="flex items-center gap-2">
+                  <Star className="w-4 h-4" />
+                  影評專欄
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" className="rounded-full" asChild>
+                <Link href="/blog/category/theater" className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  戲院資訊
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" className="rounded-full" asChild>
+                <Link href="/blog/category/boxoffice" className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4" />
+                  票房分析
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
         
         <main className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -232,18 +298,63 @@ export default function Home() {
       </main>
       
       <footer className="bg-card border-t mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <h3 className="text-lg font-headline text-primary mb-2">特典速報</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              台灣電影特典資訊的最佳選擇
-            </p>
-            {donationConfig.showFooterLink && (
-              <div className="mb-4">
-                <DonationButton position="footer" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Main Site Info */}
+            <div className="text-center md:text-left">
+              <h3 className="text-lg font-headline text-primary mb-2">特典速報</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                台灣電影特典資訊的最佳選擇
+              </p>
+              {donationConfig.showFooterLink && (
+                <div className="mb-4">
+                  <DonationButton position="footer" />
+                </div>
+              )}
+            </div>
+            
+            {/* Blog Navigation */}
+            <div className="text-center md:text-left">
+              <h4 className="font-semibold text-foreground mb-3">電影專欄</h4>
+              <div className="space-y-2">
+                <Link href="/blog" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  最新文章
+                </Link>
+                <Link href="/blog/category/review" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  影評專欄
+                </Link>
+                <Link href="/blog/category/news" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  電影新聞
+                </Link>
+                <Link href="/blog/category/bonus" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  特典情報
+                </Link>
               </div>
-            )}
-            <div className="flex justify-center space-x-6 text-xs text-muted-foreground">
+            </div>
+            
+            {/* Additional Categories */}
+            <div className="text-center md:text-left">
+              <h4 className="font-semibold text-foreground mb-3">更多分類</h4>
+              <div className="space-y-2">
+                <Link href="/blog/category/theater" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  戲院資訊
+                </Link>
+                <Link href="/blog/category/boxoffice" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  票房分析
+                </Link>
+                <Link href="/blog/search" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  搜尋文章
+                </Link>
+                <Link href="/blog" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
+                  所有文章
+                </Link>
+              </div>
+            </div>
+          </div>
+          
+          {/* Copyright and Sources */}
+          <div className="border-t pt-6">
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs text-muted-foreground">
               <span>資料來源：威秀影城、各大電影院</span>
               <span>即時更新</span>
               <span>© {new Date().getFullYear()} 特典速報</span>
